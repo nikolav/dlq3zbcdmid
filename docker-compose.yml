@@ -1,0 +1,44 @@
+version: "3"
+
+services:
+  
+  pg:
+    container_name: pg
+    image: postgres:14.5
+    restart: always
+    ports:
+      - 5544:5432
+    env_file:
+      - ./db/.env
+    volumes:
+      - vol_pg:/var/lib/postgresql/
+    # depends_on:
+    #   - redis
+
+  api:
+    container_name: api
+    build: .
+    restart: always
+    ports:
+      - 8081:5000
+    depends_on:
+      - pg
+      # - redis
+    env_file:
+      - ./.env
+    # volumes:
+    #   - ./api:/home/app
+
+
+  # redis:
+  #   container_name: redis
+  #   image: redis
+  #   ports:
+  #     - 6879:6379
+  #   restart: always
+  #   volumes:
+  #     - ./redis.conf:/etc/redis/redis.conf
+  #   command: ["redis-server", "/etc/redis/redis.conf"]
+
+volumes:
+  vol_pg:
