@@ -18,7 +18,6 @@ from middleware.authenticate import authenticate
 # mount resources
 api.add_resource(DocsResource, '/docs/<string:tag_name>')
 
-
 # @blueprints:mount
 #   /auth
 app.register_blueprint(bp_auth)
@@ -31,7 +30,7 @@ if not PRODUCTION:
   app.register_blueprint(bp_testing)
 
 
-# init graphql endpoint, POST /graphql
+# init graphql endpoint, `POST /graphql`
 import config.graphql.init
 
 
@@ -46,11 +45,10 @@ import config.graphql.init
 #   return send_from_directory('templates', path)
 
 
-# authentication middleware
+# authentication.middleware@init
 @app.before_request
 def before_request_authenticate():
   return authenticate()
-
 
 # io status check
 @io.on('connect')

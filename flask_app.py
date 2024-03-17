@@ -29,10 +29,11 @@ REBUILD_SCHEMA_ = bool(os.getenv('REBUILD_SCHEMA'))
 REBUILD_SCHEMA  = (not PRODUCTION) and REBUILD_SCHEMA_
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
-app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URI
+
+app.config['SECRET_KEY']                     = os.getenv('SECRET_KEY')
+app.config['SQLALCHEMY_DATABASE_URI']        = DATABASE_URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_ECHO'] = not PRODUCTION
+app.config['SQLALCHEMY_ECHO']                = not PRODUCTION
 
 # talisman = Talisman(app, force_https = False)
 cors     = CORS(app, supports_credentials = True)

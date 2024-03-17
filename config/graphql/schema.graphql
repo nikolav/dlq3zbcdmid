@@ -113,7 +113,6 @@ type Mutation {
   docsRm(topic: String!, id: ID!): JsonData
   docUpsert(doc_id: String!, data: JsonData!): JsonData!
   docsRmById(id: ID!): JsonData
-
   # manage docs/tags: id, { "@tag/foo": true, "@tag/bar": false }
   docsTags(id: ID!, tags: JsonDocsTags!): JsonDocsTags!
 

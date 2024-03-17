@@ -32,8 +32,9 @@ bp_testing = Blueprint('testing', __name__, url_prefix = '/test')
 # cors blueprints as wel for cross-domain requests
 cors_bp_testing = CORS(bp_testing)
 
-from schemas.serialization   import SchemaSerializeDocJsonTimes  as DocPlain
-from schemas.serialization   import SchemaSerializeProductsTimes as SchemaProducts
+from schemas.serialization import SchemaSerializeDocJsonTimes  as DocPlain
+from schemas.serialization import SchemaSerializeProductsTimes as SchemaProducts
+from schemas.serialization import SchemaSerializeUsersTimes    as UsersPlain
 
 from marshmallow.exceptions  import ValidationError
 from marshmallow  import Schema
@@ -61,23 +62,10 @@ def testing_home():
   print(f'--testing: ')
   print(g.user)
 
-  # for i in range(20):
-  #   p = Products(name = f'p:{i}')
-  #   db.session.add(p)
+  u = db.session.scalars(
+    db.select(Users)
+  )
 
-  # db.session.commit()
-  
-  # t = Tags.by_name('@products:category:foo1', create = True)
-  # p = db.session.get(Products, 10)
-  # t.products.append(p)
-  # # t.users.append(u)
-  # db.session.commit()
-  # p = db.session.get(Products, 4)
-  u = db.session.get(Users, 4)
-  
-  # u.products.append(p)
-  # db.session.commit()
-
-  return { 'res': SchemaProducts(many = True).dump(u.products) }
+  return { 'res': UsersPlain(many = True).dump(u) }
   # return { 'res': 'ok' }
 
