@@ -6,6 +6,10 @@ schema {
 scalar JsonData
 scalar JsonDocsTags
 
+
+#########
+## @types
+
 type Var {
   id: ID!
   name: String!
@@ -67,33 +71,42 @@ type Company {
   updated_at: String!
 }
 
-type Query {
-  
-  status: String!
 
-  # docs
-  docsByTopic(topic: String!): [JsonData!]!
-  docByDocId(doc_id: String!): JsonData!
-  tagsByDocId(id: ID!): [String!]!
+#########
+## @Query
+
+type Query {
+
+  # api --status
+  status: String!
 
   # vars
   vars: [Var!]!
 
-  # storage
-  storageList: [StorageFileInfo!]!
+  # companies
+  companiesList(approved: Boolean): [Company!]!
 
   # products
   productsListByUser(user_id: ID!): [Product!]!
   productsListByTags(tags: [String!]!): [Product!]!
 
-  # companies
-  companiesList(approved: Boolean): [Company!]!
+  # storage
+  storageList: [StorageFileInfo!]!
+
+  # docs
+  docsByTopic(topic: String!): [JsonData!]!
+  docByDocId(doc_id: String!): JsonData!
+  tagsByDocId(id: ID!): [String!]!
 }
+
+
+############
+## @Mutation
 
 type Mutation {
 
-  # storage
-  storageRemoveFile(file_id: String!): StorageFileRemovedInfo
+  # products
+  productsAdd(name: String!, user_id: ID!, tags: [String!]): Product
 
   # docs
   docsUpsert(topic: String!, data: JsonData!, id: ID): JsonData!
@@ -104,6 +117,6 @@ type Mutation {
   # manage docs/tags: id, { "@tag/foo": true, "@tag/bar": false }
   docsTags(id: ID!, tags: JsonDocsTags!): JsonDocsTags!
 
-  # products
-  productsAdd(name: String!, user_id: ID!, tags: [String!]): Product
+  # storage
+  storageRemoveFile(file_id: String!): StorageFileRemovedInfo
 }
