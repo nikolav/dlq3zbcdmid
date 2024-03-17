@@ -68,6 +68,7 @@ if __name__ == '__main__':
     from models.tokens   import Tokens
     from models.users    import Users
     from models.products import Products
+    from models.orders   import Orders
     from models.docs     import Docs
     
     # drop/create schema

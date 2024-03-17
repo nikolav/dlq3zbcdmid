@@ -19,14 +19,13 @@ class Users(MixinTimestamps, MixinIncludesTags, db.Model):
   
   id: Mapped[int] = mapped_column(primary_key = True)
   
-  email: Mapped[str] = mapped_column(unique = True)
+  email   : Mapped[str] = mapped_column(unique = True)
   password: Mapped[str]
   
   # virtual
-  tags: Mapped[List['Tags']] = relationship(secondary = ln_users_tags,
-                                            back_populates = 'users')
-  
+  tags    : Mapped[List['Tags']]     = relationship(secondary = ln_users_tags, back_populates = 'users')
   products: Mapped[List['Products']] = relationship(back_populates = 'user')
+  orders  : Mapped[List['Orders']]   = relationship(back_populates = 'user')
 
 
   # magic

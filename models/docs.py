@@ -27,25 +27,29 @@ _schemaDocsDumpMany = SchemaSerializeDocJsonTimes(many = True)
 class Docs(MixinTimestamps, MixinIncludesTags, db.Model):
   __tablename__ = docsTable
 
-  id:   Mapped[int]  = mapped_column(primary_key = True)
+  id: Mapped[int] = mapped_column(primary_key = True)
+
   data: Mapped[dict] = mapped_column(JSON)
 
   # virtual
-  tags: Mapped[List['Tags']] = relationship(secondary      = ln_docs_tags, 
-                                            back_populates = 'docs')
+  tags: Mapped[List['Tags']] = relationship(secondary = ln_docs_tags, back_populates = 'docs')
+
   
   # magic
   def __repr__(self):
     return f'Docs({json.dumps(self.dump())})'
+
 
   @staticmethod
   def tagged(tag_name):
     tag = Tags.by_name(tag_name)
     return tag.docs if tag else []
   
+  
   @staticmethod
   def dicts(docs, **kwargs):
     return _schemaDocsDumpMany.dump(docs, **kwargs)
+  
   
   @staticmethod
   def by_tag_and_id(tag, id):
@@ -62,6 +66,7 @@ class Docs(MixinTimestamps, MixinIncludesTags, db.Model):
     
     return doc
 
+
   @staticmethod
   def var_by_name(var_name):
     return db.session.scalar(
@@ -70,6 +75,7 @@ class Docs(MixinTimestamps, MixinIncludesTags, db.Model):
         Docs.data.contains(var_name)
       )
     )
+  
   
   @staticmethod
   def by_doc_id(doc_id, *, create = False):
@@ -107,6 +113,7 @@ class Docs(MixinTimestamps, MixinIncludesTags, db.Model):
           db.session.commit()
 
     return doc
+    
     
   def dump(self, **kwargs):
     return _schemaDocsDump.dump(self, **kwargs)

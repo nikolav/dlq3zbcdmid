@@ -352,3 +352,4 @@ demo.mjs
 flaskapi/storage/
 
 dev.db.sqlite
+.access

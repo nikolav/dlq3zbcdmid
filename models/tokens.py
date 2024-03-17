@@ -29,6 +29,7 @@ class Tokens(MixinTimestamps, db.Model):
   def __repr__(self):
     return f'Tokens(id={self.id!r}, token={self.token!r})'
 
+
   @staticmethod
   def exists(str_token):
     try:
