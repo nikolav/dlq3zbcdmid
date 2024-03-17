@@ -51,7 +51,7 @@ def auth_register():
     db.session.commit()
 
     # tag user as company if `bool:company == true` provided
-    if True == company:
+    if company:
       newUser.tags.append(Tags.by_name(os.getenv('POLICY_COMPANY')))
       db.session.commit()
     
