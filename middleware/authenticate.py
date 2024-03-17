@@ -19,15 +19,15 @@ def authenticate():
   
   error = '@error/internal.500'
 
-  # pass open routes
+
+  # allow open routes
   if any(re.match(p, request.path) for p in PATHS_SKIP_AUTH):
     return
   
-  # ensure all CORS preflight OPTIONS requests 
-  # are answered with a successful HTTP status code (2xx)
-  # and do not redirect
+  # do not redirect `CORS` preflight `OPTIONS` requests, send success/2xx
   if 'OPTIONS' == request.method.upper():
     return abort(make_response('', 200))
+
 
   # @auth
   try:
@@ -45,11 +45,14 @@ def authenticate():
     
     # pass if authenticated, user exists in db
     user = db.session.get(Users, payload['id'])
+    
     if user:
+      
       # cache auth-data
       g.access_token         = token
       g.access_token_payload = payload
       g.user                 = user
+      
       # run next
       return
   
