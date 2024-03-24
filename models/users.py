@@ -14,6 +14,8 @@ from src.mixins import MixinTimestamps
 from src.mixins import MixinIncludesTags
 
 
+POLICY_COMPANY = os.getenv('POLICY_COMPANY')
+
 class Users(MixinTimestamps, MixinIncludesTags, db.Model):
   __tablename__ = usersTable
   
@@ -35,6 +37,6 @@ class Users(MixinTimestamps, MixinIncludesTags, db.Model):
   
   # public
   def is_company(self):
-    return self.includes_tags(os.getenv('POLICY_COMPANY'))
+    return self.includes_tags(POLICY_COMPANY)
   
   

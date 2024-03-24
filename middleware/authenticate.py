@@ -1,3 +1,4 @@
+import os
 import re
 
 from flask import request
@@ -13,6 +14,8 @@ from utils.jwtToken import expired as tokenExpired
 from utils.jwtToken import valid   as tokenValid
 from config         import PATHS_SKIP_AUTH
 
+
+POLICY_COMPANY = os.getenv('POLICY_COMPANY')
 
 def authenticate():
   # @before_request
@@ -52,7 +55,8 @@ def authenticate():
       g.access_token         = token
       g.access_token_payload = payload
       g.user                 = user
-      
+      g.is_company           = g.user.is_company()
+
       # run next
       return
   

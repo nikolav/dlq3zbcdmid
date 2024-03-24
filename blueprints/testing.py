@@ -61,6 +61,7 @@ class SchemaTesting(Schema):
 def testing_home():
   print(f'--testing: ')
   print(g.user)
+  print(g.is_company)
 
   u = db.session.scalars(
     db.select(Users)
