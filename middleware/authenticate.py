@@ -15,8 +15,6 @@ from utils.jwtToken import valid   as tokenValid
 from config         import PATHS_SKIP_AUTH
 
 
-POLICY_COMPANY = os.getenv('POLICY_COMPANY')
-
 def authenticate():
   # @before_request
   
@@ -46,18 +44,18 @@ def authenticate():
     if not tokenValid(token):
       raise Exception('access denied')
     
-    # pass if authenticated, user exists in db
+    # pass if authenticated, valid user in db
     user = db.session.get(Users, payload['id'])
     
     if user:
       
-      # cache auth-data
+      # cache auth-data `@globals`
       g.access_token         = token
       g.access_token_payload = payload
       g.user                 = user
       g.is_company           = g.user.is_company()
 
-      # run next
+      # `.success`, run next
       return
   
   except Exception as err:
