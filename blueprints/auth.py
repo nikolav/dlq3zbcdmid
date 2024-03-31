@@ -49,10 +49,15 @@ def auth_register():
     db.session.add(newUser)
 
     db.session.commit()
-
-    # tag user as company if `bool:company == true` provided
+    
+    # if `bool:company == true` provided; --dev-feature
+    #   tag user as company
+    #   tag user as :approved
+    #   tag user as fs:approved
     if company:
       newUser.tags.append(Tags.by_name(os.getenv('POLICY_COMPANY')))
+      newUser.tags.append(Tags.by_name(os.getenv('POLICY_APPROVED')))
+      newUser.tags.append(Tags.by_name(os.getenv('POLICY_FILESTORAGE')))
       db.session.commit()
     
     # new user added, issue access-token
