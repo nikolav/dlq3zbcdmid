@@ -23,6 +23,7 @@ class SchemaSerializeProductsTimes(SchemaSerializeTimes):
   stockType   = fields.String()
   stock       = fields.Float()
   onSale      = fields.Boolean()
+  tags        = fields.List(fields.String())
 
 class SchemaSerializeUsersTimes(SchemaSerializeTimes):
   id       = fields.Integer()

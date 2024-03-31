@@ -65,6 +65,7 @@ type Product {
   stockType: String
   onSale: Boolean
   description: String
+  tags: [String!]!
   created_at: String!
   updated_at: String!
 }

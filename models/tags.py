@@ -29,6 +29,10 @@ class Tags(db.Model):
   # magic
   def __repr__(self):
     return f'Tags(id={self.id!r}, tag={self.tag!r})'
+  
+  def __str__(self):
+    # return super().__str__()
+    return self.tag
 
 
   @staticmethod
