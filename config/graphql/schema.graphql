@@ -5,6 +5,7 @@ schema {
 
 scalar JsonData
 scalar JsonDocsTags
+scalar NumberReal
 
 
 #########
@@ -59,6 +60,11 @@ type Product {
   id: ID!
   user_id: ID
   name: String!
+  price: NumberReal
+  stock: NumberReal
+  stockType: String
+  onSale: Boolean
+  description: String
   created_at: String!
   updated_at: String!
 }
@@ -69,6 +75,16 @@ type Company {
   password: String!
   created_at: String!
   updated_at: String!
+}
+
+input InputProduct {
+  name: String
+  category: String
+  price: NumberReal
+  stock: NumberReal
+  stockType: String
+  onSale: Boolean
+  description: String
 }
 
 
@@ -106,7 +122,8 @@ type Query {
 type Mutation {
 
   # products
-  productsAdd(name: String!, user_id: ID!, tags: [String!]): Product
+  productsUpsert(data: InputProduct!, id: ID): Product!
+  productsRm(id: ID!): Product
 
   # docs
   docsUpsert(topic: String!, data: JsonData!, id: ID): JsonData!

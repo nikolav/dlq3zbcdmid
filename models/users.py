@@ -10,8 +10,10 @@ from sqlalchemy.orm import relationship
 from . import db
 from . import usersTable
 from . import ln_users_tags
+from . import POLICY_APPROVED
 from src.mixins import MixinTimestamps
 from src.mixins import MixinIncludesTags
+from models.tags import Tags
 
 
 POLICY_COMPANY = os.getenv('POLICY_COMPANY')
@@ -39,4 +41,24 @@ class Users(MixinTimestamps, MixinIncludesTags, db.Model):
   def is_company(self):
     return self.includes_tags(POLICY_COMPANY)
   
+  # public
+  def approved(self):
+    return self.includes_tags(POLICY_APPROVED)
   
+  # public
+  def approve(self):
+    error = '@error:internal'
+
+    try:
+      if not self.approved():
+        tag_approved = Tags.by_name(POLICY_APPROVED)
+        tag_approved.users.append(self)
+        db.session.commit()
+
+    except Exception as e:
+      error = e
+
+    else:
+      return str(self.id)
+    
+    return { 'error': str(error) }, 500

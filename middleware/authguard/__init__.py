@@ -14,3 +14,21 @@ def authguard(*policies):
       return fn_route(*args, **kwargs)
     return wrapper
   return with_authguard
+
+def authguard_company_approved(fn_route):
+  @wraps(fn_route)
+  def wrapper(*args, **kwargs):
+    try:
+      
+      if not g.user.is_company():
+        raise Exception('unavailable.com')
+      
+      if not g.user.approved():
+        raise Exception('unavailable.com')
+    
+    except:
+      return abort(make_response('', 403))
+
+    return fn_route(*args, **kwargs)
+  
+  return wrapper

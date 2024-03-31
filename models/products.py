@@ -2,6 +2,7 @@
 # import json
 # import re
 from typing import List
+from typing import Optional
 
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
@@ -22,6 +23,11 @@ class Products(MixinTimestamps, MixinIncludesTags, db.Model):
   id: Mapped[int] = mapped_column(primary_key = True)
 
   name: Mapped[str]
+  price: Mapped[Optional[float]]
+  description: Mapped[Optional[str]]
+  stockType: Mapped[Optional[str]]
+  stock: Mapped[Optional[float]]
+  onSale: Mapped[Optional[bool]]
   
   user_id = mapped_column(db.ForeignKey(f'{usersTable}.id'))
   

@@ -55,14 +55,16 @@ policy_email_            = os.getenv('POLICY_EMAIL')
 policy_fs_               = os.getenv('POLICY_FILESTORAGE')
 policy_all_              = os.getenv('POLICY_ALL')
 policy_company_          = os.getenv('POLICY_COMPANY')
-policy_company_approved_ = os.getenv('POLICY_COMPANY_APPROVED')
+# policy_company_approved_ = os.getenv('POLICY_COMPANY_APPROVED')
+policy_approved_         = os.getenv('POLICY_APPROVED')
 
 tagPolicyADMINS           = Tags.by_name(policy_admins_,  create = True)
 tagPolicyEMAIL            = Tags.by_name(policy_email_,   create = True)
 tagPolicyFS               = Tags.by_name(policy_fs_,      create = True)
 tagPolicyALL              = Tags.by_name(policy_all_,     create = True)
 tagPolicyCOMPANY          = Tags.by_name(policy_company_, create = True)
-tagPolicyCOMPANY_approved = Tags.by_name(policy_company_approved_, create = True)
+# tagPolicyCOMPANY_approved = Tags.by_name(policy_company_approved_, create = True)
+tagPolicy_approved        = Tags.by_name(policy_approved_, create = True)
 
 
 # tag default users
@@ -72,6 +74,10 @@ if not user_admin.includes_tags(policy_email_):
   tagPolicyEMAIL.users.append(user_admin)
 if not user_admin.includes_tags(policy_fs_):
   tagPolicyFS.users.append(user_admin)
+if not user_admin.includes_tags(policy_company_):
+  tagPolicyCOMPANY.users.append(user_admin)
+if not user_admin.includes_tags(policy_approved_):
+  tagPolicy_approved.users.append(user_admin)
 # if not user_admin.includes_tags(policy_all_):
 #   tagPolicyALL.users.append(user_admin)
 

@@ -15,9 +15,14 @@ class SchemaSerializeDocJsonTimes(SchemaSerializeDocJson):
   updated_at = fields.DateTime()
 
 class SchemaSerializeProductsTimes(SchemaSerializeTimes):
-  id      = fields.Integer()
-  user_id = fields.Integer(dump_default = None)
-  name    = fields.String()
+  id          = fields.Integer()
+  user_id     = fields.Integer(dump_default = None)
+  name        = fields.String()
+  price       = fields.Float()
+  description = fields.String()
+  stockType   = fields.String()
+  stock       = fields.Float()
+  onSale      = fields.Boolean()
 
 class SchemaSerializeUsersTimes(SchemaSerializeTimes):
   id       = fields.Integer()

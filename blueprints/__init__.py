@@ -15,10 +15,13 @@ cors_bp_home = CORS(bp_home)
 @timelog
 def status_ok():
   
+  
   admin_email = ''
   app_name    = ''
   
   for d in Docs.tagged(TAG_VARS):
+
+    print('--status :1')
 
     if 'app:name' in d.data:
       app_name = d.data['app:name']

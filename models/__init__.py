@@ -2,6 +2,7 @@ import os
 
 from flask_app import db
 
+POLICY_APPROVED = os.getenv('POLICY_APPROVED')
 
 tblSuffix = os.getenv('TABLE_NAME_SUFFIX')
 
