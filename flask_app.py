@@ -8,6 +8,8 @@ from flask_sqlalchemy import SQLAlchemy
 # from flask_talisman   import Talisman
 # https://github.com/miguelgrinberg/flask-socketio/issues/40#issuecomment-48268526
 from flask_socketio import SocketIO
+# https://pythonhosted.org/Flask-Mail/
+from flask_mail import Mail
 
 from src.classes import Base as DbModelBaseClass
 
@@ -36,11 +38,23 @@ app.config['SQLALCHEMY_DATABASE_URI']        = DATABASE_URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO']                = not PRODUCTION
 
+
+# email
+app.config['MAIL_SERVER']            = os.getenv('MAIL_SERVER')
+app.config['MAIL_PORT']              = os.getenv('MAIL_PORT')
+app.config['MAIL_USERNAME']          = os.getenv('MAIL_USERNAME')
+app.config['MAIL_PASSWORD']          = os.getenv('MAIL_PASSWORD')
+app.config['MAIL_USE_TLS']           = bool(os.getenv('MAIL_USE_TLS'))
+app.config['MAIL_USE_SSL']           = bool(os.getenv('MAIL_USE_SSL'))
+app.config['MAIL_ASCII_ATTACHMENTS'] = bool(os.getenv('MAIL_ASCII_ATTACHMENTS'))
+
+
 # talisman = Talisman(app, force_https = False)
-cors     = CORS(app, supports_credentials = True)
-api      = Api(app)
-db       = SQLAlchemy(app, model_class = DbModelBaseClass)
-io       = SocketIO(app, 
-              cors_allowed_origins = IO_CORS_ALLOW_ORIGINS, 
-              cors_supports_credentials = True)
+cors  = CORS(app, supports_credentials = True)
+api   = Api(app)
+db    = SQLAlchemy(app, model_class = DbModelBaseClass)
+io    = SocketIO(app, 
+                 cors_allowed_origins = IO_CORS_ALLOW_ORIGINS, 
+                 cors_supports_credentials = True)
+mail  = Mail(app)
 

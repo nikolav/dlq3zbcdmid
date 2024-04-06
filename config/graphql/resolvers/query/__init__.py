@@ -8,6 +8,7 @@ from .docs import tags_by_doc_id
 
 from .products import products_list_by_user
 from .products import products_list_by_tags
+from .products import products_list_all
 
 from .companies import companies_list
 

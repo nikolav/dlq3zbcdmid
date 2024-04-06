@@ -49,24 +49,45 @@ from models.users     import Users
 from models.products  import Products
 from models.docs      import Docs
 
-class SchemaTesting(Schema):
+from flask_mail import Message
+from flask_app import mail
 
-  class Meta:
-    unknown = EXCLUDE
+from utils import id_gen
+
+# class SchemaTesting(Schema):
+
+#   class Meta:
+#     unknown = EXCLUDE
     
-  x0 = fields.Integer(load_default = -9999)
+#   x0 = fields.Integer(load_default = -9999)
+
+from flask import render_template
 
 @bp_testing.route('/', methods = ('POST',))
-@arguments_schema(SchemaTesting())
+# @arguments_schema(SchemaTesting())
 def testing_home():
-  print(f'--testing: ')
-  print(g.user)
-  print(g.is_company)
+  email_status = { 'status': None, 'error': None }
 
-  u = db.session.scalars(
-    db.select(Users)
+  message = Message(
+    'kantar:test --html-poruka',
+    sender = ("KANTAR.RS", "app@kantar.rs"),
+    recipients = [
+      "admin@nikolav.rs",
+      # "slavko.savic@me.com",
+    ]
   )
-
-  return { 'res': UsersPlain(many = True).dump(u) }
-  # return { 'res': 'ok' }
-
+  # message.body='hello'
+  message.html = render_template("mail/status.html", 
+                                 status = 'ok', 
+                                 link   = 'http://70.34.223.252:3001/')
+  # message.html = render_template("mail/simple.html", text = f'your pin code is: { id_gen() }')
+  
+  try:
+    mail.send(message)
+  except Exception as err:
+    email_status['error'] = str(err)
+    print(err)
+  else:
+    email_status['status'] = 'ok'
+  
+  return email_status

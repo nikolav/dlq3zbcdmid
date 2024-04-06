@@ -7,7 +7,6 @@ scalar JsonData
 scalar JsonDocsTags
 scalar NumberReal
 
-
 #########
 ## @types
 
@@ -88,12 +87,10 @@ input InputProduct {
   description: String
 }
 
-
 #########
 ## @Query
 
 type Query {
-
   # api --status
   status: String!
 
@@ -104,6 +101,7 @@ type Query {
   companiesList(approved: Boolean): [Company!]!
 
   # products
+  productsListAll: [Product!]!
   productsListByUser(user_id: ID!): [Product!]!
   productsListByTags(tags: [String!]!): [Product!]!
 
@@ -116,12 +114,10 @@ type Query {
   tagsByDocId(id: ID!): [String!]!
 }
 
-
 ############
 ## @Mutation
 
 type Mutation {
-
   # products
   productsUpsert(data: InputProduct!, id: ID): Product!
   productsRm(id: ID!): Product
