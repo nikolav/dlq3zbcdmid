@@ -29,3 +29,9 @@ class SchemaSerializeUsersTimes(SchemaSerializeTimes):
   id       = fields.Integer()
   email    = fields.String()
   password = fields.String()
+
+class SchemaSerializeOrdersTimes(SchemaSerializeTimes):
+  id          = fields.Integer()
+  code        = fields.String()
+  description = fields.String()
+  user_id     = fields.Integer(dump_default = None)

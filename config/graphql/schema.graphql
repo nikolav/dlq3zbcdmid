@@ -69,10 +69,34 @@ type Product {
   updated_at: String!
 }
 
+type ProductWithAmount {
+  id: ID!
+  user_id: ID
+  name: String!
+  price: NumberReal
+  stock: NumberReal
+  stockType: String
+  onSale: Boolean
+  description: String
+  tags: [String!]!
+  created_at: String!
+  updated_at: String!
+  amount: NumberReal!
+}
+
 type Company {
   id: ID!
   email: String!
   password: String!
+  created_at: String!
+  updated_at: String!
+}
+
+type Order {
+  id: ID!
+  code: String
+  description: String
+  user_id: ID
   created_at: String!
   updated_at: String!
 }
@@ -104,6 +128,12 @@ type Query {
   productsListAll: [Product!]!
   productsListByUser(user_id: ID!): [Product!]!
   productsListByTags(tags: [String!]!): [Product!]!
+  productsListPopular(length: Int): [Product!]!
+  productsListExact(products: [ID!]!): [Product!]!
+
+  # orders
+  ordersReceived: [Order!]!
+  ordersReceivedProducts(order_id: ID!): [ProductWithAmount!]!
 
   # storage
   storageList: [StorageFileInfo!]!
@@ -121,6 +151,9 @@ type Mutation {
   # products
   productsUpsert(data: InputProduct!, id: ID): Product!
   productsRm(id: ID!): Product
+
+  # orders
+  ordersPlace(code: String, description: String, items: JsonData!): ID
 
   # docs
   docsUpsert(topic: String!, data: JsonData!, id: ID): JsonData!

@@ -9,6 +9,11 @@ from .docs import tags_by_doc_id
 from .products import products_list_by_user
 from .products import products_list_by_tags
 from .products import products_list_all
+from .products import products_list_popular
+from .products import products_list_exact
 
 from .companies import companies_list
+
+from .orders import orders_received
+from .orders import orders_received_products
 

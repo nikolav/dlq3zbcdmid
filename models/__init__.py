@@ -1,6 +1,10 @@
 import os
 
+from sqlalchemy import Float
+from sqlalchemy import Integer
+
 from flask_app import db
+
 
 POLICY_APPROVED = os.getenv('POLICY_APPROVED')
 
@@ -35,6 +39,7 @@ ln_orders_products = db.Table(
   lnTableOrdersProducts,
   db.Column('order_id',   db.ForeignKey(f'{ordersTable}.id'),   primary_key = True),
   db.Column('product_id', db.ForeignKey(f'{productsTable}.id'), primary_key = True),
+  db.Column('amount', Float),
 )
 
 ln_orders_tags = db.Table(

@@ -8,3 +8,6 @@ from .docs import docs_rm_by_id
 
 from .products import products_rm
 from .products import products_upsert
+
+from .orders import orders_place
+

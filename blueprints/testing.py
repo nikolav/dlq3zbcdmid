@@ -47,7 +47,9 @@ from models.tags      import Tags
 from models.tokens    import Tokens
 from models.users     import Users
 from models.products  import Products
+from models.orders    import Orders
 from models.docs      import Docs
+from models import ln_orders_products
 
 from flask_mail import Message
 from flask_app import mail
@@ -63,31 +65,31 @@ from utils import id_gen
 
 from flask import render_template
 
+from sqlalchemy import func
+from sqlalchemy import desc
+
+
+from schemas.serialization import SchemaSerializeOrdersTimes
+from schemas.serialization import SchemaSerializeProductsTimes
+
 @bp_testing.route('/', methods = ('POST',))
 # @arguments_schema(SchemaTesting())
 def testing_home():
-  email_status = { 'status': None, 'error': None }
+  # res_orders = db.session.scalars(
+  #   db.select(Orders)
+  #     .join(ln_orders_products)
+  #     .join(Products)
+  #     .where(Products.user_id == g.user.id)
+  #     .order_by(desc(Orders.updated_at))
+  #     .group_by(Orders)
+  # )  
+  # return SchemaSerializeOrdersTimes(many = True).dump(res_orders)
 
-  message = Message(
-    'kantar:test --html-poruka',
-    sender = ("KANTAR.RS", "app@kantar.rs"),
-    recipients = [
-      "admin@nikolav.rs",
-      # "slavko.savic@me.com",
-    ]
+  res = db.session.execute(
+    db.select(Products, ln_orders_products.c.amount)
+      .join(ln_orders_products)
+      .join(Orders)
+      .where(Orders.id == 5, Products.user_id == g.user.id)
   )
-  # message.body='hello'
-  message.html = render_template("mail/status.html", 
-                                 status = 'ok', 
-                                 link   = 'http://70.34.223.252:3001/')
-  # message.html = render_template("mail/simple.html", text = f'your pin code is: { id_gen() }')
   
-  try:
-    mail.send(message)
-  except Exception as err:
-    email_status['error'] = str(err)
-    print(err)
-  else:
-    email_status['status'] = 'ok'
-  
-  return email_status
+  return [[SchemaSerializeProductsTimes().dump(p), amount] for (p, amount) in res]
