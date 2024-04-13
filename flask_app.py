@@ -33,13 +33,15 @@ REBUILD_SCHEMA  = (not PRODUCTION) and REBUILD_SCHEMA_
 
 app = Flask(__name__)
 
+# app-config
 app.config['SECRET_KEY']                     = os.getenv('SECRET_KEY')
+
+# app-config:db
 app.config['SQLALCHEMY_DATABASE_URI']        = DATABASE_URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO']                = not PRODUCTION
 
-
-# email
+# app-config:email
 app.config['MAIL_SERVER']            = os.getenv('MAIL_SERVER')
 app.config['MAIL_PORT']              = os.getenv('MAIL_PORT')
 app.config['MAIL_USERNAME']          = os.getenv('MAIL_USERNAME')

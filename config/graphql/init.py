@@ -37,7 +37,7 @@ def graphql_handle():
         schema,
         data,
         context_value={'request': request},
-        debug=app.debug
+        debug = app.debug
     )
 
     status_code = 200 if success else 400
