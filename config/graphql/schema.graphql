@@ -148,6 +148,7 @@ type Query {
 
   # storage
   storageList: [StorageFileInfo!]!
+  storageListAll: [StorageFileInfo!]!
 
   # docs
   docsByTopic(topic: String!): [JsonData!]!
