@@ -71,10 +71,19 @@ from sqlalchemy import desc
 
 from schemas.serialization import SchemaSerializeOrdersTimes
 from schemas.serialization import SchemaSerializeProductsTimes
+from schemas.serialization import SchemaSerializeDocJsonTimes
 
 @bp_testing.route('/', methods = ('POST',))
 # @arguments_schema(SchemaTesting())
 def testing_home():
+  res = db.session.scalar(
+    db.select(func.count(Docs.id))
+    .where(Docs.tags.any(Tags.tag == '@vars'))
+  )
+  print(res)
+  return { 'status': 'ok' }
+
+
   # res_orders = db.session.scalars(
   #   db.select(Orders)
   #     .join(ln_orders_products)
@@ -85,11 +94,11 @@ def testing_home():
   # )  
   # return SchemaSerializeOrdersTimes(many = True).dump(res_orders)
 
-  res = db.session.execute(
-    db.select(Products, ln_orders_products.c.amount)
-      .join(ln_orders_products)
-      .join(Orders)
-      .where(Orders.id == 5, Products.user_id == g.user.id)
-  )
+  # res = db.session.execute(
+  #   db.select(Products, ln_orders_products.c.amount)
+  #     .join(ln_orders_products)
+  #     .join(Orders)
+  #     .where(Orders.id == 5, Products.user_id == g.user.id)
+  # )
   
-  return [[SchemaSerializeProductsTimes().dump(p), amount] for (p, amount) in res]
+  # return [[SchemaSerializeProductsTimes().dump(p), amount] for (p, amount) in res]

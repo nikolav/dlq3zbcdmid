@@ -31,7 +31,9 @@ class SchemaSerializeUsersTimes(SchemaSerializeTimes):
   password = fields.String()
 
 class SchemaSerializeOrdersTimes(SchemaSerializeTimes):
+  user_id     = fields.Integer(dump_default = None)
   id          = fields.Integer()
   code        = fields.String()
   description = fields.String()
-  user_id     = fields.Integer(dump_default = None)
+  completed   = fields.Boolean()
+  canceled    = fields.Boolean()

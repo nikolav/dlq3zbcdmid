@@ -22,8 +22,10 @@ class Orders(MixinTimestamps, MixinIncludesTags, db.Model):
   
   id: Mapped[int] = mapped_column(primary_key = True)
 
-  code       : Mapped[Optional[str]]
-  description: Mapped[Optional[str]]
+  code        : Mapped[Optional[str]]
+  description : Mapped[Optional[str]]
+  completed   : Mapped[Optional[bool]]
+  canceled    : Mapped[Optional[bool]]
   
   user_id = mapped_column(db.ForeignKey(f'{usersTable}.id'))
   

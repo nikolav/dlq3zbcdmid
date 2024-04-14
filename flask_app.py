@@ -34,7 +34,7 @@ REBUILD_SCHEMA  = (not PRODUCTION) and REBUILD_SCHEMA_
 app = Flask(__name__)
 
 # app-config
-app.config['SECRET_KEY']                     = os.getenv('SECRET_KEY')
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
 # app-config:db
 app.config['SQLALCHEMY_DATABASE_URI']        = DATABASE_URI

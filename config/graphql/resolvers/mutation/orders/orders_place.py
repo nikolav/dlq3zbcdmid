@@ -19,6 +19,7 @@ from config.graphql.init import mutation
 
 IOEVENT_PRODUCTS_CHANGE_prefix = os.getenv('IOEVENT_PRODUCTS_CHANGE_prefix')
 IOEVENT_PRODUCTS_CHANGE        = os.getenv('IOEVENT_PRODUCTS_CHANGE')
+IOEVENT_ORDERS_CHANGE          = os.getenv('IOEVENT_ORDERS_CHANGE')
 
 @mutation.field('ordersPlace')
 def resolve_ordersPlace(_obj, _info, items, code = "", description = ""):
@@ -30,8 +31,15 @@ def resolve_ordersPlace(_obj, _info, items, code = "", description = ""):
     # products:ordered
     lsProductsOrdered = [p for p in db.session.scalars(
       db.select(Products)
-        .where(Products.id.in_(items.keys()))
+        .where(
+          Products.id.in_(items.keys()), 
+          # skip own products
+          Products.user_id != g.user.id
+        )
     )]
+    
+    if not 0 < len(lsProductsOrdered):
+      raise Exception('--ordersPlace-skip-cRXgtZgd7Z')
 
     # insert order
     o = Orders(
@@ -69,16 +77,13 @@ def resolve_ordersPlace(_obj, _info, items, code = "", description = ""):
   else:
     # notify companies
     for company in com:
-      io.emit(f'@ORDERS_UPDATE:{company.id}')
+      io.emit(f'{IOEVENT_ORDERS_CHANGE}{company.id}')
       # mail.send(
       #   Message(
       #     'narudzbe azurirane | KANTAR.RS',
-      #     sender = ('KANTAR.RS', 'app@kantar.rs'),
-      #     recipients = [
-      #       'admin@nikolav.rs',
-      #       # 'slavko.savic@me.com'
-      #     ],
-      #     html = render_template('mail/simple.html', text = f'@kantar.dev: nova narudzba [{o.id}] 😎')
+      #     sender = ('KANTAR.RS', 'no-reply.app@kantar.rs'),
+      #     recipients = map(lambda user: user.email, com),
+      #     html = render_template('mail/simple.html', text = f'@kantar.dev: nova narudzba [{o.id}]')
       #   )
       # )
 

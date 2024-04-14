@@ -84,6 +84,14 @@ type ProductWithAmount {
   amount: NumberReal!
 }
 
+type User {
+  id: ID!
+  email: String!
+  password: String!
+  created_at: String!
+  updated_at: String!
+}
+
 type Company {
   id: ID!
   email: String!
@@ -97,6 +105,8 @@ type Order {
   code: String
   description: String
   user_id: ID
+  completed: Boolean
+  canceled: Boolean
   created_at: String!
   updated_at: String!
 }
@@ -121,8 +131,9 @@ type Query {
   # vars
   vars: [Var!]!
 
-  # companies
+  # companies, users
   companiesList(approved: Boolean): [Company!]!
+  users: [User!]!
 
   # products
   productsListAll: [Product!]!
@@ -160,6 +171,7 @@ type Mutation {
   docsRm(topic: String!, id: ID!): JsonData
   docUpsert(doc_id: String!, data: JsonData!): JsonData!
   docsRmById(id: ID!): JsonData
+
   # manage docs/tags: id, { "@tag/foo": true, "@tag/bar": false }
   docsTags(id: ID!, tags: JsonDocsTags!): JsonDocsTags!
 

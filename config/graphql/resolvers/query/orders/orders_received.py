@@ -21,7 +21,7 @@ def resolve_ordersReceived(_obj, _info):
         .join(ln_orders_products)
         .join(Products)
         .where(Products.user_id == g.user.id)
-        .order_by(desc(Orders.updated_at))
+        .order_by(desc(Orders.created_at))
         .group_by(Orders)
     )  
     return SchemaSerializeOrdersTimes(many = True).dump(orders)

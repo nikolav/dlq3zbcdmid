@@ -3,10 +3,10 @@ import json
 import re
 from typing import List
 
+from sqlalchemy     import JSON
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
-from sqlalchemy     import JSON
 
 from . import docsTable
 from . import ln_docs_tags

@@ -7,6 +7,7 @@ from flask_cors import CORS
 from sqlalchemy import func
 
 from flask_app      import db
+from flask_app      import io
 from models.users   import Users
 from models.tags    import Tags
 from utils.pw       import hash  as hashPassword
@@ -18,6 +19,8 @@ from middleware.arguments    import arguments_schema
 from schemas.validation.auth import SchemaAuthLogin
 from schemas.validation.auth import SchemaAuthRegister
 
+
+IOEVENT_AUTH_NEWUSER = os.getenv('IOEVENT_AUTH_NEWUSER')
 
 # router config
 bp_auth = Blueprint('auth', __name__, url_prefix = '/auth')
@@ -69,6 +72,7 @@ def auth_register():
   else:
     # user registered, send token, 201
     if token:
+      io.emit(IOEVENT_AUTH_NEWUSER)
       return { 'token': token }, 201
   
   # forbiden otherwise
