@@ -273,3 +273,4 @@ web_modules/
 wheels/
 yarn-debug.log*
 yarn-error.log*
+heroku-config-set.sh
