@@ -13,8 +13,9 @@ from utils.str import match_after_last_colon
 from utils.str import match_after_last_underscore
 
 IOEVENT_PRODUCT_IMAGES_CHANGE_prefix = os.getenv('IOEVENT_PRODUCT_IMAGES_CHANGE_prefix')
+IOEVENT_COM_PHOTOS_CHANGE_prefix = os.getenv('IOEVENT_COM_PHOTOS_CHANGE_prefix')
 PRODUCT_IMAGES_prefix = os.getenv('PRODUCT_IMAGES_prefix')
-IOEVENT_FILES = os.getenv('IOEVENT_FILES')
+COM_PHOTOS_prefix = os.getenv('COM_PHOTOS_prefix')
 
 @mutation.field('docsTags')
 def resolve_docsTags(_obj, _info, id, tags):
@@ -66,8 +67,18 @@ def resolve_docsTags(_obj, _info, id, tags):
           for name in tags_managed 
             if name.startswith(PRODUCT_IMAGES_prefix)
       ]
-
       for ioevent_ in ioevents_product_images_managed:
+        io.emit(ioevent_)
+
+      # detect if `@com:images:{uid}`
+      #  filter tags_managed, @starts_with `@com:images:{uid}`; 
+      #   @each io:emit @com:images:{uid}
+      ioevent_com_photos_managed = [
+        f'{IOEVENT_COM_PHOTOS_CHANGE_prefix}{match_after_last_colon(name)}' 
+          for name in tags_managed 
+            if name.startswith(COM_PHOTOS_prefix)        
+      ]      
+      for ioevent_ in ioevent_com_photos_managed:
         io.emit(ioevent_)
 
   return res
