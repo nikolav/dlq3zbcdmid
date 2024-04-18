@@ -28,8 +28,8 @@ from config import TAG_STORAGE
 from config import TAG_IS_FILE
 
 
-UPLOAD_PATH = os.getenv('UPLOAD_PATH')
-UPLOAD_DIR  = os.getenv('UPLOAD_DIR')
+UPLOAD_PATH   = os.getenv('UPLOAD_PATH')
+UPLOAD_DIR    = os.getenv('UPLOAD_DIR')
 
 # router config
 bp_storage = Blueprint('storage', __name__, url_prefix = '/storage')

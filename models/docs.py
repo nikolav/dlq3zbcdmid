@@ -27,9 +27,8 @@ _schemaDocsDumpMany = SchemaSerializeDocJsonTimes(many = True)
 class Docs(MixinTimestamps, MixinIncludesTags, db.Model):
   __tablename__ = docsTable
 
-  id: Mapped[int] = mapped_column(primary_key = True)
-
-  data: Mapped[dict] = mapped_column(JSON)
+  id   : Mapped[int]  = mapped_column(primary_key = True)
+  data : Mapped[dict] = mapped_column(JSON)
 
   # virtual
   tags: Mapped[List['Tags']] = relationship(secondary = ln_docs_tags, back_populates = 'docs')

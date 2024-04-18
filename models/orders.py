@@ -26,13 +26,12 @@ class Orders(MixinTimestamps, MixinIncludesTags, db.Model):
   description : Mapped[Optional[str]]
   completed   : Mapped[Optional[bool]]
   canceled    : Mapped[Optional[bool]]
-  
   user_id = mapped_column(db.ForeignKey(f'{usersTable}.id'))
   
   # virtual
-  tags    : Mapped[List['Tags']]     = relationship(secondary = ln_orders_tags, back_populates = 'orders')
-  user    : Mapped['Users']          = relationship(back_populates = 'orders')
-  products: Mapped[List['Products']] = relationship(secondary = ln_orders_products, back_populates = 'orders')
+  tags     : Mapped[List['Tags']]     = relationship(secondary = ln_orders_tags, back_populates = 'orders')
+  user     : Mapped['Users']          = relationship(back_populates = 'orders')
+  products : Mapped[List['Products']] = relationship(secondary = ln_orders_products, back_populates = 'orders')
   
   
   # magic

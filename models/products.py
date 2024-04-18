@@ -22,19 +22,18 @@ class Products(MixinTimestamps, MixinIncludesTags, db.Model):
   
   id: Mapped[int] = mapped_column(primary_key = True)
 
-  name: Mapped[str]
-  price: Mapped[Optional[float]]
-  description: Mapped[Optional[str]]
-  stockType: Mapped[Optional[str]]
-  stock: Mapped[Optional[float]]
-  onSale: Mapped[Optional[bool]]
-  
+  name        : Mapped[str]
+  price       : Mapped[Optional[float]]
+  description : Mapped[Optional[str]]
+  stockType   : Mapped[Optional[str]]
+  stock       : Mapped[Optional[float]]
+  onSale      : Mapped[Optional[bool]]
   user_id = mapped_column(db.ForeignKey(f'{usersTable}.id'))
   
   # virtual
-  tags  : Mapped[List['Tags']]   = relationship(secondary = ln_products_tags, back_populates = 'products')
-  user  : Mapped['Users']        = relationship(back_populates = 'products')
-  orders: Mapped[List['Orders']] = relationship(secondary = ln_orders_products, back_populates = 'products')
+  tags   : Mapped[List['Tags']]   = relationship(secondary = ln_products_tags, back_populates = 'products')
+  user   : Mapped['Users']        = relationship(back_populates = 'products')
+  orders : Mapped[List['Orders']] = relationship(secondary = ln_orders_products, back_populates = 'products')
   
 
   # magic

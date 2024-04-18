@@ -14,6 +14,7 @@ from utils.str import match_after_last_underscore
 
 IOEVENT_PRODUCT_IMAGES_CHANGE_prefix = os.getenv('IOEVENT_PRODUCT_IMAGES_CHANGE_prefix')
 PRODUCT_IMAGES_prefix = os.getenv('PRODUCT_IMAGES_prefix')
+IOEVENT_FILES = os.getenv('IOEVENT_FILES')
 
 @mutation.field('docsTags')
 def resolve_docsTags(_obj, _info, id, tags):
@@ -65,6 +66,7 @@ def resolve_docsTags(_obj, _info, id, tags):
           for name in tags_managed 
             if name.startswith(PRODUCT_IMAGES_prefix)
       ]
+
       for ioevent_ in ioevents_product_images_managed:
         io.emit(ioevent_)
 
