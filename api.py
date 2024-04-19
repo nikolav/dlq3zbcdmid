@@ -7,12 +7,12 @@ from flask_app import io
 from flask_app import PRODUCTION
 from flask_app import REBUILD_SCHEMA
 
+from middleware.authenticate import authenticate
 from resources.docs          import DocsResource
 from blueprints              import bp_home
 from blueprints.auth         import bp_auth
 from blueprints.storage      import bp_storage
 from blueprints.testing      import bp_testing
-from middleware.authenticate import authenticate
 
 
 # mount resources

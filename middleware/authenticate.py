@@ -36,13 +36,17 @@ def authenticate():
     token   = tokenFromRequest()
     payload = jwtTokenDecode(token)
     
-    # abort.401 if token expired
-    if tokenExpired(payload):
-      raise Exception('access denied')
+    # skip token validation if user is
+    #  default, no policies, user
+    if not Users.is_default(payload['id']):
+          
+      # abort.401 if token expired
+      if tokenExpired(payload):
+        raise Exception('access denied')
 
-    # abort.401 if token invalid
-    if not tokenValid(token):
-      raise Exception('access denied')
+      # abort.401 if token invalid
+      if not tokenValid(token):
+        raise Exception('access denied')
     
     # pass if authenticated, valid user in db
     user = db.session.get(Users, payload['id'])

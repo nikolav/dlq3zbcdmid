@@ -76,11 +76,6 @@ from schemas.serialization import SchemaSerializeDocJsonTimes
 @bp_testing.route('/', methods = ('POST',))
 # @arguments_schema(SchemaTesting())
 def testing_home():
-  res = db.session.scalar(
-    db.select(func.count(Docs.id))
-    .where(Docs.tags.any(Tags.tag == '@vars'))
-  )
-  print(res)
   return { 'status': 'ok' }
 
 

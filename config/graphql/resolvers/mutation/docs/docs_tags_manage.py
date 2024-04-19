@@ -1,6 +1,5 @@
 import os
 
-
 from flask_app import db
 from flask_app import io
 
@@ -10,12 +9,13 @@ from models.docs import Docs
 from config.graphql.init import mutation
 from . import IOEVENT_DOCS_TAGS_CHANGE_prefix
 from utils.str import match_after_last_colon
-from utils.str import match_after_last_underscore
+
 
 IOEVENT_PRODUCT_IMAGES_CHANGE_prefix = os.getenv('IOEVENT_PRODUCT_IMAGES_CHANGE_prefix')
 IOEVENT_COM_PHOTOS_CHANGE_prefix = os.getenv('IOEVENT_COM_PHOTOS_CHANGE_prefix')
 PRODUCT_IMAGES_prefix = os.getenv('PRODUCT_IMAGES_prefix')
 COM_PHOTOS_prefix = os.getenv('COM_PHOTOS_prefix')
+
 
 @mutation.field('docsTags')
 def resolve_docsTags(_obj, _info, id, tags):

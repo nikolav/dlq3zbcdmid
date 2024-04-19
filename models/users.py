@@ -17,6 +17,7 @@ from models.tags import Tags
 
 
 POLICY_COMPANY = os.getenv('POLICY_COMPANY')
+USER_EMAIL = os.getenv('USER_EMAIL')
 
 class Users(MixinTimestamps, MixinIncludesTags, db.Model):
   __tablename__ = usersTable
@@ -35,6 +36,19 @@ class Users(MixinTimestamps, MixinIncludesTags, db.Model):
   # magic
   def __repr__(self):
     return f'Users(id={self.id!r}, email={self.email!r}, password={self.password!r})'
+  
+  
+  # static
+  @staticmethod
+  def is_default(id):
+    try:
+      return id == db.session.scalar(
+        db.select(Users.id)
+          .where(Users.email == USER_EMAIL))
+    except:
+      pass
+    
+    return False
   
   
   # public
