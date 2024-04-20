@@ -1,5 +1,7 @@
 import os
 
+import sqlalchemy
+
 from flask      import Blueprint
 from flask_cors import CORS
 
@@ -23,13 +25,11 @@ cors_bp_home = CORS(bp_home)
 @timelog
 def status_ok():
   
-  
   admin_email = ''
   app_name    = ''
   
+  
   for d in Docs.tagged(TAG_VARS):
-
-    print('--status :1')
 
     if 'app:name' in d.data:
       app_name = d.data['app:name']
@@ -39,11 +39,13 @@ def status_ok():
     
     if app_name and admin_email:
       break
+
   
   uid = db.session.scalar(
     db.select(Users.id)
     .where(Users.email == USER_EMAIL)
   )
+  
   uid_admin = db.session.scalar(
     db.select(Users.id)
     .where(Users.email == ADMIN_EMAIL)
@@ -56,4 +58,5 @@ def status_ok():
     'admin:pin'     : uid_admin,
     'uid:default'   : uid,
     'token:default' : encode({ 'id': uid }),
+    'sqlalchemy'    : sqlalchemy.__version__,
   }

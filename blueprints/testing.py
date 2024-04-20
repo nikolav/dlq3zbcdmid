@@ -10,15 +10,8 @@ from flask_cors import cross_origin
 from flask      import make_response
 from flask      import abort
 
-from sqlalchemy import select
-from sqlalchemy import literal_column
-from sqlalchemy import text
-from sqlalchemy import func
-
 from flask_app       import db
 from flask_app       import app
-from models.tags     import Tags
-from models.docs     import Docs
 # from utils.pw       import hash  as hashPassword
 # from utils.pw       import check as checkPassword
 # from utils.jwtToken import issueToken
@@ -49,10 +42,10 @@ from models.users     import Users
 from models.products  import Products
 from models.orders    import Orders
 from models.docs      import Docs
-from models import ln_orders_products
+from models           import ln_orders_products
 
 from flask_mail import Message
-from flask_app import mail
+from flask_app  import mail
 
 from utils import id_gen
 
@@ -73,10 +66,16 @@ from schemas.serialization import SchemaSerializeOrdersTimes
 from schemas.serialization import SchemaSerializeProductsTimes
 from schemas.serialization import SchemaSerializeDocJsonTimes
 
+from sqlalchemy import text
+
 @bp_testing.route('/', methods = ('POST',))
 # @arguments_schema(SchemaTesting())
 def testing_home():
-  return { 'status': 'ok' }
+  status = db.session.scalar(
+    text('select :msg'), 
+    { 'msg': 'done' }
+  )
+  return { 'status': status }
 
 
   # res_orders = db.session.scalars(
