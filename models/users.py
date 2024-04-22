@@ -31,6 +31,7 @@ class Users(MixinTimestamps, MixinIncludesTags, db.Model):
   tags     : Mapped[List['Tags']]     = relationship(secondary = ln_users_tags, back_populates = 'users')
   products : Mapped[List['Products']] = relationship(back_populates = 'user')
   orders   : Mapped[List['Orders']]   = relationship(back_populates = 'user')
+  posts    : Mapped[List['Posts']]    = relationship(back_populates = 'user')
 
 
   # magic

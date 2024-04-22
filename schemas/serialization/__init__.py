@@ -37,3 +37,8 @@ class SchemaSerializeOrdersTimes(SchemaSerializeTimes):
   description = fields.String()
   completed   = fields.Boolean()
   canceled    = fields.Boolean()
+
+class SchemaSerializePosts(SchemaSerializeTimes):
+  id       = fields.Integer()
+  title    = fields.String()
+  content  = fields.String()

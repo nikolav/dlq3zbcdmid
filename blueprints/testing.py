@@ -28,6 +28,7 @@ cors_bp_testing = CORS(bp_testing)
 from schemas.serialization import SchemaSerializeDocJsonTimes  as DocPlain
 from schemas.serialization import SchemaSerializeProductsTimes as SchemaProducts
 from schemas.serialization import SchemaSerializeUsersTimes    as UsersPlain
+from schemas.serialization import SchemaSerializePosts
 
 from marshmallow.exceptions  import ValidationError
 from marshmallow  import Schema
@@ -42,6 +43,7 @@ from models.users     import Users
 from models.products  import Products
 from models.orders    import Orders
 from models.docs      import Docs
+from models.posts     import Posts
 from models           import ln_orders_products
 
 from flask_mail import Message
@@ -68,12 +70,16 @@ from schemas.serialization import SchemaSerializeDocJsonTimes
 
 from sqlalchemy import text
 
+
 @bp_testing.route('/', methods = ('POST',))
 # @arguments_schema(SchemaTesting())
 def testing_home():
+  t = Tags.by_name("posts:jDDsXtp5I", create = True)
+  print(SchemaSerializePosts(many = True).dump(t.posts))
+
   status = db.session.scalar(
     text('select :msg'), 
-    { 'msg': 'done' }
+    { 'msg': 'ok' }
   )
   return { 'status': status }
 

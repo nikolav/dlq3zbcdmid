@@ -68,6 +68,7 @@ if __name__ == '__main__':
     from models.products import Products
     from models.orders   import Orders
     from models.docs     import Docs
+    from models.posts    import Posts
     
     # drop/create schema
     if REBUILD_SCHEMA:
