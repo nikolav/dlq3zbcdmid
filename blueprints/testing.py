@@ -74,9 +74,6 @@ from sqlalchemy import text
 @bp_testing.route('/', methods = ('POST',))
 # @arguments_schema(SchemaTesting())
 def testing_home():
-  t = Tags.by_name("posts:jDDsXtp5I", create = True)
-  print(SchemaSerializePosts(many = True).dump(t.posts))
-
   status = db.session.scalar(
     text('select :msg'), 
     { 'msg': 'ok' }
