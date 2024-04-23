@@ -55,6 +55,14 @@ type StorageFileRemovedInfo {
   file: StorageFileRemovedInfoSuccess
 }
 
+type User {
+  id: ID!
+  email: String!
+  password: String!
+  created_at: String!
+  updated_at: String!
+}
+
 type Product {
   id: ID!
   user_id: ID
@@ -65,6 +73,7 @@ type Product {
   onSale: Boolean
   description: String
   tags: [String!]!
+  user: User
   created_at: String!
   updated_at: String!
 }
@@ -82,14 +91,6 @@ type ProductWithAmount {
   created_at: String!
   updated_at: String!
   amount: NumberReal!
-}
-
-type User {
-  id: ID!
-  email: String!
-  password: String!
-  created_at: String!
-  updated_at: String!
 }
 
 type Company {

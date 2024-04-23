@@ -41,4 +41,4 @@ services:
     #   command: ["redis-server", "/etc/redis/redis.conf"]
 
     # volumes: 
-    # vol_pg:
+    #   vol_pg:

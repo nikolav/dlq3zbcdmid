@@ -14,6 +14,11 @@ class SchemaSerializeDocJsonTimes(SchemaSerializeDocJson):
   created_at = fields.DateTime()
   updated_at = fields.DateTime()
 
+class SchemaSerializeUsersTimes(SchemaSerializeTimes):
+  id       = fields.Integer()
+  email    = fields.String()
+  password = fields.String()
+
 class SchemaSerializeProductsTimes(SchemaSerializeTimes):
   id          = fields.Integer()
   user_id     = fields.Integer(dump_default = None)
@@ -24,11 +29,8 @@ class SchemaSerializeProductsTimes(SchemaSerializeTimes):
   stock       = fields.Float()
   onSale      = fields.Boolean()
   tags        = fields.List(fields.String())
+  user        = fields.Nested(SchemaSerializeUsersTimes(exclude = ('password',)))
 
-class SchemaSerializeUsersTimes(SchemaSerializeTimes):
-  id       = fields.Integer()
-  email    = fields.String()
-  password = fields.String()
 
 class SchemaSerializeOrdersTimes(SchemaSerializeTimes):
   user_id     = fields.Integer(dump_default = None)
