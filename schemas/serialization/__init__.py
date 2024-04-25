@@ -18,6 +18,7 @@ class SchemaSerializeUsersTimes(SchemaSerializeTimes):
   id       = fields.Integer()
   email    = fields.String()
   password = fields.String()
+  products = fields.List(fields.Nested(lambda: SchemaSerializeProductsTimes(exclude = ('user',))))
 
 class SchemaSerializeProductsTimes(SchemaSerializeTimes):
   id          = fields.Integer()
@@ -29,7 +30,7 @@ class SchemaSerializeProductsTimes(SchemaSerializeTimes):
   stock       = fields.Float()
   onSale      = fields.Boolean()
   tags        = fields.List(fields.String())
-  user        = fields.Nested(SchemaSerializeUsersTimes(exclude = ('password',)))
+  user        = fields.Nested(SchemaSerializeUsersTimes(exclude = ('password', 'products')))
 
 
 class SchemaSerializeOrdersTimes(SchemaSerializeTimes):

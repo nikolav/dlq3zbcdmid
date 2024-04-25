@@ -19,4 +19,5 @@ from .orders import orders_received
 from .orders import orders_received_products
 
 from .users import users_list
+from .users import users_by_id
 

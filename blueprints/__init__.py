@@ -7,14 +7,16 @@ from flask_cors import CORS
 
 from flask_app                   import db
 from config                      import TAG_VARS
+from models.tags                 import Tags
 from models.docs                 import Docs
 from models.users                import Users
 from middleware.wrappers.timelog import timelog
 from utils.jwtToken              import encode
 
 
-ADMIN_EMAIL = os.getenv('ADMIN_EMAIL')
-USER_EMAIL  = os.getenv('USER_EMAIL')
+ADMIN_EMAIL   = os.getenv('ADMIN_EMAIL')
+USER_EMAIL    = os.getenv('USER_EMAIL')
+POLICY_ADMINS = os.getenv('POLICY_ADMINS')
 
 bp_home = Blueprint('home', __name__, url_prefix = '/')
 
@@ -51,6 +53,8 @@ def status_ok():
     .where(Users.email == ADMIN_EMAIL)
   )
   
+  uids_admin = [u.id for u in Tags.by_name(POLICY_ADMINS).users]
+
   return {
     'status'        : 'ok',
     'app:name'      : app_name,
@@ -59,4 +63,5 @@ def status_ok():
     'uid:default'   : uid,
     'token:default' : encode({ 'id': uid }),
     'sqlalchemy'    : sqlalchemy.__version__,
+    'admins'        : uids_admin,
   }

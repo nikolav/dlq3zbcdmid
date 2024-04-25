@@ -59,6 +59,7 @@ type User {
   id: ID!
   email: String!
   password: String!
+  products: [Product!]
   created_at: String!
   updated_at: String!
 }
@@ -135,6 +136,7 @@ type Query {
   # companies, users
   companiesList(approved: Boolean): [Company!]!
   users: [User!]!
+  usersById(uid: ID!): User
 
   # products
   productsListAll: [Product!]!
