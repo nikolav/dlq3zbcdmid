@@ -50,6 +50,5 @@ def resolve_productsRm(_obj, _info, id):
       io.emit(f'{IOEVENT_PRODUCTS_CHANGE_SINGLE_prefix}{p.id}')
       io.emit(f'{IOEVENT_PRODUCTS_CHANGE_prefix}{uid}')
       io.emit(IOEVENT_PRODUCTS_CHANGE)
-      return SchemaSerializeProductsTimes().dump(p)
   
-  return None
+  return SchemaSerializeProductsTimes().dump(p) if None != p else None
