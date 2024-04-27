@@ -60,23 +60,24 @@ type User {
   email: String!
   password: String!
   products: [Product!]
-  created_at: String!
-  updated_at: String!
+  posts: [Post!]
+  created_at: String
+  updated_at: String
 }
 
 type Product {
   id: ID!
   user_id: ID
-  name: String!
+  name: String
   price: NumberReal
   stock: NumberReal
   stockType: String
   onSale: Boolean
   description: String
-  tags: [String!]!
+  tags: [String!]
   user: User
-  created_at: String!
-  updated_at: String!
+  created_at: String
+  updated_at: String
 }
 
 type ProductWithAmount {
@@ -115,14 +116,14 @@ type Order {
 
 type Post {
   id: ID!
-  title: String!
-  content: String!
-  user_id: ID!
-  user: User!
+  title: String
+  content: String
+  user_id: ID
+  user: User
   tags: [String!]
   docs: [JsonData!]
-  created_at: String!
-  updated_at: String!
+  created_at: String
+  updated_at: String
 }
 
 input InputProduct {

@@ -12,9 +12,9 @@ from models              import ln_orders_products
 
 from config.graphql.init import mutation
 
-# from flask      import render_template
-# from flask_mail import Message
-# from flask_app  import mail
+from flask      import render_template
+from flask_mail import Message
+from flask_app  import mail
 
 
 IOEVENT_PRODUCTS_CHANGE_prefix = os.getenv('IOEVENT_PRODUCTS_CHANGE_prefix')
@@ -78,13 +78,14 @@ def resolve_ordersPlace(_obj, _info, items, code = "", description = ""):
     # notify companies
     for company in com:
       io.emit(f'{IOEVENT_ORDERS_CHANGE}{company.id}')
-      # mail.send(
-      #   Message(
-      #     'narudzbe azurirane | KANTAR.RS',
-      #     sender = ('KANTAR.RS', 'no-reply.app@kantar.rs'),
-      #     recipients = map(lambda user: user.email, com),
-      #     html = render_template('mail/simple.html', text = f'@kantar.dev: nova narudzba [{o.id}]')
-      #   )
-      # )
+      mail.send(
+        Message(
+          'nova.narudžba@kantar.rs --dev',
+          sender = ('KANTAR.RS', 'app@kantar.rs'),
+          # recipients = map(lambda user: user.email, com),
+          recipients = ['admin@nikolav.rs', 'slavko.savic@me.com'],
+          html = render_template('mail/simple.html', text = f'nova narudzba [Ref #{o.id}] --dev')
+        )
+      )
 
   return o.id if None != o else None

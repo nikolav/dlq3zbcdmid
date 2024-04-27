@@ -77,12 +77,23 @@ from sqlalchemy import text
 # @arguments_schema(SchemaTesting())
 def testing_home():
   
-  r = db.session.scalar(
-    db.select(func.count(Users.id)).where(Users.email == 'admin@nikolav.rs')
-  )
-    
-  return { 'status': r }
+  p = db.session.get(Posts, 35)
+  db.session.delete(p)
+  db.session.commit()
+  
+  #   id: ID!
+  # title: String
+  # content: String
+  # user_id: ID
+  # user: User
+  # tags: [String!]
+  # docs: [JsonData!]
+  # created_at: String
+  # updated_at: String
 
+
+  return SchemaSerializePosts().dump(p)
+    
 
   # res_orders = db.session.scalars(
   #   db.select(Orders)

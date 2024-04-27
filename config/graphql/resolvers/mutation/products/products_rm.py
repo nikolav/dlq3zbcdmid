@@ -13,13 +13,15 @@ from schemas.serialization import SchemaSerializeProductsTimes
 # from middleware.authguard import authguard
 from middleware.authguard import authguard_company_approved
 
-IOEVENT_PRODUCTS_CHANGE_prefix = os.getenv('IOEVENT_PRODUCTS_CHANGE_prefix')
-IOEVENT_PRODUCTS_CHANGE        = os.getenv('IOEVENT_PRODUCTS_CHANGE')
+IOEVENT_PRODUCTS_CHANGE_SINGLE_prefix = os.getenv('IOEVENT_PRODUCTS_CHANGE_SINGLE_prefix')
+IOEVENT_PRODUCTS_CHANGE_prefix        = os.getenv('IOEVENT_PRODUCTS_CHANGE_prefix')
+IOEVENT_PRODUCTS_CHANGE               = os.getenv('IOEVENT_PRODUCTS_CHANGE')
 
 @mutation.field('productsRm')
 @authguard_company_approved
 def resolve_productsRm(_obj, _info, id):
-  p = None
+  p   = None
+  uid = None
 
   try:
     p = db.session.get(Products, id)
@@ -30,6 +32,8 @@ def resolve_productsRm(_obj, _info, id):
     if not p.user.id == g.user.id:
       raise Exception('forbidden')
     
+    uid = p.user.id
+
     # approved company
     # remove owned product record
     g.user.products.remove(p)
@@ -43,7 +47,8 @@ def resolve_productsRm(_obj, _info, id):
   else:
     if None != p.id:
       # emit updated
-      io.emit(f'{IOEVENT_PRODUCTS_CHANGE_prefix}{g.user.id}')
+      io.emit(f'{IOEVENT_PRODUCTS_CHANGE_SINGLE_prefix}{p.id}')
+      io.emit(f'{IOEVENT_PRODUCTS_CHANGE_prefix}{uid}')
       io.emit(IOEVENT_PRODUCTS_CHANGE)
       return SchemaSerializeProductsTimes().dump(p)
   
