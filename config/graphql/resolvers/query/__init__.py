@@ -21,3 +21,5 @@ from .orders import orders_received_products
 from .users import users_list
 from .users import users_by_id
 
+from .posts import posts_list
+

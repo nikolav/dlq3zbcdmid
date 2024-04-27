@@ -8,6 +8,7 @@ from sqlalchemy import func
 
 from flask_app      import db
 from flask_app      import io
+
 from models.users   import Users
 from models.tags    import Tags
 from utils.pw       import hash  as hashPassword
@@ -42,10 +43,11 @@ def auth_register():
   try:    
     # skip registered
     if (0 < db.session.scalar(
-      db.select(func.count(Users.id)).where(Users.email == email)
+      db.select(func.count(Users.id))
+        .where(Users.email == email)
     )):
       raise Exception('access denied')
-        
+
     # email available
     #  register, save
     newUser = Users(email = email, password = hashPassword(password))
@@ -53,14 +55,13 @@ def auth_register():
 
     db.session.commit()
     
-    # if `bool:company == true` provided; --dev-feature
-    #   tag user as company
-    #   tag user as :approved
-    #   tag user as fs:approved
+    # --dev-feature; auto approve companies
+    # if `bool:company == true` provided; 
+    #   tag user as [company, approved, fs:approved]
     if company:
       newUser.tags.append(Tags.by_name(os.getenv('POLICY_COMPANY')))
-      newUser.tags.append(Tags.by_name(os.getenv('POLICY_APPROVED')))
       newUser.tags.append(Tags.by_name(os.getenv('POLICY_FILESTORAGE')))
+      newUser.tags.append(Tags.by_name(os.getenv('POLICY_APPROVED')))
       db.session.commit()
     
     # new user added, issue access-token
@@ -98,14 +99,13 @@ def auth_login():
     # skip invalid credentials ~email ~password
     if not u:
       raise Exception('access denied')
-    
     if not checkPassword(password, u.password):
       raise Exception('access denied')
     
     # app user valid here
     #  issue access token
     token = issueToken({ 'id': u.id })
-      
+
   except Exception as err:
     error = err
 

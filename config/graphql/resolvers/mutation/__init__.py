@@ -11,3 +11,6 @@ from .products import products_upsert
 
 from .orders import orders_place
 
+from .posts import posts_upsert
+from .posts import posts_rm
+

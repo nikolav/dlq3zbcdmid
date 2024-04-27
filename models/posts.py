@@ -25,8 +25,9 @@ class Posts(MixinTimestamps, MixinIncludesTags, db.Model):
   user_id = mapped_column(db.ForeignKey(f'{usersTable}.id'))
   
   # virtual
-  tags : Mapped[List['Tags']] = relationship(secondary = ln_posts_tags, back_populates = 'posts')
   user : Mapped['Users']      = relationship(back_populates = 'posts')
+  tags : Mapped[List['Tags']] = relationship(secondary = ln_posts_tags, back_populates = 'posts')
+  docs : Mapped[List['Docs']] = relationship(back_populates = 'post')
 
   # magic
   def __repr__(self):

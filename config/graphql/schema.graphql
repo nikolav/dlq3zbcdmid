@@ -113,6 +113,18 @@ type Order {
   updated_at: String!
 }
 
+type Post {
+  id: ID!
+  title: String!
+  content: String!
+  user_id: ID!
+  user: User!
+  tags: [String!]
+  docs: [JsonData!]
+  created_at: String!
+  updated_at: String!
+}
+
 input InputProduct {
   name: String
   category: String
@@ -121,6 +133,11 @@ input InputProduct {
   stockType: String
   onSale: Boolean
   description: String
+}
+
+input InputPost {
+  title: String
+  content: String
 }
 
 #########
@@ -149,6 +166,9 @@ type Query {
   ordersReceived: [Order!]!
   ordersReceivedProducts(order_id: ID!): [ProductWithAmount!]!
 
+  # posts
+  postsList(uid: ID): [Post!]!
+
   # storage
   storageList: [StorageFileInfo!]!
   storageListAll: [StorageFileInfo!]!
@@ -169,6 +189,10 @@ type Mutation {
 
   # orders
   ordersPlace(code: String, description: String, items: JsonData!): ID
+
+  # posts
+  postsUpsert(data: InputPost!, id: ID): Post!
+  postsRemove(id: ID!): Post
 
   # docs
   docsUpsert(topic: String!, data: JsonData!, id: ID): JsonData!

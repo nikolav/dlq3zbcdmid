@@ -9,6 +9,8 @@ from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 
 from . import docsTable
+from . import usersTable
+from . import postsTable
 from . import ln_docs_tags
 from . import db
 from .tags import Tags
@@ -27,11 +29,15 @@ _schemaDocsDumpMany = SchemaSerializeDocJsonTimes(many = True)
 class Docs(MixinTimestamps, MixinIncludesTags, db.Model):
   __tablename__ = docsTable
 
-  id   : Mapped[int]  = mapped_column(primary_key = True)
-  data : Mapped[dict] = mapped_column(JSON)
+  id      : Mapped[int]  = mapped_column(primary_key = True)
+  data    : Mapped[dict] = mapped_column(JSON)
+  user_id = mapped_column(db.ForeignKey(f'{usersTable}.id'))
+  post_id = mapped_column(db.ForeignKey(f'{postsTable}.id'))
 
   # virtual
-  tags: Mapped[List['Tags']] = relationship(secondary = ln_docs_tags, back_populates = 'docs')
+  tags : Mapped[List['Tags']] = relationship(secondary = ln_docs_tags, back_populates = 'docs')
+  user : Mapped['Users']      = relationship(back_populates = 'docs')
+  post : Mapped['Posts']      = relationship(back_populates = 'docs')
 
   
   # magic

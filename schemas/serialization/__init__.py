@@ -12,13 +12,18 @@ class SchemaSerializeDocJson(Schema):
 
 class SchemaSerializeDocJsonTimes(SchemaSerializeDocJson):
   created_at = fields.DateTime()
-  updated_at = fields.DateTime()
+  updated_at = fields.DateTime()  
+
+# 1
+class SchemaSerializeDocJsonWithRelationsPosts(SchemaSerializeDocJsonTimes):
+  post = fields.Nested(lambda: SchemaSerializePosts(exclude = ('docs',)))
 
 class SchemaSerializeUsersTimes(SchemaSerializeTimes):
   id       = fields.Integer()
   email    = fields.String()
   password = fields.String()
   products = fields.List(fields.Nested(lambda: SchemaSerializeProductsTimes(exclude = ('user',))))
+  posts    = fields.List(fields.Nested(lambda: SchemaSerializePosts(exclude = ('user',))))
 
 class SchemaSerializeProductsTimes(SchemaSerializeTimes):
   id          = fields.Integer()
@@ -41,7 +46,16 @@ class SchemaSerializeOrdersTimes(SchemaSerializeTimes):
   completed   = fields.Boolean()
   canceled    = fields.Boolean()
 
+# class SchemaSerializePosts(SchemaSerializeTimes):
+#   id       = fields.Integer()
+#   title    = fields.String()
+#   content  = fields.String()
+
 class SchemaSerializePosts(SchemaSerializeTimes):
-  id       = fields.Integer()
-  title    = fields.String()
-  content  = fields.String()
+  id          = fields.Integer()
+  title       = fields.String()
+  content     = fields.String()
+  user_id     = fields.Integer()
+  user        = fields.Nested(SchemaSerializeUsersTimes(exclude = ('password', 'posts', 'products')))
+  tags        = fields.List(fields.String())
+  docs        = fields.List(fields.Nested(SchemaSerializeDocJsonWithRelationsPosts(exclude = ('post',))))

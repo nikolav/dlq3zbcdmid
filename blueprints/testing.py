@@ -10,6 +10,8 @@ from flask_cors import cross_origin
 from flask      import make_response
 from flask      import abort
 
+from sqlalchemy.orm import joinedload
+
 from flask_app       import db
 from flask_app       import app
 # from utils.pw       import hash  as hashPassword
@@ -74,11 +76,12 @@ from sqlalchemy import text
 @bp_testing.route('/', methods = ('POST',))
 # @arguments_schema(SchemaTesting())
 def testing_home():
-  status = db.session.scalar(
-    text('select :msg'), 
-    { 'msg': 'ok' }
+  
+  r = db.session.scalar(
+    db.select(func.count(Users.id)).where(Users.email == 'admin@nikolav.rs')
   )
-  return { 'status': status }
+    
+  return { 'status': r }
 
 
   # res_orders = db.session.scalars(
