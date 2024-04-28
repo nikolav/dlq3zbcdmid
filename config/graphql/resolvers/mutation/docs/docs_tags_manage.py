@@ -12,9 +12,10 @@ from utils.str import match_after_last_colon
 
 
 IOEVENT_PRODUCT_IMAGES_CHANGE_prefix = os.getenv('IOEVENT_PRODUCT_IMAGES_CHANGE_prefix')
-IOEVENT_COM_PHOTOS_CHANGE_prefix = os.getenv('IOEVENT_COM_PHOTOS_CHANGE_prefix')
-PRODUCT_IMAGES_prefix = os.getenv('PRODUCT_IMAGES_prefix')
-COM_PHOTOS_prefix = os.getenv('COM_PHOTOS_prefix')
+IOEVENT_COM_PHOTOS_CHANGE_prefix     = os.getenv('IOEVENT_COM_PHOTOS_CHANGE_prefix')
+PRODUCT_IMAGES_prefix                = os.getenv('PRODUCT_IMAGES_prefix')
+COM_PHOTOS_prefix                    = os.getenv('COM_PHOTOS_prefix')
+POST_IMAGES_prefix                   = os.getenv('POST_IMAGES_prefix')
 
 
 @mutation.field('docsTags')
@@ -79,6 +80,17 @@ def resolve_docsTags(_obj, _info, id, tags):
             if name.startswith(COM_PHOTOS_prefix)        
       ]      
       for ioevent_ in ioevent_com_photos_managed:
+        io.emit(ioevent_)
+
+      # detect if `@story:images:{sid}`
+      #  filter tags_managed, @starts_with `@story:com:images:{sid}`;
+      #   @each io:emit @story:images:{uid}
+      ioevent_story_photos_managed = [
+        f'{IOEVENT_COM_PHOTOS_CHANGE_prefix}{match_after_last_colon(name)}' 
+          for name in tags_managed 
+            if name.startswith(POST_IMAGES_prefix)        
+      ]      
+      for ioevent_ in ioevent_story_photos_managed:
         io.emit(ioevent_)
 
   return res

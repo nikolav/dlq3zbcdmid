@@ -73,13 +73,31 @@ from schemas.serialization import SchemaSerializeDocJsonTimes
 from sqlalchemy import text
 
 
+POST_IMAGES_prefix = os.getenv('POST_IMAGES_prefix')
+
+from utils.str import match_after_last_colon
+
 @bp_testing.route('/', methods = ('POST',))
 # @arguments_schema(SchemaTesting())
 def testing_home():
+  # tags = db.session.scalars(
+  #   db.select(Tags)
+  # )
+  docs = db.session.scalars(
+    db.select(Docs)
+  )
+  return list([d.id for d in docs])
+
+  return { 'ok': 1 }
+  # for fd in [db.session.get(Docs, match_after_last_colon(t.tag)) for t in tags]:
+  #   os.unlink(fd.data.get("path", ""))
+  # d = [db.session.get(Docs, match_after_last_colon(t.tag)) for t in tags]
+
+  # for t in tags:
+  #   db.session.delete(t)
+  # db.session.commit()
   
-  p = db.session.get(Posts, 35)
-  db.session.delete(p)
-  db.session.commit()
+  # return match_after_last_colon('CkJmp2R984QY@16:26')
   
   #   id: ID!
   # title: String
@@ -89,11 +107,7 @@ def testing_home():
   # tags: [String!]
   # docs: [JsonData!]
   # created_at: String
-  # updated_at: String
-
-
-  return SchemaSerializePosts().dump(p)
-    
+  # updated_at: String    
 
   # res_orders = db.session.scalars(
   #   db.select(Orders)
