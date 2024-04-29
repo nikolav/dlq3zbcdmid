@@ -4,6 +4,7 @@
 from typing import List
 from typing import Optional
 
+from sqlalchemy     import JSON
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
@@ -22,21 +23,39 @@ class Products(MixinTimestamps, MixinIncludesTags, db.Model):
   
   id: Mapped[int] = mapped_column(primary_key = True)
 
-  name        : Mapped[str]
-  price       : Mapped[Optional[float]]
-  description : Mapped[Optional[str]]
-  stockType   : Mapped[Optional[str]]
-  stock       : Mapped[Optional[float]]
-  onSale      : Mapped[Optional[bool]]
+  name          : Mapped[str]
+  price         : Mapped[Optional[float]]
+  description   : Mapped[Optional[str]]
+  stockType     : Mapped[Optional[str]]
+  stock         : Mapped[Optional[float]]
+  onSale        : Mapped[Optional[bool]]
   user_id = mapped_column(db.ForeignKey(f'{usersTable}.id'))
+  # { date: Date; price: number }[]
+  price_history : Mapped[List[dict]] = mapped_column(JSON)
   
   # virtual
-  tags   : Mapped[List['Tags']]   = relationship(secondary = ln_products_tags, back_populates = 'products')
   user   : Mapped['Users']        = relationship(back_populates = 'products')
+  docs   : Mapped[List['Docs']]   = relationship(back_populates = 'product')
+  tags   : Mapped[List['Tags']]   = relationship(secondary = ln_products_tags, back_populates = 'products')
   orders : Mapped[List['Orders']] = relationship(secondary = ln_orders_products, back_populates = 'products')
-  
 
   # magic
   def __repr__(self):
     return f'Products(id={self.id!r}, name={self.name!r}, user_id={self.user_id!r})'
 
+  # public
+  def price_by_date(self, d):
+    # calc price by date from .price_history record
+    pass
+  
+  # public
+  def price_by_order(self, o):
+    # calc price by order date from .price_history record
+    pass
+  
+  def price_history_add(self, node):
+    ls = self.price_history.copy()
+    ls.append(node)
+    self.price_history = ls
+  
+  

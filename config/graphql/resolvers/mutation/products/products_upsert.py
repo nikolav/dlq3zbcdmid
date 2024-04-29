@@ -1,4 +1,6 @@
 import os
+from datetime import datetime
+from datetime import timezone
 
 from flask import g
 
@@ -18,23 +20,13 @@ IOEVENT_PRODUCTS_CHANGE               = os.getenv('IOEVENT_PRODUCTS_CHANGE')
 
 FIELDS = [
   'name',
-  'category',
+  # 'category',
   'price',
   'stock',
   'stockType',
   'onSale',
   'description',
 ]
-
-# input InputProduct {
-#   name: String!
-#   category: String!
-#   price: Number
-#   stockType: String
-#   stock: Number
-#   onSale: Boolean
-#   description: String
-# }
 
 @mutation.field('productsUpsert')
 @authguard_company_approved
@@ -52,9 +44,17 @@ def resolve_productsUpsert(_obj, _info, data, id = None):
         raise Exception('forbidden')
       
       for field in FIELDS:
-        if 'category' != field:
-          if field in data:
-            setattr(p, field, data[field])
+        # if 'category' != field:
+        if field in data:
+          if 'price' == field:
+            priceNew = data['price']
+            # if cache empty or doesnt match update
+            if not len(p.price_history) or (priceNew != p.price_history[-1]['price']):
+              if 0 <= priceNew:
+                p.price_history_add({ 
+                  'day'  : datetime.now(tz = timezone.utc).isoformat(), 
+                  'price': priceNew })
+          setattr(p, field, data[field])
     
     else:
       # create
@@ -62,12 +62,13 @@ def resolve_productsUpsert(_obj, _info, data, id = None):
       category_ = data.get('category', None)
       
       p = Products(
-        name        = data.get('name', None),
-        price       = data.get('price', None),
-        stock       = data.get('stock', None),
-        stockType   = data.get('stockType', None),
-        onSale      = data.get('onSale', None),
-        description = data.get('description', None),
+        name          = data.get('name', None),
+        price         = data.get('price', None),
+        stock         = data.get('stock', None),
+        stockType     = data.get('stockType', None),
+        onSale        = data.get('onSale', None),
+        description   = data.get('description', None),
+        price_history = [],
         user = g.user, 
         tags = [Tags.by_name(category_, create = True)] if None != category_ else [])
       

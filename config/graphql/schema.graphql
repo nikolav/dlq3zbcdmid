@@ -70,30 +70,52 @@ type Product {
   user_id: ID
   name: String
   price: NumberReal
+  price_history: [JsonData!]
   stock: NumberReal
   stockType: String
   onSale: Boolean
   description: String
-  tags: [String!]
   user: User
+  tags: [String!]
+  docs: [JsonData!]
   created_at: String
   updated_at: String
 }
 
+# type ProductWithAmount {
+#   id: ID!
+#   user_id: ID
+#   name: String!
+#   price: NumberReal
+#   stock: NumberReal
+#   stockType: String
+#   onSale: Boolean
+#   description: String
+#   tags: [String!]!
+#   created_at: String!
+#   updated_at: String!
+#   amount: NumberReal!
+# }
+
 type ProductWithAmount {
   id: ID!
   user_id: ID
-  name: String!
+  name: String
   price: NumberReal
+  price_history: [JsonData!]
   stock: NumberReal
   stockType: String
   onSale: Boolean
   description: String
-  tags: [String!]!
-  created_at: String!
-  updated_at: String!
+  user: User
+  tags: [String!]
+  docs: [JsonData!]
+  created_at: String
+  updated_at: String
   amount: NumberReal!
 }
+
+
 
 type Company {
   id: ID!

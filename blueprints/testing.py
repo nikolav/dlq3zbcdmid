@@ -1,6 +1,9 @@
 import os
 import json
 from pprint import pprint
+from datetime import datetime
+from datetime import timezone
+from random import randint
 
 from flask      import Blueprint
 from flask      import request
@@ -80,15 +83,7 @@ from utils.str import match_after_last_colon
 @bp_testing.route('/', methods = ('POST',))
 # @arguments_schema(SchemaTesting())
 def testing_home():
-  # return list([t.tag for t in db.session.scalars(
-  #   db.select(Tags)
-  # )])
-  tags = db.session.scalars(
-            db.select(Tags)
-              .where(Tags.tag.like(f'{POST_IMAGES_prefix}{2}:%')))
-
-  images = map(lambda id: db.session.get(Docs, id), 
-          [match_after_last_colon(t.tag) for t in tags])
-
-  return SchemaSerializeDocJsonTimes(many = True).dump(images)
+  p = db.session.get(Products, 1)
+  return SchemaSerializeProductsTimes().dump(p)
+  
   

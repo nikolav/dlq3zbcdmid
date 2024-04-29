@@ -26,16 +26,18 @@ class SchemaSerializeUsersTimes(SchemaSerializeTimes):
   posts    = fields.List(fields.Nested(lambda: SchemaSerializePosts(exclude = ('user',))))
 
 class SchemaSerializeProductsTimes(SchemaSerializeTimes):
-  id          = fields.Integer()
-  user_id     = fields.Integer(dump_default = None)
-  name        = fields.String()
-  price       = fields.Float()
-  description = fields.String()
-  stockType   = fields.String()
-  stock       = fields.Float()
-  onSale      = fields.Boolean()
-  tags        = fields.List(fields.String())
-  user        = fields.Nested(SchemaSerializeUsersTimes(exclude = ('password', 'products')))
+  id            = fields.Integer()
+  user_id       = fields.Integer(dump_default = None)
+  name          = fields.String()
+  price         = fields.Float()
+  description   = fields.String()
+  stockType     = fields.String()
+  stock         = fields.Float()
+  onSale        = fields.Boolean()
+  price_history = fields.List(fields.Dict())
+  tags          = fields.List(fields.String())
+  user          = fields.Nested(SchemaSerializeUsersTimes(exclude = ('password', 'products')))
+  docs          = fields.List(fields.Nested(SchemaSerializeDocJsonTimes()))
 
 
 class SchemaSerializeOrdersTimes(SchemaSerializeTimes):

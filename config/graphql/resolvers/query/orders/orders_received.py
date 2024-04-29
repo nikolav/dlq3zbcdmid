@@ -20,7 +20,10 @@ def resolve_ordersReceived(_obj, _info):
       db.select(Orders)
         .join(ln_orders_products)
         .join(Products)
-        .where(Products.user_id == g.user.id)
+        .where(
+          # pick orders for own items only
+          Products.user_id == g.user.id
+        )
         .order_by(desc(Orders.created_at))
         .group_by(Orders)
     )  

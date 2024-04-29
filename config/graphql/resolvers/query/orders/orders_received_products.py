@@ -20,7 +20,10 @@ def resolve_ordersReceivedProducts(_obj, _info, order_id):
       db.select(Products, ln_orders_products.c.amount)
         .join(ln_orders_products)
         .join(Orders)
-        .where(Orders.id == order_id, Products.user_id == g.user.id)
+        .where(
+          # pick own products @`Orders.id`
+          Orders.id == order_id, 
+          Products.user_id == g.user.id)
     )
     for p, amount in res:
       node = SchemaSerializeProductsTimes().dump(p)
