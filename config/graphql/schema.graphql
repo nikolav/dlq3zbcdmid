@@ -70,7 +70,7 @@ type Product {
   user_id: ID
   name: String
   price: NumberReal
-  price_history: [JsonData!]
+  price_history: [JsonData!]!
   stock: NumberReal
   stockType: String
   onSale: Boolean
@@ -102,7 +102,7 @@ type ProductWithAmount {
   user_id: ID
   name: String
   price: NumberReal
-  price_history: [JsonData!]
+  price_history: [JsonData!]!
   stock: NumberReal
   stockType: String
   onSale: Boolean

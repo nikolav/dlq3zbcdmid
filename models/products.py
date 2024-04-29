@@ -1,6 +1,8 @@
 # import os
 # import json
 # import re
+from datetime import datetime
+from datetime import timezone
 from typing import List
 from typing import Optional
 
@@ -53,9 +55,12 @@ class Products(MixinTimestamps, MixinIncludesTags, db.Model):
     # calc price by order date from .price_history record
     pass
   
-  def price_history_add(self, node):
+  def price_history_add(self, price):
+    # doesnt commit; cache data outside
     ls = self.price_history.copy()
-    ls.append(node)
+    ls.append({
+      'day'   : datetime.now(tz = timezone.utc).isoformat(),
+      'price' : price
+    })
     self.price_history = ls
-  
   

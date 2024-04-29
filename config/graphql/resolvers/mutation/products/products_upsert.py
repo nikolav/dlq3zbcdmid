@@ -51,19 +51,18 @@ def resolve_productsUpsert(_obj, _info, data, id = None):
             # if cache empty or doesnt match update
             if not len(p.price_history) or (priceNew != p.price_history[-1]['price']):
               if 0 <= priceNew:
-                p.price_history_add({ 
-                  'day'  : datetime.now(tz = timezone.utc).isoformat(), 
-                  'price': priceNew })
+                p.price_history_add(priceNew)
           setattr(p, field, data[field])
     
     else:
       # create
       
       category_ = data.get('category', None)
+      price     = data.get('price', None)
       
       p = Products(
         name          = data.get('name', None),
-        price         = data.get('price', None),
+        price         = price,
         stock         = data.get('stock', None),
         stockType     = data.get('stockType', None),
         onSale        = data.get('onSale', None),
@@ -71,6 +70,10 @@ def resolve_productsUpsert(_obj, _info, data, id = None):
         price_history = [],
         user = g.user, 
         tags = [Tags.by_name(category_, create = True)] if None != category_ else [])
+      
+      # add provided price to history if any
+      if 0 < price:
+        p.price_history_add(price)
       
       db.session.add(p)
     
