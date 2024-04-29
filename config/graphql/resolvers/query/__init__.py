@@ -22,4 +22,5 @@ from .users import users_list
 from .users import users_by_id
 
 from .posts import posts_list
+from .posts import posts_images
 

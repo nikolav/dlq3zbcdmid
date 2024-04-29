@@ -80,50 +80,15 @@ from utils.str import match_after_last_colon
 @bp_testing.route('/', methods = ('POST',))
 # @arguments_schema(SchemaTesting())
 def testing_home():
-  # tags = db.session.scalars(
+  # return list([t.tag for t in db.session.scalars(
   #   db.select(Tags)
-  # )
-  docs = db.session.scalars(
-    db.select(Docs)
-  )
-  return list([d.id for d in docs])
+  # )])
+  tags = db.session.scalars(
+            db.select(Tags)
+              .where(Tags.tag.like(f'{POST_IMAGES_prefix}{2}:%')))
 
-  return { 'ok': 1 }
-  # for fd in [db.session.get(Docs, match_after_last_colon(t.tag)) for t in tags]:
-  #   os.unlink(fd.data.get("path", ""))
-  # d = [db.session.get(Docs, match_after_last_colon(t.tag)) for t in tags]
+  images = map(lambda id: db.session.get(Docs, id), 
+          [match_after_last_colon(t.tag) for t in tags])
 
-  # for t in tags:
-  #   db.session.delete(t)
-  # db.session.commit()
+  return SchemaSerializeDocJsonTimes(many = True).dump(images)
   
-  # return match_after_last_colon('CkJmp2R984QY@16:26')
-  
-  #   id: ID!
-  # title: String
-  # content: String
-  # user_id: ID
-  # user: User
-  # tags: [String!]
-  # docs: [JsonData!]
-  # created_at: String
-  # updated_at: String    
-
-  # res_orders = db.session.scalars(
-  #   db.select(Orders)
-  #     .join(ln_orders_products)
-  #     .join(Products)
-  #     .where(Products.user_id == g.user.id)
-  #     .order_by(desc(Orders.updated_at))
-  #     .group_by(Orders)
-  # )  
-  # return SchemaSerializeOrdersTimes(many = True).dump(res_orders)
-
-  # res = db.session.execute(
-  #   db.select(Products, ln_orders_products.c.amount)
-  #     .join(ln_orders_products)
-  #     .join(Orders)
-  #     .where(Orders.id == 5, Products.user_id == g.user.id)
-  # )
-  
-  # return [[SchemaSerializeProductsTimes().dump(p), amount] for (p, amount) in res]

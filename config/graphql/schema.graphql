@@ -169,6 +169,7 @@ type Query {
 
   # posts
   postsList(uid: ID): [Post!]!
+  postsImages(id: ID): [JsonData!]!
 
   # storage
   storageList: [StorageFileInfo!]!
