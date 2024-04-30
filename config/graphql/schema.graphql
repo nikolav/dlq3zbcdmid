@@ -82,20 +82,6 @@ type Product {
   updated_at: String
 }
 
-# type ProductWithAmount {
-#   id: ID!
-#   user_id: ID
-#   name: String!
-#   price: NumberReal
-#   stock: NumberReal
-#   stockType: String
-#   onSale: Boolean
-#   description: String
-#   tags: [String!]!
-#   created_at: String!
-#   updated_at: String!
-#   amount: NumberReal!
-# }
 
 type ProductWithAmount {
   id: ID!
