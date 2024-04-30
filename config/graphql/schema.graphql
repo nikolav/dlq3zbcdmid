@@ -217,6 +217,7 @@ type Mutation {
   # posts
   postsUpsert(data: InputPost!, id: ID): Post!
   postsRemove(id: ID!): Post
+  postsImagesDrop(id: ID!): Post
 
   # docs
   docsUpsert(topic: String!, data: JsonData!, id: ID): JsonData!

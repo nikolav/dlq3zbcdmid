@@ -27,7 +27,9 @@ def files(fn_route):
             'file': f,
             # posted file data{}
             #   { 'title': 'foo', 'description': 'bar' }?
-            'data': json.loads(request.form[name]) if name in request.form else {}
+            # 'data': json.loads(request.form[name]) if name in request.form else {},
+            'data': json.loads(request.form[f'{name}:data']) if f'{name}:data' in request.form else {},
+            'meta': json.loads(request.form[f'{name}:meta']) if f'{name}:meta' in request.form else {},
           }
 
       # abort if no files passed

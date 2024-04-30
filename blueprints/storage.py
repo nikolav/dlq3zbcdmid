@@ -111,6 +111,8 @@ def storage_upload():
           else:
             # @201; file uploaded, data cached
             saved[name] = doc_plain(doc_file_data)
+            if 'emits' in node['meta']:
+              io.emit(node['meta']['emits'])
   
   if 0 < len(saved):
     status = 201

@@ -66,27 +66,12 @@ def resolve_postsRemove(_obj, _info, id):
       #   then rm Tags related
 
       # 1.images
-      tags = db.session.scalars(
-              db.select(Tags)
-                .where(
-                  Tags.tag.like(
-                    f'{POST_IMAGES_prefix}{p.id}:%')))
-      for t in tags:
-        id = match_after_last_colon(t.tag)
-        fd = db.session.get(Docs, id)
-        path = fd.data.get("path", "")
-        if os.path.exists(path):
-          os.unlink(path)
-        db.session.delete(t)
-        db.session.delete(fd)
-      db.session.commit()
-      
+      p.drop_images()
       
       # get related file-docs to remove
       #  rm where tag like '{POST_IMAGES_prefix}{ppid}%'
       
       # @todo remove related docs-attachments    
-    
     
     if None != p.id:
       # # emit updated
