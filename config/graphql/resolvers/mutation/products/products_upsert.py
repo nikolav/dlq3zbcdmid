@@ -1,6 +1,4 @@
 import os
-from datetime import datetime
-from datetime import timezone
 
 from flask import g
 
@@ -17,10 +15,12 @@ from middleware.authguard import authguard_company_approved
 IOEVENT_PRODUCTS_CHANGE_SINGLE_prefix = os.getenv('IOEVENT_PRODUCTS_CHANGE_SINGLE_prefix')
 IOEVENT_PRODUCTS_CHANGE_prefix        = os.getenv('IOEVENT_PRODUCTS_CHANGE_prefix')
 IOEVENT_PRODUCTS_CHANGE               = os.getenv('IOEVENT_PRODUCTS_CHANGE')
+PRODUCT_CATEGORY_prefix               = os.getenv('PRODUCT_CATEGORY_prefix')
+
 
 FIELDS = [
   'name',
-  # 'category',
+  'category',
   'price',
   'stock',
   'stockType',
@@ -32,9 +32,16 @@ FIELDS = [
 @authguard_company_approved
 def resolve_productsUpsert(_obj, _info, data, id = None):
   p = None
-  
+  print('############################')
+  print('############################')
+  print('############################')
+  print('############################')
+  print('############################')
+  print('############################')
+  print(data)
   try:
     p = db.session.get(Products, id) if None != id else None
+    category_ = data.get('category', None)
 
     if None != p:
       # update
@@ -44,21 +51,42 @@ def resolve_productsUpsert(_obj, _info, data, id = None):
         raise Exception('forbidden')
       
       for field in FIELDS:
-        # if 'category' != field:
-        if field in data:
-          if 'price' == field:
-            priceNew = data['price']
-            # if cache empty or doesnt match update
-            if not len(p.price_history) or (priceNew != p.price_history[-1]['price']):
-              if 0 <= priceNew:
-                p.price_history_add(priceNew)
-          setattr(p, field, data[field])
-    
+        if 'category' != field:
+          if field in data:
+            if 'price' == field:
+              priceNew = data['price']
+              # if cache empty or doesnt match update
+              if not len(p.price_history) or (priceNew != p.price_history[-1]['price']):
+                if 0 <= priceNew:
+                  p.price_history_add(priceNew)
+            setattr(p, field, data[field])
+        else:
+          if not category_:
+            continue
+
+          if p.includes_tags(category_):
+            continue
+          # edit category 
+          #   drop old tags
+          #   add provided
+          #  loop tags, drop if starts with category domain, `@product:category:`
+          
+          tags_rm = []
+          for t in p.tags:
+            if t.tag.startswith(PRODUCT_CATEGORY_prefix):
+              tags_rm.append(t)
+
+          if 0 < len(tags_rm):
+            for t in tags_rm:
+              # db.session.delete(t)
+              p.tags.remove(t)
+          
+          p.tags.append(Tags.by_name(category_, create = True))
+
     else:
       # create
       
-      category_ = data.get('category', None)
-      price     = data.get('price', None)
+      price = data.get('price', None)
       
       p = Products(
         name          = data.get('name', None),
