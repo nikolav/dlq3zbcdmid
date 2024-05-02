@@ -32,13 +32,7 @@ FIELDS = [
 @authguard_company_approved
 def resolve_productsUpsert(_obj, _info, data, id = None):
   p = None
-  print('############################')
-  print('############################')
-  print('############################')
-  print('############################')
-  print('############################')
-  print('############################')
-  print(data)
+
   try:
     p = db.session.get(Products, id) if None != id else None
     category_ = data.get('category', None)
