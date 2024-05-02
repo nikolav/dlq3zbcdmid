@@ -274,3 +274,5 @@ wheels/
 yarn-debug.log*
 yarn-error.log*
 heroku-config-set.sh
+run-dev.sh
+db.access.py

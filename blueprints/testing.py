@@ -82,8 +82,5 @@ from utils.str import match_after_last_colon
 
 @bp_testing.route('/', methods = ('POST',))
 # @arguments_schema(SchemaTesting())
-def testing_home():
-  p = db.session.get(Products, 1)
-  return SchemaSerializeProductsTimes().dump(p)
-  
-  
+def testing_home():  
+  return { 'status': 'ok' }

@@ -61,7 +61,12 @@ def auth_register():
     if company:
       newUser.tags.append(Tags.by_name(os.getenv('POLICY_COMPANY')))
       newUser.tags.append(Tags.by_name(os.getenv('POLICY_FILESTORAGE')))
+      
+      # @todo; no auto approve
+      #  approve users manualy through ui, emails, contacts
       newUser.tags.append(Tags.by_name(os.getenv('POLICY_APPROVED')))
+
+      
       db.session.commit()
     
     # new user added, issue access-token

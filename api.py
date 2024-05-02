@@ -58,9 +58,10 @@ def io_connected():
 
 if __name__ == '__main__':
 
+
   with app.app_context():
     # @app:init
-
+    
     # load models
     from models.tags     import Tags
     from models.tokens   import Tokens
@@ -69,7 +70,7 @@ if __name__ == '__main__':
     from models.orders   import Orders
     from models.docs     import Docs
     from models.posts    import Posts
-    
+
     # drop/create schema
     if REBUILD_SCHEMA:
       db.drop_all()

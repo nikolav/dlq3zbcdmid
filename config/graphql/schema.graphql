@@ -187,6 +187,7 @@ type Query {
   docsByTopic(topic: String!): [JsonData!]!
   docByDocId(doc_id: String!): JsonData!
   tagsByDocId(id: ID!): [String!]!
+
 }
 
 ############

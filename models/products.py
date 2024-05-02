@@ -64,3 +64,30 @@ class Products(MixinTimestamps, MixinIncludesTags, db.Model):
     })
     self.price_history = ls
   
+  # product price for given order
+  #  taking into account .price_history record[]
+  def price_for_order(self, o):
+    # assumes product belongs to provided order
+    price = None
+    hlen  = len(self.price_history)
+
+    if not 1 < hlen:
+      # no price updates
+      price = self.price
+    else:
+      for index in range(hlen):
+        # if next price update is after order day
+        #  take current node
+        if index < hlen - 1:
+          if o.created_at.timestamp() < datetime.fromisoformat(self.price_history[index + 1]['day']).timestamp():
+            # next price update is newer than order date;
+            #  take this nodes price
+            price = self.price_history[index]['price']
+            break
+        else:
+          # at last node
+          price = self.price
+          break
+  
+    return price
+  

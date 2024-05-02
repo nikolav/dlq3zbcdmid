@@ -1,5 +1,4 @@
 import os
-# from pprint import pprint
 
 from flask       import Blueprint
 # from flask       import request
@@ -17,7 +16,6 @@ from middleware.authguard      import authguard
 # from middleware.arguments      import arguments_schema
 
 from schemas.validation.storage import SchemaStorageFile
-# from schemas.validation.storage import SchemaStorageRemoveArguments
 
 from utils import id_gen
 from utils import gen_filename
@@ -81,6 +79,9 @@ def storage_upload():
             'size'     : os.path.getsize(filepath_),
             'mimetype' : mimetype(node['file']),
           }
+        # assign fields @.data { title, description }
+        #  can require `title` and `description` from users
+        #   (..supply additional data on nodes to app users)
         file_data.update(node['data'])
         
         try:
@@ -100,8 +101,8 @@ def storage_upload():
             tag_isfile = Tags.by_name(TAG_IS_FILE, create = True)
             
             # link file tags
-            tag_isfile.docs.append(doc_file_data)
             tag.docs.append(doc_file_data)
+            tag_isfile.docs.append(doc_file_data)
 
             db.session.commit()
             
@@ -109,13 +110,19 @@ def storage_upload():
             pass
           
           else:
+
             # @201; file uploaded, data cached
             saved[name] = doc_plain(doc_file_data)
+            
+            # provide `node.emits` field at clients
+            #  send on demand signals to clients
             if 'emits' in node['meta']:
               io.emit(node['meta']['emits'])
+
   
   if 0 < len(saved):
     status = 201
+    # signal updates
     io.emit(tag_storage_)
   
   return saved, status
