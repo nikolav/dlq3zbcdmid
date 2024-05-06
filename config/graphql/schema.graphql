@@ -82,7 +82,6 @@ type Product {
   updated_at: String
 }
 
-
 type ProductWithAmount {
   id: ID!
   user_id: ID
@@ -100,8 +99,6 @@ type ProductWithAmount {
   updated_at: String
   amount: NumberReal!
 }
-
-
 
 type Company {
   id: ID!
@@ -187,7 +184,6 @@ type Query {
   docsByTopic(topic: String!): [JsonData!]!
   docByDocId(doc_id: String!): JsonData!
   tagsByDocId(id: ID!): [String!]!
-
 }
 
 ############
@@ -199,7 +195,7 @@ type Mutation {
   productsRm(id: ID!): Product
 
   # orders
-  ordersPlace(code: String, description: String, items: JsonData!): ID
+  ordersPlace(data: JsonData!, items: JsonData!): ID
 
   # posts
   postsUpsert(data: InputPost!, id: ID): Post!

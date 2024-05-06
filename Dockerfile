@@ -7,8 +7,5 @@ RUN pip3 install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-# CMD [ "python", "api.py" ]
-CMD [ "python", "-m", "flask", "--app", "api", "run", "--debug" ]
-
-
-
+CMD [ "python", "api.py" ]
+# CMD [ "python", "-m", "flask", "--app", "api", "run", "--debug" ]
