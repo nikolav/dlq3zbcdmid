@@ -32,7 +32,7 @@ FIELDS = [
 @authguard_company_approved
 def resolve_productsUpsert(_obj, _info, data, id = None):
   p = None
-
+  
   try:
     p = db.session.get(Products, id) if None != id else None
     category_ = data.get('category', None)
@@ -54,16 +54,18 @@ def resolve_productsUpsert(_obj, _info, data, id = None):
                 if 0 <= priceNew:
                   p.price_history_add(priceNew)
             setattr(p, field, data[field])
+
         else:
           if not category_:
             continue
 
           if p.includes_tags(category_):
             continue
-          # edit category 
-          #   drop old tags
-          #   add provided
-          #  loop tags, drop if starts with category domain, `@product:category:`
+          # doesnt have this category
+          # edit 
+          #  drop old
+          #  add provided
+          #  loop/drop if starts with category domain, `@product:category:`
           
           tags_rm = []
           for t in p.tags:
@@ -106,9 +108,12 @@ def resolve_productsUpsert(_obj, _info, data, id = None):
 
   else:
     if None != p.id:
-      # emit updated
+      # emit updates
       io.emit(f'{IOEVENT_PRODUCTS_CHANGE_SINGLE_prefix}{p.id}')
       io.emit(f'{IOEVENT_PRODUCTS_CHANGE_prefix}{p.user.id}')
+      # emit 'prefix':'tag' to ui
+      for c in p.categories():
+        io.emit(f'{IOEVENT_PRODUCTS_CHANGE_prefix}{c}')
       io.emit(IOEVENT_PRODUCTS_CHANGE)
   
   return SchemaSerializeProductsTimes().dump(p)

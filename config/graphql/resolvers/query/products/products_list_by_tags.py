@@ -12,7 +12,9 @@ def resolve_productsListByTags(_obj, _info, tags = []):
   try:
     return SchemaSerializeProductsTimes(many = True).dump(
         db.session.scalars(
-          db.select(Products).join(Products.tags).where(Tags.tag.in_(tags))
+          db.select(Products)
+            .join(Products.tags)
+            .where(Tags.tag.in_(tags))
         )
       )
     

@@ -1,4 +1,4 @@
-# import os
+import os
 # import json
 # import re
 from datetime import datetime
@@ -18,6 +18,8 @@ from . import ln_products_tags
 from . import ln_orders_products
 from src.mixins import MixinTimestamps
 from src.mixins import MixinIncludesTags
+
+PRODUCT_CATEGORY_prefix = os.getenv('PRODUCT_CATEGORY_prefix')
 
 
 class Products(MixinTimestamps, MixinIncludesTags, db.Model):
@@ -90,4 +92,7 @@ class Products(MixinTimestamps, MixinIncludesTags, db.Model):
           break
   
     return price
+  
+  def categories(self):
+    return [t.tag for t in self.tags if t.tag.startswith(PRODUCT_CATEGORY_prefix)]
   
