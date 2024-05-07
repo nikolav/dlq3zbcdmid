@@ -17,6 +17,8 @@ from .companies import companies_list
 
 from .orders import orders_received
 from .orders import orders_received_products
+from .orders import orders_list_by_user
+from .orders import orders_products
 
 from .users import users_list
 from .users import users_by_id

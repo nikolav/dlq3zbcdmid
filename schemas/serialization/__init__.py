@@ -36,7 +36,7 @@ class SchemaSerializeProductsTimes(SchemaSerializeTimes):
   onSale        = fields.Boolean()
   price_history = fields.List(fields.Dict())
   tags          = fields.List(fields.String())
-  user          = fields.Nested(SchemaSerializeUsersTimes(exclude = ('password', 'products')))
+  user          = fields.Nested(SchemaSerializeUsersTimes(exclude = ('password', 'products', 'posts')))
   docs          = fields.List(fields.Nested(SchemaSerializeDocJsonTimes()))
 
 
@@ -48,6 +48,9 @@ class SchemaSerializeOrdersTimes(SchemaSerializeTimes):
   completed   = fields.Boolean()
   canceled    = fields.Boolean()
 
+class SchemaSerializeOrdersProducts(SchemaSerializeOrdersTimes):
+  products = fields.List(fields.Nested(SchemaSerializeProductsTimes()))
+  
 # class SchemaSerializePosts(SchemaSerializeTimes):
 #   id       = fields.Integer()
 #   title    = fields.String()

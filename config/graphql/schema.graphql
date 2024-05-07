@@ -83,6 +83,7 @@ type Product {
 }
 
 type ProductWithAmount {
+  amount: NumberReal
   id: ID!
   user_id: ID
   name: String
@@ -97,7 +98,6 @@ type ProductWithAmount {
   docs: [JsonData!]
   created_at: String
   updated_at: String
-  amount: NumberReal!
 }
 
 type Company {
@@ -115,6 +115,7 @@ type Order {
   user_id: ID
   completed: Boolean
   canceled: Boolean
+  products: [ProductWithAmount!]
   created_at: String!
   updated_at: String!
 }
@@ -171,6 +172,8 @@ type Query {
   # orders
   ordersReceived: [Order!]!
   ordersReceivedProducts(order_id: ID!): [ProductWithAmount!]!
+  ordersListByUser(uid: ID!): [Order!]!
+  ordersProducts(oid: ID!): [ProductWithAmount!]!
 
   # posts
   postsList(uid: ID): [Post!]!
