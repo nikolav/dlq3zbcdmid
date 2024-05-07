@@ -24,8 +24,9 @@ IO_CORS_ALLOW_ORIGINS = (
   os.getenv('IOCORS_ALLOW_ORIGIN_dev'),
   os.getenv('IOCORS_ALLOW_ORIGIN_dev_1'),
   os.getenv('IOCORS_ALLOW_ORIGIN_dev_2'),
-  os.getenv('IOCORS_ALLOW_ORIGIN_production'),
   os.getenv('IOCORS_ALLOW_ORIGIN_nikolavrs'),
+  os.getenv('IOCORS_ALLOW_ORIGIN_production'),
+  os.getenv('IOCORS_ALLOW_ORIGIN_production_2'),
 )
 
 REBUILD_SCHEMA_ = bool(os.getenv('REBUILD_SCHEMA'))
