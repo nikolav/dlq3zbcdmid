@@ -84,6 +84,9 @@ def resolve_ordersPlace(_obj, _info, data, items):
     for company in com:
       # io, upadtes ui
       io.emit(f'{IOEVENT_ORDERS_CHANGE}{company.id}')
+    
+    # refresh user ui
+    io.emit(f'{IOEVENT_ORDERS_CHANGE}{g.user.id}')
 
     if MAIL_COMPANIES_ON_ORDER:
       try:
@@ -99,8 +102,6 @@ def resolve_ordersPlace(_obj, _info, data, items):
           )
         )
       except:
-        pass
-      else:
         pass
     
     if True == data.get('email', None):
