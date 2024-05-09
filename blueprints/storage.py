@@ -37,7 +37,7 @@ cors_bp_storage = CORS(bp_storage)
 
 
 @bp_storage.route('/', methods = ('POST',))
-@authguard(os.getenv('POLICY_FILESTORAGE'))
+# @authguard(os.getenv('POLICY_FILESTORAGE'))
 @files
 def storage_upload():
   saved  = {}
