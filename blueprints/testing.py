@@ -5,6 +5,7 @@ from pprint import pprint
 from datetime import datetime
 from datetime import timezone
 from random import randint
+from functools import reduce
 
 from flask      import Blueprint
 from flask      import request
@@ -95,5 +96,4 @@ PRODUCTS_SEARCH_RANDOM_MAX = int(os.getenv('PRODUCTS_SEARCH_RANDOM_MAX'))
 @bp_testing.route('/', methods = ('POST',))
 # @arguments_schema(SchemaTesting())
 def testing_home():  
-  data = request.get_json()
-  return { 'data': data }
+  return { 'status': 1 }

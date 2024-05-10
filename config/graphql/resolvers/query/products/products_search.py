@@ -15,7 +15,7 @@ from schemas.serialization import SchemaSerializeProductsTimes
 
 
 PRODUCTS_SEARCH_RANDOM_MAX = os.getenv('PRODUCTS_SEARCH_RANDOM_MAX')
-SORT_METHODS_ALLOWED = [1,2,3,4,5,6,7]
+SORT_METHODS_ALLOWED = [1,2,3,4,5,6,7,8]
 SORT_METHOD_db = {
   1: Products.price.asc(),
   2: Products.price.desc(),
@@ -23,17 +23,26 @@ SORT_METHOD_db = {
   6: Products.created_at.asc(),
 }
 SORT_METHOD_manual = {
+  
   # 🌟 -rating DESC
   3: lambda ls: sorted(ls, 
                        key     = lambda p: p.rating(), 
                        reverse = True),
+                       
   # 👍🏻 -likes.coun DESC
   4: lambda ls: sorted(ls, 
                        key     = lambda p: p.likes_count(), 
                        reverse = True),
+                       
   # 💬 -comments.count DESC
   7: lambda ls: sorted(ls, 
                        key     = lambda p: p.comments_count(), 
+                       reverse = True),
+                       
+  # 🏆 -total amount ordred DESC
+  #   the most sales 
+  8: lambda ls: sorted(ls, 
+                       key     = lambda p: p.total_amount_ordered(), 
                        reverse = True)
 }
 
@@ -129,7 +138,7 @@ def resolve_productsSearch(_obj, _info, query = None):
     pls = SORT_METHOD_manual[sort_method](pls)
   
   if LIMIT and 0 < LIMIT:
-    pls = pls[0:LIMIT]
+    pls = list(pls)[0:LIMIT]
 
   return SchemaSerializeProductsTimes(many = True).dump(pls)
 

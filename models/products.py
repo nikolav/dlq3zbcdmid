@@ -151,5 +151,18 @@ class Products(MixinTimestamps, MixinIncludesTags, db.Model):
         .join(Docs.tags)
         .where(Tags.tag == CTAG)
     )
+  
+  def total_amount_ordered(self):
+    summed_ammounts = 0
+    try:
+      summed_ammounts = int(db.session.scalar(
+        db.select(func.sum(ln_orders_products.c.amount))
+            .select_from(Products)
+            .join(ln_orders_products)
+            .where(Products.id == self.id)
+            .group_by(Products.id)
+        ))
+    except:
+      pass
 
-
+    return summed_ammounts
