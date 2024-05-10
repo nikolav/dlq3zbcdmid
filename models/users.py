@@ -13,11 +13,17 @@ from . import ln_users_tags
 from . import POLICY_APPROVED
 from src.mixins import MixinTimestamps
 from src.mixins import MixinIncludesTags
+
 from models.tags import Tags
+from models.docs import Docs
+
+from utils.str import match_after_last_at
+
+from schemas.serialization import SchemaSerializeDocJsonTimes
 
 
 POLICY_COMPANY = os.getenv('POLICY_COMPANY')
-USER_EMAIL = os.getenv('USER_EMAIL')
+USER_EMAIL     = os.getenv('USER_EMAIL')
 
 class Users(MixinTimestamps, MixinIncludesTags, db.Model):
   __tablename__ = usersTable
@@ -78,3 +84,29 @@ class Users(MixinTimestamps, MixinIncludesTags, db.Model):
       return str(self.id)
     
     return { 'error': str(error) }, 500
+  
+  def profile(self):
+    p = None
+    
+    try:
+
+      # get profile tag prefix in .tags
+      profile_domain = Docs.docs_profile_domain_from_uid(self.id)
+      
+      # fetch Tags{}
+      t = db.session.scalar(
+        db.select(Tags)
+          .where(Tags.tag.startswith(profile_domain))
+      )
+      
+      # docid from Tags{}
+      docid = int(match_after_last_at(t.tag))
+
+      doc = db.session.get(Docs, docid)
+      p   = getattr(doc, 'data')
+      
+    except:
+      pass
+
+    return p if p else {}
+

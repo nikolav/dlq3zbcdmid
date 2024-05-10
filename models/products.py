@@ -1,6 +1,6 @@
 import os
 # import json
-# import re
+import re
 from datetime import datetime
 from datetime import timezone
 from typing import List
@@ -96,3 +96,10 @@ class Products(MixinTimestamps, MixinIncludesTags, db.Model):
   def categories(self):
     return [t.tag for t in self.tags if t.tag.startswith(PRODUCT_CATEGORY_prefix)]
   
+  def district(self):
+    p = self.user.profile()
+    return p.get('district', '') if p else ''
+  
+  def is_from_district(self, district = ''):
+    return bool(re.match(
+      f'.*{re.escape(district)}.*', self.district(), flags = re.IGNORECASE))

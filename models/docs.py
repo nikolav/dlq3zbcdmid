@@ -20,7 +20,8 @@ from src.mixins import MixinIncludesTags
 from schemas.serialization import SchemaSerializeDocJsonTimes
 
 
-_prefix_by_doc_id = os.getenv('PREFIX_BY_DOC_ID')
+PREFIX_BY_DOC_ID           = os.getenv('PREFIX_BY_DOC_ID')
+TAG_COMPANY_PROFILE_prefix = os.getenv('TAG_COMPANY_PROFILE_prefix')
 
 _schemaDocsDump     = SchemaSerializeDocJsonTimes()
 _schemaDocsDumpMany = SchemaSerializeDocJsonTimes(many = True)
@@ -84,13 +85,20 @@ class Docs(MixinTimestamps, MixinIncludesTags, db.Model):
       )
     )
   
+  @staticmethod
+  def docs_profile_domain_from_docid(doc_id):
+    return f'{PREFIX_BY_DOC_ID}://{doc_id}@'
+  
+  @staticmethod
+  def docs_profile_domain_from_uid(uid):
+    return Docs.docs_profile_domain_from_docid(f'{TAG_COMPANY_PROFILE_prefix}{uid}')
   
   @staticmethod
   def by_doc_id(doc_id, *, create = False):
     # get single doc by id `doc_id: string` cached in 
     # `@tags.tag` collection, 
-    #   ex. `kmPtHAgrysK://foo@56` 
-    domain_ = f'{_prefix_by_doc_id}://{doc_id}@'
+    #   ex. `kmPtHAgrysK://{doc_id}@56` 
+    domain_ = Docs.docs_profile_domain_from_docid(doc_id)
     tag_    = None
     doc     = None
 
