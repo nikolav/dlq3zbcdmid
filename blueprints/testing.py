@@ -77,12 +77,36 @@ from schemas.serialization import SchemaSerializeDocJsonTimes
 
 from sqlalchemy import text
 
-
-POST_IMAGES_prefix      = os.getenv('POST_IMAGES_prefix')
-PRODUCT_CATEGORY_prefix = os.getenv('PRODUCT_CATEGORY_prefix')
-
-
 from utils.str import match_after_last_colon
+
+
+POST_IMAGES_prefix         = os.getenv('POST_IMAGES_prefix')
+PRODUCT_CATEGORY_prefix    = os.getenv('PRODUCT_CATEGORY_prefix')
+PRODUCTS_SEARCH_RANDOM_MAX = int(os.getenv('PRODUCTS_SEARCH_RANDOM_MAX'))
+
+
+SORT_METHODS_ALLOWED        = [1,2,3,4,5,6,7]
+# SORT_METHODS_ALLOWED_db     = [1,2,5,6]
+# SORT_METHODS_ALLOWED_manual = [3,4,7]
+
+SORT_METHOD_db = {
+  1: Products.price.asc(),
+  2: Products.price.desc(),
+  5: Products.created_at.desc(),
+  6: Products.created_at.asc(),
+}
+
+SORT_METHOD_manual = {
+
+  # 🌟 -rating DESC
+  3: 3,
+  
+  # 👍🏻 -likes.coun DESC
+  4: 4, 
+
+  # 💬 -comments.count DESC
+  7: 7
+}
 
 
 
@@ -107,20 +131,29 @@ def testing_home():
       db.session.scalars(
         db.select(Products)
           .order_by(func.random())
-          .limit(5)
+          .limit(PRODUCTS_SEARCH_RANDOM_MAX)
       )
     )
-
+  
+  # :string
   category     = data.get('category', None)
 
+  # :string
   text         = data.get('text', None)
   TEXT         = text.strip().upper() if text else None
 
+  # :int
   d_price_max  = data.get('priceMax', None)
   PRICE        = int(d_price_max) if d_price_max else None
 
+  # :string
   district_    = data.get('district', None)
   district     = district_.strip() if district_ else None
+
+  # 0 < :int
+  sort_method_ = data.get('sortBy', None)
+  sort_method  = int(sort_method_) if sort_method_ else None
+
 
   q = db.select(Products)
 
@@ -144,6 +177,21 @@ def testing_home():
       Products.price <= int(PRICE)
     )
 
+  # sort strategy
+  if sort_method in SORT_METHOD_db:
+    # db
+    #   1: .price      ASC
+    #   2: .price      DESC
+    #   5: .created_at DESC
+    #   6: .created_at ASC
+    
+    # manual
+    #   3: -rating         DESC
+    #   4: -likes.coun     DESC
+    #   7: -comments.count DESC
+    q = q.sort_by(SORT_METHOD_db[sort_method])
+
+
   pls = db.session.scalars(q)
 
 
@@ -155,3 +203,35 @@ def testing_home():
   return SchemaSerializeProductsTimes(many = True).dump(pls)
   
   # return []
+
+# searchSortBy: [
+#       {
+#         title: "👌🏻 Najjeftinije",
+#         value: 1,
+#       },
+#       {
+#         title: "💰 Najskuplje",
+#         value: 2,
+#       },
+
+#       {
+#         title: "🌟 Najbolja ocena",
+#         value: 3,
+#       },
+#       {
+#         title: "👍🏻 Pozitivno",
+#         value: 4,
+#       },
+#       {
+#         title: "✨ Novo",
+#         value: 5,
+#       },
+#       {
+#         title: "⌛ Staro",
+#         value: 6,
+#       },
+#       {
+#         title: "🔊 Najvise komentara",
+#         value: 7,
+#       },
+#     ],
