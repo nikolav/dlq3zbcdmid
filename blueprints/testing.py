@@ -154,7 +154,7 @@ def testing_home():
   sort_method_ = data.get('sortBy', None)
   sort_method  = int(sort_method_) if sort_method_ else None
 
-
+  # query --builder
   q = db.select(Products)
 
   if category:
@@ -183,18 +183,15 @@ def testing_home():
     #   1: .price      ASC
     #   2: .price      DESC
     #   5: .created_at DESC
-    #   6: .created_at ASC
-    
-    # manual
-    #   3: -rating         DESC
-    #   4: -likes.coun     DESC
-    #   7: -comments.count DESC
+    #   6: .created_at ASC    
     q = q.sort_by(SORT_METHOD_db[sort_method])
 
 
+  # execute
   pls = db.session.scalars(q)
 
-
+  # manual filter/sort
+  
   if district:
     # filter on user:profle:district
     pls = [p for p in pls if p.is_from_district(district)]

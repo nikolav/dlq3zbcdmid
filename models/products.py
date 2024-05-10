@@ -101,5 +101,5 @@ class Products(MixinTimestamps, MixinIncludesTags, db.Model):
     return p.get('district', '') if p else ''
   
   def is_from_district(self, district = ''):
-    return bool(re.match(
-      f'.*{re.escape(district)}.*', self.district(), flags = re.IGNORECASE))
+    return bool(re.match( f'.*{re.escape(district)}.*', 
+      self.district(), flags = re.IGNORECASE))
