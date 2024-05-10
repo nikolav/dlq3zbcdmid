@@ -15,7 +15,7 @@ from schemas.serialization import SchemaSerializeProductsTimes
 
 
 PRODUCTS_SEARCH_RANDOM_MAX = os.getenv('PRODUCTS_SEARCH_RANDOM_MAX')
-SORT_METHODS_ALLOWED = [1,2,3,4,5,6,7,8]
+SORT_METHODS_ALLOWED       = [1,2,3,4,5,6,7,8]
 SORT_METHOD_db = {
   1: Products.price.asc(),
   2: Products.price.desc(),
@@ -105,7 +105,12 @@ def resolve_productsSearch(_obj, _info, query = None):
         func.upper(Products.description).like(f'%{TEXT}%'),
         Products.tags.any(
           # func.upper(Tags.tag).like((f'%{PRODUCT_CATEGORY_prefix}{TEXT}%').upper())
-          func.upper(Tags.tag).op('~')(f'.*{re.escape(TEXT)}.*')
+
+          # postgres
+          # func.upper(Tags.tag).op('~')(f'.*{re.escape(TEXT)}.*')
+
+          # sqlite
+          func.upper(Tags.tag).op('REGEXP')(f'.*{re.escape(TEXT)}.*')
         )
       )
     )
