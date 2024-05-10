@@ -168,6 +168,7 @@ type Query {
   productsListByTags(tags: [String!]!): [Product!]!
   productsListPopular(length: Int): [Product!]!
   productsListExact(products: [ID!]!): [Product!]!
+  productsSearch(query: JsonData): [Product!]!
 
   # orders
   ordersReceived: [Order!]!

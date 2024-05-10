@@ -12,6 +12,7 @@ from .products import products_list_by_tags
 from .products import products_list_all
 from .products import products_list_popular
 from .products import products_list_exact
+from .products import products_search
 
 from .companies import companies_list
 
@@ -25,4 +26,3 @@ from .users import users_by_id
 
 from .posts import posts_list
 from .posts import posts_images
-
