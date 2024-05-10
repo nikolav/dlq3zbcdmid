@@ -99,13 +99,19 @@ SORT_METHOD_db = {
 SORT_METHOD_manual = {
 
   # 🌟 -rating DESC
-  3: 3,
+  3: lambda ls: sorted(ls, 
+                       key     = lambda p: p.rating(), 
+                       reverse = True),
   
   # 👍🏻 -likes.coun DESC
-  4: 4, 
+  4: lambda ls: sorted(ls, 
+                       key     = lambda p: p.likes_count(), 
+                       reverse = True),
 
   # 💬 -comments.count DESC
-  7: 7
+  7: lambda ls: sorted(ls, 
+                       key     = lambda p: p.comments_count(), 
+                       reverse = True)
 }
 
 
@@ -113,13 +119,13 @@ SORT_METHOD_manual = {
 @bp_testing.route('/', methods = ('POST',))
 # @arguments_schema(SchemaTesting())
 def testing_home():  
-
   # {
   # 'category' : '@product:category:brasno',
   # 'district' : 'Srem',
   # 'priceMax' : 1122,
   # 'sortBy'   : 3,
   # 'text'     : '12'
+  # 'limit'    : 10
   # }
 
   
@@ -135,26 +141,30 @@ def testing_home():
       )
     )
   
-  # :string
+  # # :string
   category     = data.get('category', None)
 
-  # :string
+  # # :string
   text         = data.get('text', None)
   TEXT         = text.strip().upper() if text else None
 
-  # :int
+  # # :int
   d_price_max  = data.get('priceMax', None)
   PRICE        = int(d_price_max) if d_price_max else None
 
-  # :string
+  # # :string
   district_    = data.get('district', None)
   district     = district_.strip() if district_ else None
 
-  # 0 < :int
+  # # 0 < :int
   sort_method_ = data.get('sortBy', None)
   sort_method  = int(sort_method_) if sort_method_ else None
+  
+  # limit max
+  limit_       = data.get('limit', None)
+  LIMIT        = int(limit_) if limit_ else None
 
-  # query --builder
+  # # query --builder
   q = db.select(Products)
 
   if category:
@@ -172,63 +182,40 @@ def testing_home():
       )
     )
   
-  if PRICE:
+  if PRICE and 0 < PRICE:
     q = q.where(
       Products.price <= int(PRICE)
     )
 
-  # sort strategy
+  # # sort strategy
   if sort_method in SORT_METHOD_db:
     # db
     #   1: .price      ASC
     #   2: .price      DESC
     #   5: .created_at DESC
     #   6: .created_at ASC    
-    q = q.sort_by(SORT_METHOD_db[sort_method])
+    q = q.order_by(SORT_METHOD_db[sort_method])
 
 
-  # execute
+  # # execute
   pls = db.session.scalars(q)
 
-  # manual filter/sort
-  
+
+  # # manual filter/sort
+
   if district:
     # filter on user:profle:district
     pls = [p for p in pls if p.is_from_district(district)]
+
+
+  # # rating-sort
+  if sort_method in SORT_METHOD_manual:
+    pls = SORT_METHOD_manual[sort_method](pls)
+  
+  
+  if LIMIT and 0 < LIMIT:
+    pls = pls[0:LIMIT]
   
   
   return SchemaSerializeProductsTimes(many = True).dump(pls)
-  
-  # return []
 
-# searchSortBy: [
-#       {
-#         title: "👌🏻 Najjeftinije",
-#         value: 1,
-#       },
-#       {
-#         title: "💰 Najskuplje",
-#         value: 2,
-#       },
-
-#       {
-#         title: "🌟 Najbolja ocena",
-#         value: 3,
-#       },
-#       {
-#         title: "👍🏻 Pozitivno",
-#         value: 4,
-#       },
-#       {
-#         title: "✨ Novo",
-#         value: 5,
-#       },
-#       {
-#         title: "⌛ Staro",
-#         value: 6,
-#       },
-#       {
-#         title: "🔊 Najvise komentara",
-#         value: 7,
-#       },
-#     ],

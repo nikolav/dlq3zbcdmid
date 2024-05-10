@@ -7,6 +7,7 @@ from typing import List
 from typing import Optional
 
 from sqlalchemy     import JSON
+from sqlalchemy     import func
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
@@ -19,7 +20,17 @@ from . import ln_orders_products
 from src.mixins import MixinTimestamps
 from src.mixins import MixinIncludesTags
 
-PRODUCT_CATEGORY_prefix = os.getenv('PRODUCT_CATEGORY_prefix')
+from models.tags import Tags
+from models.docs import Docs
+
+
+
+PRODUCT_CATEGORY_prefix    = os.getenv('PRODUCT_CATEGORY_prefix')
+TOPIC_RATINGS              = os.getenv('TOPIC_RATINGS')
+PRODUCT_RATING_prefix      = os.getenv('PRODUCT_RATING_prefix')
+LIKEDISLIKE_CACHE_ID       = os.getenv('LIKEDISLIKE_CACHE_ID')
+PRODUCTS_LIKES_prefix      = os.getenv('PRODUCTS_LIKES_prefix')
+TOPIC_CHAT_PRODUCTS_prefix = os.getenv('TOPIC_CHAT_PRODUCTS_prefix')
 
 
 class Products(MixinTimestamps, MixinIncludesTags, db.Model):
@@ -103,3 +114,42 @@ class Products(MixinTimestamps, MixinIncludesTags, db.Model):
   def is_from_district(self, district = ''):
     return bool(re.match( f'.*{re.escape(district)}.*', 
       self.district(), flags = re.IGNORECASE))
+  
+  # getter, calculate 🌟 rating
+  def rating(self):
+    
+    # get rating map
+    doc__ratings_map = Docs.by_doc_id(TOPIC_RATINGS)
+    ratings_map      = getattr(doc__ratings_map, 'data')
+
+    # get user ratings map by product ID
+    key     = f'{PRODUCT_RATING_prefix}{self.id}'
+    ratings = ratings_map[key] if key in ratings_map else None
+    
+    # sum, divide ratings;
+    #  0 == 'unrated' 
+    #  wont raise at empty collections; if (empty[]) --> False
+    return round(sum(ratings.values()) / len(ratings)) if ratings else 0
+  
+  def likes_count(self):
+    
+    # get likedislike cache by `docid` cacheID
+    doc__ld_cache = Docs.by_doc_id(LIKEDISLIKE_CACHE_ID)
+    ld_cache      = getattr(doc__ld_cache, 'data')
+    
+    # get likes:map @path {domain}{pid}.likes
+    key       = f'{PRODUCTS_LIKES_prefix}{self.id}'
+    likes_map = ld_cache[key]['likes'] if 'likes' in (ld_cache[key] if key in ld_cache else []) else None
+
+    # count `true` values
+    return len([val for val in likes_map.values() if val]) if likes_map else 0
+  
+  def comments_count(self):
+    CTAG = f'{TOPIC_CHAT_PRODUCTS_prefix}{self.id}'
+    return db.session.scalar(
+      db.select(func.count(Docs.id))
+        .join(Docs.tags)
+        .where(Tags.tag == CTAG)
+    )
+
+
