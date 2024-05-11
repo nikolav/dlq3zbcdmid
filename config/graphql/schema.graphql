@@ -147,6 +147,10 @@ input InputPost {
   content: String
 }
 
+type ResultTotalAmountOrdered {
+  amount: Int!
+}
+
 #########
 ## @Query
 
@@ -169,6 +173,7 @@ type Query {
   productsListPopular(length: Int): [Product!]!
   productsListExact(products: [ID!]!): [Product!]!
   productsSearch(query: JsonData): [Product!]!
+  productsTotalAmountOrdered(pid: ID!): ResultTotalAmountOrdered!
 
   # orders
   ordersReceived: [Order!]!

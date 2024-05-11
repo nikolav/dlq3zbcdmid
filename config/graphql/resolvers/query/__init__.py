@@ -13,6 +13,7 @@ from .products import products_list_all
 from .products import products_list_popular
 from .products import products_list_exact
 from .products import products_search
+from .products import products_total_amount_ordered
 
 from .companies import companies_list
 
