@@ -95,5 +95,16 @@ PRODUCTS_SEARCH_RANDOM_MAX = int(os.getenv('PRODUCTS_SEARCH_RANDOM_MAX'))
 
 @bp_testing.route('/', methods = ('POST',))
 # @arguments_schema(SchemaTesting())
-def testing_home():  
-  return { 'status': 1 }
+def testing_home():
+  sumedc = func.sum(ln_orders_products.c.amount)
+  r = db.session.scalars(
+    db.select(Products, sumedc)
+      # .select_from(Products)
+      .join(ln_orders_products)
+      # .where(Products.id == ID)
+      .group_by(Products.id)
+      .order_by(desc(sumedc))
+      .limit(3)
+    )
+  
+  return SchemaSerializeProductsTimes(many = True).dump(r)
