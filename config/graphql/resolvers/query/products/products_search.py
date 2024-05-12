@@ -106,10 +106,10 @@ def resolve_productsSearch(_obj, _info, query = None):
         Products.tags.any(
 
           # postgres
-          # func.upper(Tags.tag).op('~')(f'.*{re.escape(TEXT)}.*')
+          func.upper(Tags.tag).op('~')(f'.*{re.escape(TEXT)}.*')
 
           # sqlite
-          func.upper(Tags.tag).op('REGEXP')(f'.*{re.escape(TEXT)}.*')
+          # func.upper(Tags.tag).op('REGEXP')(f'.*{re.escape(TEXT)}.*')
           
         )
       )
