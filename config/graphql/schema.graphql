@@ -162,9 +162,10 @@ type Query {
   vars: [Var!]!
 
   # companies, users
-  companiesList(approved: Boolean): [Company!]!
+  companiesList(approved: Boolean, district: String): [User!]!
   users: [User!]!
   usersById(uid: ID!): User
+  companiesCountedByDistrict: JsonData!
 
   # products
   productsListAll: [Product!]!

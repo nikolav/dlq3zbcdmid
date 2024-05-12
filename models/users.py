@@ -3,6 +3,8 @@ import os
 # import re
 from typing import List
 
+from sqlalchemy     import func
+from sqlalchemy     import desc
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
@@ -14,12 +16,14 @@ from . import POLICY_APPROVED
 from src.mixins import MixinTimestamps
 from src.mixins import MixinIncludesTags
 
-from models.tags import Tags
-from models.docs import Docs
+from models          import ln_orders_products
+from models.tags     import Tags
+from models.docs     import Docs
+from models.products import Products
 
 from utils.str import match_after_last_at
 
-from schemas.serialization import SchemaSerializeDocJsonTimes
+from schemas.serialization import SchemaSerializeProductsTimes
 
 
 POLICY_COMPANY = os.getenv('POLICY_COMPANY')
@@ -109,4 +113,21 @@ class Users(MixinTimestamps, MixinIncludesTags, db.Model):
       pass
 
     return p if p else {}
+  
+  def products_sorted_popular(self):
+    lsp = []
 
+    sumc = func.sum(ln_orders_products.c.amount)
+    ls_p = db.session.scalars(
+      db.select(Products, sumc)
+        # .join(ln_orders_products)
+        # include Products with no orders also
+        .join(ln_orders_products, isouter = True)
+        .where(Products.user_id == self.id)
+        .group_by(Products.id)
+        .order_by(desc(sumc))
+    )
+
+    lsp = SchemaSerializeProductsTimes(exclude = ('user','user_id',), many = True).dump(ls_p)
+    
+    return lsp

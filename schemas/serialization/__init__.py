@@ -24,7 +24,7 @@ class SchemaSerializeUsersTimes(SchemaSerializeTimes):
   password = fields.String()
   products = fields.List(fields.Nested(lambda: SchemaSerializeProductsTimes(exclude = ('user',))))
   posts    = fields.List(fields.Nested(lambda: SchemaSerializePosts(exclude = ('user',))))
-
+  
 class SchemaSerializeProductsTimes(SchemaSerializeTimes):
   id            = fields.Integer()
   user_id       = fields.Integer(dump_default = None)

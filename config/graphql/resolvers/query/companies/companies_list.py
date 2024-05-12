@@ -1,19 +1,23 @@
 import os
 
-from models.tags         import Tags
 from config.graphql.init import query
+from models.tags         import Tags
 
 from schemas.serialization import SchemaSerializeUsersTimes
 
 
 @query.field('companiesList')
-def resolve_companiesList(_obj, _info, approved = False):
-  try:
-    tag_com = Tags.by_name(os.getenv('POLICY_COMPANY_APPROVED' if approved else 'POLICY_COMPANY'))
-    return SchemaSerializeUsersTimes(many = True).dump(tag_com.users)
+def resolve_companiesList(_obj, _info, approved = False, district = None):
+  ls_com = []
 
-  except:
-    pass
+  t_coms = Tags.by_name(os.getenv('POLICY_COMPANY'))
+  coms   = t_coms.users if None == district else [com for com in t_coms.users if district == com.profile()['district']]
+  
+  sch = SchemaSerializeUsersTimes(exclude = ('password', 'products',))
+  for com in coms:
+    lsp  = com.products_sorted_popular()
+    node = sch.dump(com)
+    node['products'] = lsp
+    ls_com.append(node)
 
-  return []
-
+  return ls_com

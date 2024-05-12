@@ -16,6 +16,7 @@ from .products import products_search
 from .products import products_total_amount_ordered
 
 from .companies import companies_list
+from .companies import companies_counted_by_district
 
 from .orders import orders_received
 from .orders import orders_received_products
