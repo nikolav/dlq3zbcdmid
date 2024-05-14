@@ -50,25 +50,37 @@ SORT_METHOD_manual = {
 def resolve_productsSearch(_obj, _info, query = None):
   # query: JSON | None
   # {
-  # 'category' : '@product:category:brasno',
-  # 'district' : 'Srem',
-  # 'priceMax' : 1122,
-  # 'sortBy'   : 3,
-  # 'text'     : '12'
-  # 'limit'    : 10
+  #   'category' : '@product:category:brasno',
+  #   'district' : 'Srem',
+  #   'priceMax' : 1122,
+  #   'sortBy'   : 3,
+  #   'text'     : '12'
+  #   'limit'    : 10
+  #   'random'   : true
   # }
   
-  if not query:
-    # no parameters; send random
-    return SchemaSerializeProductsTimes(many = True).dump(
-      db.session.scalars(
-        db.select(Products)
-          .order_by(func.random())
-          .limit(PRODUCTS_SEARCH_RANDOM_MAX)
-      )
-    )
 
-  # # :string
+  if not query:
+    # no parameters
+    return []
+  
+  # if True == RANDOM:
+  #   return SchemaSerializeProductsTimes(many = True).dump(
+  #     db.session.scalars(
+  #       db.select(Products)
+  #         .order_by(func.random())
+  #         .limit(LIMIT or PRODUCTS_SEARCH_RANDOM_MAX)
+  #     )
+  #   )
+  
+  # lsrandom
+  RANDOM       = True == query.get('random', None)
+
+  # limit max
+  limit_       = query.get('limit', None)
+  LIMIT        = int(limit_) if limit_ else None
+
+  # :string
   category     = query.get('category', None)
 
   # # :string
@@ -87,10 +99,7 @@ def resolve_productsSearch(_obj, _info, query = None):
   sort_method_ = query.get('sortBy', None)
   sort_method  = int(sort_method_) if sort_method_ else None
   
-  # limit max
-  limit_       = query.get('limit', None)
-  LIMIT        = int(limit_) if limit_ else None
-
+  
   # # query --builder
   q = db.select(Products)
 
@@ -121,13 +130,16 @@ def resolve_productsSearch(_obj, _info, query = None):
     )
 
   # # sort strategy
-  if sort_method in SORT_METHOD_db:
-    # db
-    #   1: .price      ASC
-    #   2: .price      DESC
-    #   5: .created_at DESC
-    #   6: .created_at ASC    
-    q = q.order_by(SORT_METHOD_db[sort_method])
+  if RANDOM:
+    q = q.order_by(func.random())
+  else:
+    if sort_method in SORT_METHOD_db:
+      # db
+      #   1: .price      ASC
+      #   2: .price      DESC
+      #   5: .created_at DESC
+      #   6: .created_at ASC    
+      q = q.order_by(SORT_METHOD_db[sort_method])
 
   # # execute
   pls = db.session.scalars(q)
