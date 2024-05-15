@@ -11,7 +11,7 @@ def resolve_companiesList(_obj, _info, approved = False, district = None):
   ls_com = []
 
   t_coms = Tags.by_name(os.getenv('POLICY_COMPANY'))
-  coms   = t_coms.users if None == district else [com for com in t_coms.users if district == com.profile()['district']]
+  coms   = t_coms.users if None == district else [com for com in t_coms.users if district == com.profile().get('district')]
   
   sch = SchemaSerializeUsersTimes(exclude = ('password', 'products',))
   for com in coms:

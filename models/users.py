@@ -22,6 +22,7 @@ from models.docs     import Docs
 from models.products import Products
 
 from utils.str import match_after_last_at
+from utils.pw  import hash as hashPassword
 
 from schemas.serialization import SchemaSerializeProductsTimes
 
@@ -131,3 +132,28 @@ class Users(MixinTimestamps, MixinIncludesTags, db.Model):
     lsp = SchemaSerializeProductsTimes(exclude = ('user','user_id',), many = True).dump(ls_p)
     
     return lsp
+  
+  @staticmethod
+  def create_user(*, email, password, company = False):
+    u = Users(
+      email    = email,
+      password = hashPassword(password)
+    )
+    db.session.add(u)
+    db.session.commit()
+
+    if True == company:
+      
+      # --dev-feature; auto approve companies
+      # if `bool:company == true` provided; 
+      #   tag user as [company, approved, fs:approved]
+      u.tags.append(Tags.by_name(os.getenv('POLICY_COMPANY')))
+      u.tags.append(Tags.by_name(os.getenv('POLICY_FILESTORAGE')))
+
+      # @todo; no auto approve
+      #  approve users manualy through ui, emails, contacts
+      u.tags.append(Tags.by_name(os.getenv('POLICY_APPROVED')))
+
+      db.session.commit()
+    
+    return u

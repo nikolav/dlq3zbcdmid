@@ -10,10 +10,11 @@ def resolve_companiesCountedByDistrict(_obj, _info):
   district_coms_counts = {}
   tcom = Tags.by_name(os.getenv('POLICY_COMPANY'))  
   for com in tcom.users:
-    d = com.profile()['district']
-    if not d in district_coms_counts:
-      district_coms_counts[d] = 1
-    else:
-      district_coms_counts[d] += 1
+    d = com.profile().get('district')
+    if d:
+      if not d in district_coms_counts:
+        district_coms_counts[d] = 1
+      else:
+        district_coms_counts[d] += 1
   
   return district_coms_counts

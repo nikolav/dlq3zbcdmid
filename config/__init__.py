@@ -6,6 +6,7 @@ PATHS_SKIP_AUTH = (
   # auth.allow
   r'^/auth/register$',
   r'^/auth/login$',
+  r'^/auth/social$',
   
   # storage.allow-download
   r'^/storage/[0-9a-fA-F]+$',
