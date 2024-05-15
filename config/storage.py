@@ -3,6 +3,6 @@
 # ALLOWED_EXTENSIONS = {'*', 'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'md'}
 
 # @storage:allow-images
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+ALLOWED_EXTENSIONS = {'jpeg', 'jpg', 'png', 'gif', 'svg', 'webp', 'bmp', 'tiff', 'tif'}
 
 RE_EXT = r'^.*\.([^\.]+)$'
