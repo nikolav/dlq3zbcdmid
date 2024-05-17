@@ -2,7 +2,7 @@
 
 # update packages
 apt update
-apt-get update
+apt-get update -y
 
 # install git
 apt install git
@@ -22,6 +22,12 @@ apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
 # install docker-compose
 curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
+
+
+## install selenium chrome webdriver
+## https://github.com/password123456/setup-selenium-with-chrome-driver-on-ubuntu_debian
+## https://chatgpt.com/c/24e8ac36-02ac-4688-8ae4-a7062929978e
+
 
 # allow app @ports
 ufw allow OpenSSH
