@@ -27,7 +27,7 @@ from utils.str import match_after_last_colon
 
 
 @mutation.field('postsRemove')
-@authguard_company_approved
+# @authguard_company_approved
 def resolve_postsRemove(_obj, _info, id):
   p   = None
   uid = None

@@ -18,7 +18,7 @@ IOEVENT_PRODUCTS_CHANGE_prefix        = os.getenv('IOEVENT_PRODUCTS_CHANGE_prefi
 IOEVENT_PRODUCTS_CHANGE               = os.getenv('IOEVENT_PRODUCTS_CHANGE')
 
 @mutation.field('productsRm')
-@authguard_company_approved
+# @authguard_company_approved
 def resolve_productsRm(_obj, _info, id):
   p   = None
   uid = None
