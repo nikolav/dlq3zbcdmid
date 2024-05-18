@@ -76,6 +76,7 @@ from sqlalchemy import asc
 from schemas.serialization import SchemaSerializeOrdersTimes
 from schemas.serialization import SchemaSerializeProductsTimes
 from schemas.serialization import SchemaSerializeDocJsonTimes
+from schemas.serialization import SchemaSerializeUsersTimes
 
 from sqlalchemy import text
 
@@ -97,14 +98,9 @@ PRODUCTS_SEARCH_RANDOM_MAX = int(os.getenv('PRODUCTS_SEARCH_RANDOM_MAX'))
 @bp_testing.route('/', methods = ('POST',))
 # @arguments_schema(SchemaTesting())
 def testing_home():    
-  # counts grouped by districk
-  district_coms_counts = {}
-  tcom = Tags.by_name(os.getenv('POLICY_COMPANY'))  
-  for com in tcom.users:
-    d = com.profile()['district']
-    if not d in district_coms_counts:
-      district_coms_counts[d] = 1
-    else:
-      district_coms_counts[d] += 1
-  
-  return district_coms_counts
+  u = db.session.get(Users, 3)
+  # print(u.approved())
+  # u.disapprove()
+  # u.approve()
+
+  return { 'is_approved': u.approved() }

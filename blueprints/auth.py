@@ -191,7 +191,12 @@ def auth_who():
   error = '@error/auth:who'
   try:
     # send user data
-    return { 'id': g.user.id, 'email': g.user.email, 'company': g.is_company }, 200
+    return { 
+      'id'          : g.user.id, 
+      'email'       : g.user.email, 
+      'company'     : g.is_company,
+      'is_approved' : g.user.approved(),
+    }, 200
   except Exception as err:
     error = err
   

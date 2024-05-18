@@ -72,9 +72,28 @@ class Users(MixinTimestamps, MixinIncludesTags, db.Model):
   def approved(self):
     return self.includes_tags(POLICY_APPROVED)
   
+  # public 
+  def disapprove(self):
+    error = '@error:disapprove'
+
+    try:
+      if self.approved():
+        tag_approved = Tags.by_name(POLICY_APPROVED)
+        tag_approved.users.remove(self)
+        db.session.commit()
+
+    except Exception as e:
+      error = e
+      raise e
+    
+    else:
+      return str(self.id)
+    
+    return { 'error': str(error) }
+  
   # public
   def approve(self):
-    error = '@error:internal'
+    error = '@error:approve'
 
     try:
       if not self.approved():
@@ -84,6 +103,7 @@ class Users(MixinTimestamps, MixinIncludesTags, db.Model):
 
     except Exception as e:
       error = e
+      raise e
 
     else:
       return str(self.id)

@@ -19,11 +19,15 @@ class SchemaSerializeDocJsonWithRelationsPosts(SchemaSerializeDocJsonTimes):
   post = fields.Nested(lambda: SchemaSerializePosts(exclude = ('docs',)))
 
 class SchemaSerializeUsersTimes(SchemaSerializeTimes):
-  id       = fields.Integer()
-  email    = fields.String()
-  password = fields.String()
-  products = fields.List(fields.Nested(lambda: SchemaSerializeProductsTimes(exclude = ('user',))))
-  posts    = fields.List(fields.Nested(lambda: SchemaSerializePosts(exclude = ('user',))))
+  id          = fields.Integer()
+  email       = fields.String()
+  password    = fields.String()
+  products    = fields.List(fields.Nested(lambda: SchemaSerializeProductsTimes(exclude = ('user',))))
+  posts       = fields.List(fields.Nested(lambda: SchemaSerializePosts(exclude = ('user',))))
+  is_approved = fields.Method("calc_is_approved")
+
+  def calc_is_approved(self, u):
+    return u.approved()
   
 class SchemaSerializeProductsTimes(SchemaSerializeTimes):
   id            = fields.Integer()

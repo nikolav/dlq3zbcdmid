@@ -81,8 +81,8 @@ if not user_admin.includes_tags(policy_approved_):
 # if not user_admin.includes_tags(policy_all_):
 #   tagPolicyALL.users.append(user_admin)
 
-if not user_default.includes_tags(policy_approved_):
-  tagPolicy_approved.users.append(user_default)
+# if not user_default.includes_tags(policy_approved_):
+#   tagPolicy_approved.users.append(user_default)
 # if not user_default.includes_tags(policy_email_):
 #   tagPolicyEMAIL.users.append(user_default)
 # if not user_default.includes_tags(policy_fs_):

@@ -61,6 +61,7 @@ type User {
   password: String!
   products: [Product!]
   posts: [Post!]
+  is_approved: Boolean
   created_at: String
   updated_at: String
 }
