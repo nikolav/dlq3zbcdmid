@@ -53,11 +53,22 @@ app.config['MAIL_ASCII_ATTACHMENTS'] = bool(os.getenv('MAIL_ASCII_ATTACHMENTS'))
 
 
 # talisman = Talisman(app, force_https = False)
-cors  = CORS(app, supports_credentials = True)
+
+cors = CORS(app, 
+  supports_credentials = True, 
+  # CORS /graphql route
+  resources = {
+    r'/graphql' : {'origins': '*'},
+    r'/storage' : {'origins': '*'},
+    r'/auth'    : {'origins': '*'},
+  }
+) if PRODUCTION else CORS(app, supports_credentials = True)
+
 api   = Api(app)
 db    = SQLAlchemy(app, model_class = DbModelBaseClass)
 io    = SocketIO(app, 
-                 cors_allowed_origins = IO_CORS_ALLOW_ORIGINS, 
-                 cors_supports_credentials = True)
+                  cors_allowed_origins = IO_CORS_ALLOW_ORIGINS, 
+                  # cors_allowed_origins="*",
+                  cors_supports_credentials = True,
+                )
 mail  = Mail(app)
-

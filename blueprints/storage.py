@@ -1,7 +1,6 @@
 import os
 
 from flask       import Blueprint
-# from flask       import request
 from flask       import g
 from flask       import send_file
 from flask_cors  import CORS
@@ -33,8 +32,7 @@ UPLOAD_DIR    = os.getenv('UPLOAD_DIR')
 bp_storage = Blueprint('storage', __name__, url_prefix = '/storage')
 
 # cors blueprints as wel for cross-domain requests
-cors_bp_storage = CORS(bp_storage)
-
+CORS(bp_storage)
 
 @bp_storage.route('/', methods = ('POST',))
 # @authguard(os.getenv('POLICY_FILESTORAGE'))
