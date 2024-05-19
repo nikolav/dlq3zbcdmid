@@ -53,7 +53,6 @@ app.config['MAIL_ASCII_ATTACHMENTS'] = bool(os.getenv('MAIL_ASCII_ATTACHMENTS'))
 
 
 # talisman = Talisman(app, force_https = False)
-
 cors = CORS(app, 
   supports_credentials = True, 
   # CORS /graphql route

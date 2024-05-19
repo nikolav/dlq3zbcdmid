@@ -27,8 +27,16 @@ from utils.pw  import hash as hashPassword
 from schemas.serialization import SchemaSerializeProductsTimes
 
 
-POLICY_COMPANY = os.getenv('POLICY_COMPANY')
-USER_EMAIL     = os.getenv('USER_EMAIL')
+POLICY_COMPANY        = os.getenv('POLICY_COMPANY')
+USER_EMAIL            = os.getenv('USER_EMAIL')
+POLICY_PACKAGE_SILVER = os.getenv('POLICY_PACKAGE_SILVER')
+POLICY_PACKAGE_GOLD   = os.getenv('POLICY_PACKAGE_GOLD')
+
+PKG = {
+  'silver': POLICY_PACKAGE_SILVER,
+  'gold'  : POLICY_PACKAGE_GOLD,
+}
+
 
 class Users(MixinTimestamps, MixinIncludesTags, db.Model):
   __tablename__ = usersTable
@@ -152,6 +160,28 @@ class Users(MixinTimestamps, MixinIncludesTags, db.Model):
     lsp = SchemaSerializeProductsTimes(exclude = ('user','user_id',), many = True).dump(ls_p)
     
     return lsp
+  
+  # public
+  def packages_is_premium(self):
+    return any([self.packages_is(pkg_type) for pkg_type in PKG.keys()])
+  
+  # public
+  def packages_is(self, pkg_type):
+    return self.includes_tags(PKG.get(pkg_type))
+  
+  # public
+  def packages_add(self, pkg_type):
+    if not self.packages_is(pkg_type):
+      t = Tags.by_name(PKG.get(pkg_type))
+      t.users.append(self)
+      db.session.commit()  
+
+  # public
+  def packages_drop(self, pkg_type):
+    if self.packages_is(pkg_type):
+      t = Tags.by_name(PKG.get(pkg_type))
+      t.users.remove(self)
+      db.session.commit()
   
   @staticmethod
   def create_user(*, email, password, company = False):

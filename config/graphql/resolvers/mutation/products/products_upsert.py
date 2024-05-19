@@ -29,7 +29,7 @@ FIELDS = [
 ]
 
 @mutation.field('productsUpsert')
-@authguard_company_approved
+# @authguard_company_approved
 def resolve_productsUpsert(_obj, _info, data, id = None):
   p = None
   

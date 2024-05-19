@@ -23,14 +23,18 @@ from src.mixins import MixinIncludesTags
 from models.tags import Tags
 from models.docs import Docs
 
+from flask_app import io
 
 
-PRODUCT_CATEGORY_prefix    = os.getenv('PRODUCT_CATEGORY_prefix')
-TOPIC_RATINGS              = os.getenv('TOPIC_RATINGS')
-PRODUCT_RATING_prefix      = os.getenv('PRODUCT_RATING_prefix')
-LIKEDISLIKE_CACHE_ID       = os.getenv('LIKEDISLIKE_CACHE_ID')
-PRODUCTS_LIKES_prefix      = os.getenv('PRODUCTS_LIKES_prefix')
-TOPIC_CHAT_PRODUCTS_prefix = os.getenv('TOPIC_CHAT_PRODUCTS_prefix')
+
+PRODUCT_CATEGORY_prefix          = os.getenv('PRODUCT_CATEGORY_prefix')
+TOPIC_RATINGS                    = os.getenv('TOPIC_RATINGS')
+PRODUCT_RATING_prefix            = os.getenv('PRODUCT_RATING_prefix')
+LIKEDISLIKE_CACHE_ID             = os.getenv('LIKEDISLIKE_CACHE_ID')
+PRODUCTS_LIKES_prefix            = os.getenv('PRODUCTS_LIKES_prefix')
+TOPIC_CHAT_PRODUCTS_prefix       = os.getenv('TOPIC_CHAT_PRODUCTS_prefix')
+POLICY_PACKAGE_PROMOTED          = os.getenv('POLICY_PACKAGE_PROMOTED')
+IOEVENT_PACKAGES_PROMOTED_prefix = os.getenv('IOEVENT_PACKAGES_PROMOTED_prefix')
 
 
 class Products(MixinTimestamps, MixinIncludesTags, db.Model):
@@ -166,3 +170,37 @@ class Products(MixinTimestamps, MixinIncludesTags, db.Model):
       pass
 
     return summed_ammounts
+  
+
+  ############
+  ## @packages
+
+  # public
+  # manage if premium user included this node in promoted set
+  def packages_is_promoted(self):
+    return self.includes_tags(POLICY_PACKAGE_PROMOTED) if self.user.packages_is_premium() else False
+  
+  def packages_set_promoted(self, status = True):
+    updated = False
+    
+    # for premium users
+    if self.user.packages_is_premium():
+      t = Tags.by_name(POLICY_PACKAGE_PROMOTED)
+      
+      if True == status:
+        if not self.includes_tags(POLICY_PACKAGE_PROMOTED):
+          # include node in promoted set if not already there
+          t.products.append(self)
+          updated = True
+          
+      else:
+        if self.includes_tags(POLICY_PACKAGE_PROMOTED):
+          # remove node from promoted set if its included
+          t.products.remove(self)
+          updated = True
+      
+      if updated:
+        # update
+        db.session.commit()
+    
+    return updated

@@ -98,9 +98,13 @@ PRODUCTS_SEARCH_RANDOM_MAX = int(os.getenv('PRODUCTS_SEARCH_RANDOM_MAX'))
 @bp_testing.route('/', methods = ('POST',))
 # @arguments_schema(SchemaTesting())
 def testing_home():    
-  u = db.session.get(Users, 3)
-  # print(u.approved())
-  # u.disapprove()
-  # u.approve()
+  # u = db.session.get(Users, 1)
+  p = db.session.get(Products, 12)
+  # p.packages_set_promoted(False)
+  # u.packages_drop('silver')
+  # u.packages_add('gold')
 
-  return { 'is_approved': u.approved() }
+
+  return {
+    'is_promoted': p.packages_is_promoted()
+  }

@@ -11,7 +11,7 @@ from models.tags import Tags
 from models.docs import Docs
 
 from middleware.wrappers.files import files
-from middleware.authguard      import authguard
+# from middleware.authguard      import authguard
 # from middleware.arguments      import arguments_schema
 
 from schemas.validation.storage import SchemaStorageFile
@@ -34,6 +34,7 @@ bp_storage = Blueprint('storage', __name__, url_prefix = '/storage')
 # cors blueprints as wel for cross-domain requests
 CORS(bp_storage)
 
+
 @bp_storage.route('/', methods = ('POST',))
 # @authguard(os.getenv('POLICY_FILESTORAGE'))
 @files
@@ -50,7 +51,12 @@ def storage_upload():
     #      @success: 201, signal io:changed
     file_id_  = id_gen()
     filename_ = gen_filename(node['file'].filename, file_id_)
-    filepath_ = os.path.join(os.path.abspath(UPLOAD_PATH), UPLOAD_DIR, str(g.user.id), filename_)
+    filepath_ = os.path.join(
+      os.path.abspath(UPLOAD_PATH), 
+      UPLOAD_DIR, 
+      str(g.user.id), 
+      filename_
+    )
 
     try:
 
@@ -64,8 +70,8 @@ def storage_upload():
       # save file
       node['file'].save(filepath_)
       
-    except:
-      pass
+    except Exception as err:
+      raise err
     
     else:
       if os.path.exists(filepath_):
@@ -81,13 +87,13 @@ def storage_upload():
         #  can require `title` and `description` from users
         #   (..supply additional data on nodes to app users)
         file_data.update(node['data'])
-        
+
         try:
           file_data = SchemaStorageFile().load(file_data)
-          
+
         except:
           pass
-        
+
         else:
 
           # persist
@@ -95,8 +101,8 @@ def storage_upload():
             
             doc_file_data = Docs(data = file_data)
             
-            tag = Tags.by_name(tag_storage_, create = True)
-            tag_isfile = Tags.by_name(TAG_IS_FILE, create = True)
+            tag        = Tags.by_name(tag_storage_, create = True)
+            tag_isfile = Tags.by_name(TAG_IS_FILE,  create = True)
             
             # link file tags
             tag.docs.append(doc_file_data)
@@ -220,8 +226,10 @@ def storage_download(file_id):
     error = err
   
   else:
-      return send_file(doc_dl_file.data['path'], 
-                      as_attachment = True)
+      return send_file(
+                      doc_dl_file.data['path'], 
+                      as_attachment = True,
+                    )
   
   return { 'error': str(error) }, status
   

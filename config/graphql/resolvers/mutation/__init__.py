@@ -14,3 +14,6 @@ from .orders import orders_place
 from .posts import posts_upsert
 from .posts import posts_rm
 from .posts import posts_images_drop
+
+from .packages import packages_set_promoted
+

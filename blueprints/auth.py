@@ -195,7 +195,9 @@ def auth_who():
       'id'          : g.user.id, 
       'email'       : g.user.email, 
       'company'     : g.is_company,
-      'is_approved' : g.user.approved(),
+      'approved'    : g.user.approved(),
+      'silver'      : g.user.packages_is('silver'),
+      'gold'        : g.user.packages_is('gold'),
     }, 200
   except Exception as err:
     error = err
