@@ -161,6 +161,25 @@ class Users(MixinTimestamps, MixinIncludesTags, db.Model):
     
     return lsp
   
+  ###########
+  ## packages
+  
+  @staticmethod
+  def pasckages_list_is_gold():
+    return db.session.scalars(
+      db.select(Users)
+        .join(Users.tags)
+        .where(Tags.tag == POLICY_PACKAGE_GOLD)
+    )
+    
+  @staticmethod
+  def pasckages_list_is_silver():
+    return db.session.scalars(
+      db.select(Users)
+        .join(Users.tags)
+        .where(Tags.tag == POLICY_PACKAGE_SILVER)
+    )
+  
   # public
   def packages_is_premium(self):
     return any([self.packages_is(pkg_type) for pkg_type in PKG.keys()])

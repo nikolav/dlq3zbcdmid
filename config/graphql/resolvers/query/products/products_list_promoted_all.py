@@ -24,8 +24,8 @@ def product_package_type(product):
   return 'gold' if product.user.packages_is('gold') else 'silver'
 
 
-@query.field('productsListPromoted')
-def resolve_productsListPromoted(_obj, _info):
+@query.field('productsListPromotedAll')
+def resolve_productsListPromotedAll(_obj, _info):
   try:
     lsp = db.session.scalars(
       db.select(Products)
@@ -35,7 +35,7 @@ def resolve_productsListPromoted(_obj, _info):
         ))
         .limit(PACKAGES_LIST_ALL_MAX)
     ).unique()
-    
+
     return SchemaSerializeProductsTimes(many = True).dump(
       sorted(lsp, key = lambda p: SORTED_ORDER.get(product_package_type(p), 0), reverse = True)
     )

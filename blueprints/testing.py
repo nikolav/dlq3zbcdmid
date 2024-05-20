@@ -1,6 +1,7 @@
 import os
 import json
 import re
+import random
 from pprint import pprint
 from datetime import datetime
 from datetime import timezone
@@ -106,6 +107,24 @@ def testing_home():
   # p.packages_set_promoted(False)
   # u.packages_drop('silver')
   # u.packages_add('gold')
+  # lspromo = []
+  # # lsu = Users.pasckages_list_is_gold()
+  # for u in Users.pasckages_list_is_gold():
+  #   lspromo.extend(
+  #     sorted(
+  #       filter(
+  #         lambda p: p.packages_is_promoted(),
+  #         u.products
+  #       ),
+  #       key = lambda p: random.random()
+  #     )[:2]
+  #   )
+  u = db.session.get(Users, 4)
+  u.packages_drop('silver')
+  u.packages_drop('gold')
+  # 
+  u.packages_add('gold')
 
-
+  # return SchemaSerializeProductsTimes(many = True).dump(lspromo)
+  # return SchemaSerializeUsersTimes(many = True).dump(lspromo)
   return []

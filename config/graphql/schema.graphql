@@ -176,7 +176,8 @@ type Query {
   productsListExact(products: [ID!]!): [Product!]!
   productsSearch(query: JsonData): [Product!]!
   productsTotalAmountOrdered(pid: ID!): ResultTotalAmountOrdered!
-  productsListPromoted: [Product!]!
+  productsListPromotedAll: [Product!]!
+  productsListPromo: [Product!]!
 
   # orders
   ordersReceived: [Order!]!

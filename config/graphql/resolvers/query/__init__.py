@@ -14,7 +14,8 @@ from .products import products_list_popular
 from .products import products_list_exact
 from .products import products_search
 from .products import products_total_amount_ordered
-from .products import products_list_promoted
+from .products import products_list_promoted_all
+from .products import products_list_promo
 
 from .companies import companies_list
 from .companies import companies_counted_by_district
