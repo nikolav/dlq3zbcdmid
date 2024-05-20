@@ -98,7 +98,6 @@ PRODUCTS_SEARCH_RANDOM_MAX = int(os.getenv('PRODUCTS_SEARCH_RANDOM_MAX'))
 @bp_testing.route('/', methods = ('POST',))
 # @arguments_schema(SchemaTesting())
 def testing_home():    
-  u = db.session.get(Users, 1)
   # u.packages_drop('silver')
   # u.packages_drop('gold')
   # u.packages_add('gold')
@@ -109,7 +108,4 @@ def testing_home():
   # u.packages_add('gold')
 
 
-  return {
-    'silver': u.packages_is('silver'),
-    'gold': u.packages_is('gold')
-  }
+  return []

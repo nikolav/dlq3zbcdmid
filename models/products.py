@@ -194,7 +194,7 @@ class Products(MixinTimestamps, MixinIncludesTags, db.Model):
   # manage if premium user included this node in promoted set
   def packages_is_promoted(self):
     return self.includes_tags(POLICY_PACKAGE_PROMOTED) if self.user.packages_is_premium() else False
-  
+    
   def packages_set_promoted(self, status = True):
     updated = False
     
