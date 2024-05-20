@@ -88,7 +88,7 @@ def packages_request_mail():
       sender = ('KANTAR.RS', 'app@kantar.rs'),
       recipients = [
         'admin@nikolav.rs', 
-        'slavko.savic@me.com',
+        # 'slavko.savic@me.com',
       ],
       html = render_template(
         'mail/simple.html', 
