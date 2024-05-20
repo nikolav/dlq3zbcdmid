@@ -1,10 +1,14 @@
 import os
-
 import sqlalchemy
 
+from flask      import render_template
+from flask      import g
+from flask      import request
 from flask      import Blueprint
 from flask_cors import CORS
+from flask_mail import Message
 
+from flask_app                   import mail
 from flask_app                   import db
 from config                      import TAG_VARS
 from models.tags                 import Tags
@@ -65,3 +69,32 @@ def status_ok():
     'sqlalchemy'    : sqlalchemy.__version__,
     'admins'        : uids_admin,
   }
+  
+
+@bp_home.route('/packages-request', methods = ('POST',))
+def packages_request_mail():
+  # request:data
+  #  .name .type .contact .message
+  data = request.get_json()
+  
+  name         = data.get('name')
+  package_type = data.get('type')
+  contact      = data.get('contact')
+  message      = data.get('message')
+
+  res = mail.send(
+    Message(
+      f'zahtev-za-paket:{package_type}@kantar.rs',
+      sender = ('KANTAR.RS', 'app@kantar.rs'),
+      recipients = [
+        'admin@nikolav.rs', 
+        'slavko.savic@me.com',
+      ],
+      html = render_template(
+        'mail/simple.html', 
+        text = f'[{name}] \n\n[{package_type} paket] \n\n[Kontakt: {contact}] \n\n --- {message}'
+      )
+    )
+  )
+
+  return { 'status': 'ok' if not res else str(res) }

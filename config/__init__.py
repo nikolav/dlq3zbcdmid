@@ -2,6 +2,9 @@ PATHS_SKIP_AUTH = (
   
   # status check
   r'^/$',
+
+  # mail package requests
+  r'^/packages-request$',
   
   # auth.allow
   r'^/auth/register$',
