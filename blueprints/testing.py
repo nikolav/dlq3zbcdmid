@@ -119,11 +119,12 @@ def testing_home():
   #       key = lambda p: random.random()
   #     )[:2]
   #   )
-  u = db.session.get(Users, 4)
+  u = db.session.get(Users, 3)
   u.packages_drop('silver')
   u.packages_drop('gold')
   # 
-  u.packages_add('gold')
+  # u.packages_add('gold')
+  u.packages_add('silver')
 
   # return SchemaSerializeProductsTimes(many = True).dump(lspromo)
   # return SchemaSerializeUsersTimes(many = True).dump(lspromo)
