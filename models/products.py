@@ -174,7 +174,22 @@ class Products(MixinTimestamps, MixinIncludesTags, db.Model):
 
   ############
   ## @packages
-
+  
+  # promote all products by user
+  @staticmethod
+  def packages_promote_user(user):
+    lsp = db.session.scalars(
+      db.select(Products)
+        .join(Products.user)
+        .where(Products.user_id == user.id)
+    )
+    for p in lsp:
+      p.packages_set_promoted(True)
+    
+    # return promoted set
+    return lsp
+  
+  
   # public
   # manage if premium user included this node in promoted set
   def packages_is_promoted(self):
