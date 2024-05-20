@@ -191,6 +191,11 @@ class Products(MixinTimestamps, MixinIncludesTags, db.Model):
   
   
   # public
+
+  def packages_type(self):
+    # 'basic' | 'silver' | 'gold'
+    return 'basic' if (not self.user.packages_is_premium() or not self.packages_is_promoted()) else 'silver' if self.user.packages_is('silver') else 'gold'
+  
   # manage if premium user included this node in promoted set
   def packages_is_promoted(self):
     return self.includes_tags(POLICY_PACKAGE_PROMOTED) if self.user.packages_is_premium() else False
