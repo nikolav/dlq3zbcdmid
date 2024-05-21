@@ -16,7 +16,7 @@ def resolve_users(_obj, _info):
     )
     return SchemaSerializeUsersTimes(many = True).dump(users)
 
-  except:
-    pass
+  except Exception as err:
+    raise err
 
   return []

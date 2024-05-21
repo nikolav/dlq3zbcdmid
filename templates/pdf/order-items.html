@@ -1,0 +1,35 @@
+{% extends 'pdf/layout/order-items.html' %}
+{% block order_items %}
+<div style="padding: 1.33rem; font-family: monospace; font-size: 1.055rem;">
+  <div style="display: grid; grid-template-columns: auto 1fr 106px 41px auto; opacity: .55;">
+    <div>
+      <small style="text-align: center; margin-left: 5px; font-family: monospace;">#</small>
+    </div>
+    <div style="margin-left: 1rem;">
+      <small>Proizvod</small>
+    </div>
+    <div style="text-align: center;"><small>Količina</small></div>
+    <div style="text-align: center;">Cena</div>
+    <div style="min-width: 95px; text-align: center;"><small style="margin-left: 1rem;">Iznos</small></div>
+
+  </div>
+  <hr>
+  <div style="padding-top: .33rem; padding-left: .33rem;">
+    {% for item in order_items %}
+    <div style="display: grid; grid-template-columns: auto 1fr 106px 41px auto; margin-bottom: .22rem;">
+      <div style="padding-right: 5px;">{{ loop.index }}.</div>
+      <div style="padding-right: 5px;"><strong>{{ item.name }}</strong></div>
+      <div style="text-align: center;">
+        <strong>{{ item.amount }}</strong><small>{{ item.stockType }}</small>
+      </div>
+      <div style="text-align: center; font-style: italic;">
+        {{ item.price_original }}
+      </div>
+      <div style="min-width: 95px; text-align: end;">
+        <strong>{{ item.price_original * item.amount }}</strong><small style="opacity: .55;">RSD</small>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

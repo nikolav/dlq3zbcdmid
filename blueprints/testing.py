@@ -85,7 +85,6 @@ PRODUCTS_SEARCH_RANDOM_MAX = int(os.getenv('PRODUCTS_SEARCH_RANDOM_MAX'))
 @bp_testing.route('/', methods = ('POST',))
 # @arguments_schema(SchemaTesting())
 def testing_home():
-
   # return SchemaSerializeProductsTimes(many = True).dump(lspromo)
   # return SchemaSerializeUsersTimes(many = True).dump(lspromo)
   return []
