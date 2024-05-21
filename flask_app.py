@@ -58,10 +58,10 @@ cors = CORS(app,
   supports_credentials = True, 
   # CORS /graphql route
   resources = {
+    r'/pdf'     : {'origins': '*'},
+    r'/auth'    : {'origins': '*'},
     r'/graphql' : {'origins': '*'},
     r'/storage' : {'origins': '*'},
-    r'/auth'    : {'origins': '*'},
-    r'/pdf'     : {'origins': '*'},
   }
 ) if PRODUCTION else CORS(app, supports_credentials = True)
 
