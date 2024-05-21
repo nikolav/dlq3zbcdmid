@@ -20,14 +20,12 @@ from blueprints.testing      import bp_testing
 api.add_resource(DocsResource, '/docs/<string:tag_name>')
 
 # @blueprints:mount
-#   /auth
-app.register_blueprint(bp_auth)
 #   /
 app.register_blueprint(bp_home)
+#   /auth
+app.register_blueprint(bp_auth)
 #   /storage
 app.register_blueprint(bp_storage)
-#   /pdf
-from blueprints import pdf
 #   /test
 if not PRODUCTION:
   app.register_blueprint(bp_testing)
