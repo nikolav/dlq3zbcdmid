@@ -33,7 +33,7 @@ from middleware.authguard import authguard
 bp_testing = Blueprint('testing', __name__, url_prefix = '/test')
 
 # cors blueprints as wel for cross-domain requests
-cors_bp_testing = CORS(bp_testing)
+CORS(bp_testing)
 
 from schemas.serialization import SchemaSerializeDocJsonTimes  as DocPlain
 from schemas.serialization import SchemaSerializeProductsTimes as SchemaProducts

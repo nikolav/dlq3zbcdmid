@@ -20,10 +20,10 @@ from blueprints.testing      import bp_testing
 api.add_resource(DocsResource, '/docs/<string:tag_name>')
 
 # @blueprints:mount
-#   /
-app.register_blueprint(bp_home)
 #   /auth
 app.register_blueprint(bp_auth)
+#   /
+app.register_blueprint(bp_home)
 #   /storage
 app.register_blueprint(bp_storage)
 #   /test

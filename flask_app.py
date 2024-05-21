@@ -57,7 +57,7 @@ app.config['MAIL_ASCII_ATTACHMENTS'] = bool(os.getenv('MAIL_ASCII_ATTACHMENTS'))
 cors = CORS(app, 
   supports_credentials = True, 
   resources = {
-    r'/pdf'     : {'origins': '*'},
+    # r'/dl'      : {'origins': '*'},
     r'/auth'    : {'origins': '*'},
     r'/graphql' : {'origins': '*'},
     r'/storage' : {'origins': '*'},

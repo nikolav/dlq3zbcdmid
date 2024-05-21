@@ -9,23 +9,22 @@ from flask      import Blueprint
 from flask      import g
 from flask      import render_template
 from flask      import request
-
+from flask      import make_response
+from flask_cors                  import CORS
+from flask_mail                  import Message
 from babel.numbers import format_currency
 
+from config                      import TAG_VARS
 from models.docs                 import Docs
 from models.orders               import Orders
 from models.tags                 import Tags
 from models.users                import Users
 from models.users                import Users
-from config                      import TAG_VARS
 from flask_app                   import db
 from flask_app                   import mail
-from flask_cors                  import CORS
-from flask_mail                  import Message
 from middleware.wrappers.timelog import timelog
 from src.services.pdf            import printHtmlToPDF
 from utils.jwtToken              import encode
-
 
 ADMIN_EMAIL   = os.getenv('ADMIN_EMAIL')
 USER_EMAIL    = os.getenv('USER_EMAIL')
@@ -34,7 +33,7 @@ POLICY_ADMINS = os.getenv('POLICY_ADMINS')
 bp_home = Blueprint('home', __name__, url_prefix = '/')
 
 # cors blueprints as wel for cross-domain requests
-cors_bp_home = CORS(bp_home)
+CORS(bp_home)
 
 @bp_home.route('/', methods = ('GET',))
 @timelog
@@ -153,7 +152,7 @@ TEMPLATE = {
 }
 
 
-@bp_home.route('/pdf', methods = ('POST',))
+@bp_home.route('/dl', methods = ('POST',))
 def pdf_download():
   data          = request.get_json()
   template_name = data.get('template')
@@ -161,8 +160,14 @@ def pdf_download():
   # file = BytesIO(printHtmlToPDF(document_from_request_data_to_render()))
   file = BytesIO(printHtmlToPDF(TEMPLATE[template_name](data)))
 
-  return send_file(file,
+  res = make_response(send_file(file,
     as_attachment = True,
     download_name = 'download.pdf',
     mimetype      = 'application/pdf',
-  )
+  ))
+
+  res.headers['Access-Control-Allow-Origin']      = 'https://golden-malasada-69c9b4.netlify.app'
+  res.headers['Access-Control-Allow-Credentials'] = 'true'  
+  
+  return res
+

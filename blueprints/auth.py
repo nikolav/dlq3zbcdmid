@@ -32,7 +32,7 @@ IOEVENT_AUTH_NEWUSER       = os.getenv('IOEVENT_AUTH_NEWUSER')
 bp_auth = Blueprint('auth', __name__, url_prefix = '/auth')
 
 # cors blueprints as wel for cross-domain requests
-cors_bp_auth = CORS(bp_auth)
+CORS(bp_auth)
 
 @bp_auth.route('/register', methods = ('POST',))
 @arguments_schema(SchemaAuthRegister())
