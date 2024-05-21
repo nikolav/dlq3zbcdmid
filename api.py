@@ -13,7 +13,7 @@ from blueprints              import bp_home
 from blueprints.auth         import bp_auth
 from blueprints.storage      import bp_storage
 from blueprints.testing      import bp_testing
-from blueprints.pdf          import bp_pdf
+# from blueprints.pdf          import bp_pdf
 
 
 # mount resources
@@ -26,8 +26,8 @@ app.register_blueprint(bp_auth)
 app.register_blueprint(bp_home)
 #   /storage
 app.register_blueprint(bp_storage)
-# /pdf
-app.register_blueprint(bp_pdf)
+#   /pdf
+from blueprints import pdf
 #   /test
 if not PRODUCTION:
   app.register_blueprint(bp_testing)

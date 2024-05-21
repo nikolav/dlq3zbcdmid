@@ -8,14 +8,15 @@ import locale
 from babel.numbers import format_currency
 
 # from flask       import g
-from flask       import Blueprint
+# from flask       import Blueprint
 from flask       import request
 from flask       import send_file
 from flask       import render_template
-from flask_cors  import CORS
+# from flask_cors  import CORS
 
 from flask_app   import db
 # from flask_app   import io
+from flask_app   import app
 
 from models.users    import Users
 from models.orders   import Orders
@@ -25,11 +26,10 @@ from models.orders   import Orders
 from src.services.pdf import printHtmlToPDF
 
 
-# router config
-bp_pdf = Blueprint('pdf', __name__, url_prefix = '/pdf')
-
-# cors blueprints as wel for cross-domain requests
-CORS(bp_pdf)
+# # router config
+# bp_pdf = Blueprint('pdf', __name__, url_prefix = '/pdf')
+# # cors blueprints as wel for cross-domain requests
+# CORS(bp_pdf)
 
 
 def render_template_order_items(data):
@@ -74,7 +74,7 @@ TEMPLATE = {
 }
 
 
-@bp_pdf.route('/', methods = ('POST',))
+@app.route('/pdf', methods = ('POST',))
 # @authguard(os.getenv('POLICY_FILESTORAGE'))
 def pdf_download():
   data          = request.get_json()
