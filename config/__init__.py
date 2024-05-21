@@ -1,7 +1,7 @@
 PATHS_SKIP_AUTH = (
   
   # status check
-  r'^/$',
+  r'^/$',  
 
   # mail package requests
   r'^/packages-request$',

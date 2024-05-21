@@ -15,6 +15,7 @@ from flask_cors import CORS
 from flask_cors import cross_origin
 from flask      import make_response
 from flask      import abort
+from flask      import send_file
 
 from sqlalchemy.orm import joinedload
 from sqlalchemy     import or_
@@ -59,14 +60,6 @@ from flask_mail import Message
 from flask_app  import mail
 
 from utils import id_gen
-
-# class SchemaTesting(Schema):
-
-#   class Meta:
-#     unknown = EXCLUDE
-    
-#   x0 = fields.Integer(load_default = -9999)
-
 from flask import render_template
 
 from sqlalchemy import func
@@ -89,42 +82,9 @@ PRODUCT_CATEGORY_prefix    = os.getenv('PRODUCT_CATEGORY_prefix')
 PRODUCTS_SEARCH_RANDOM_MAX = int(os.getenv('PRODUCTS_SEARCH_RANDOM_MAX'))
 
 
-
-# SORT_METHODS_ALLOWED_db     = [1,2,5,6]
-# SORT_METHODS_ALLOWED_manual = [3,4,7]
-
-
-
-
 @bp_testing.route('/', methods = ('POST',))
 # @arguments_schema(SchemaTesting())
-def testing_home():    
-  # u.packages_drop('silver')
-  # u.packages_drop('gold')
-  # u.packages_add('gold')
-  # Products.packages_promote_user(u)
-  # p = db.session.get(Products, 12)
-  # p.packages_set_promoted(False)
-  # u.packages_drop('silver')
-  # u.packages_add('gold')
-  # lspromo = []
-  # # lsu = Users.pasckages_list_is_gold()
-  # for u in Users.pasckages_list_is_gold():
-  #   lspromo.extend(
-  #     sorted(
-  #       filter(
-  #         lambda p: p.packages_is_promoted(),
-  #         u.products
-  #       ),
-  #       key = lambda p: random.random()
-  #     )[:2]
-  #   )
-  u = db.session.get(Users, 3)
-  u.packages_drop('silver')
-  u.packages_drop('gold')
-  # 
-  # u.packages_add('gold')
-  u.packages_add('silver')
+def testing_home():
 
   # return SchemaSerializeProductsTimes(many = True).dump(lspromo)
   # return SchemaSerializeUsersTimes(many = True).dump(lspromo)

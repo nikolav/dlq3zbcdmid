@@ -20,15 +20,13 @@ def authenticate():
   
   error = '@error/internal.500'
 
-
-  # allow open routes
-  if any(re.match(p, request.path) for p in PATHS_SKIP_AUTH):
-    return
-  
   # do not redirect `CORS` preflight `OPTIONS` requests, send success/2xx
   if 'OPTIONS' == request.method.upper():
     return abort(make_response('', 200))
-
+  
+  # allow open routes
+  if any(re.match(p, request.path) for p in PATHS_SKIP_AUTH):
+    return
 
   # @auth
   try:
