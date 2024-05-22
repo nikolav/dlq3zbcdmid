@@ -38,7 +38,6 @@ PKG = {
   'gold'  : POLICY_PACKAGE_GOLD,
 }
 
-
 class Users(MixinTimestamps, MixinIncludesTags, db.Model):
   __tablename__ = usersTable
   
@@ -54,11 +53,9 @@ class Users(MixinTimestamps, MixinIncludesTags, db.Model):
   posts    : Mapped[List['Posts']]    = relationship(back_populates = 'user')
   docs     : Mapped[List['Docs']]     = relationship(back_populates = 'user')
 
-
   # magic
   def __repr__(self):
     return f'Users(id={self.id!r}, email={self.email!r}, password={self.password!r})'
-  
   
   # static
   @staticmethod
@@ -148,22 +145,7 @@ class Users(MixinTimestamps, MixinIncludesTags, db.Model):
     return p if p else {}
   
   def products_sorted_popular(self):
-    lsp = []
-
-    sumc = func.sum(ln_orders_products.c.amount)
-    ls_p = db.session.scalars(
-      db.select(Products, sumc)
-        # .join(ln_orders_products)
-        # include Products with no orders also
-        .join(ln_orders_products, isouter = True)
-        .where(Products.user_id == self.id)
-        .group_by(Products.id)
-        .order_by(desc(sumc))
-    )
-
-    lsp = SchemaSerializeProductsTimes(exclude = ('user','user_id',), many = True).dump(ls_p)
-    
-    return lsp
+    return Products.popular_sorted_user(self)
   
   ###########
   ## packages
@@ -216,17 +198,12 @@ class Users(MixinTimestamps, MixinIncludesTags, db.Model):
     db.session.commit()
 
     if True == company:
-      
-      # --dev-feature; auto approve companies
-      # if `bool:company == true` provided; 
-      #   tag user as [company, approved, fs:approved]
+      # company, approved, fs:approved
       u.tags.append(Tags.by_name(os.getenv('POLICY_COMPANY')))
       u.tags.append(Tags.by_name(os.getenv('POLICY_FILESTORAGE')))
 
-      # @todo; no auto approve
-      #  approve users manualy through ui, emails, contacts
-      u.tags.append(Tags.by_name(os.getenv('POLICY_APPROVED')))
+    db.session.commit()
 
-      db.session.commit()
+    u.approve()
     
     return u

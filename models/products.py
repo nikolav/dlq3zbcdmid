@@ -8,6 +8,7 @@ from typing import Optional
 
 from sqlalchemy     import JSON
 from sqlalchemy     import func
+from sqlalchemy     import desc
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
@@ -23,7 +24,9 @@ from src.mixins import MixinIncludesTags
 from models.tags import Tags
 from models.docs import Docs
 
-from flask_app import io
+# from flask_app import io
+
+from schemas.serialization import SchemaSerializeProductsTimes
 
 
 
@@ -172,6 +175,25 @@ class Products(MixinTimestamps, MixinIncludesTags, db.Model):
     return summed_ammounts
   
 
+  @staticmethod
+  def popular_sorted_user(user):
+    lsp = []
+
+    sumc = func.sum(ln_orders_products.c.amount)
+    ls_p = db.session.scalars(
+      db.select(Products, sumc)
+        # .join(ln_orders_products)
+        # include Products with no orders also
+        .join(ln_orders_products, isouter = True)
+        .where(Products.user_id == user.id)
+        .group_by(Products.id)
+        .order_by(desc(sumc)))
+
+    lsp = SchemaSerializeProductsTimes(exclude = ('user','user_id',), many = True).dump(ls_p)
+    
+    return lsp
+
+  
   ############
   ## @packages
   
