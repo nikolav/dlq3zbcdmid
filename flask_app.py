@@ -52,18 +52,16 @@ app.config['MAIL_USE_SSL']           = bool(os.getenv('MAIL_USE_SSL'))
 app.config['MAIL_ASCII_ATTACHMENTS'] = bool(os.getenv('MAIL_ASCII_ATTACHMENTS'))
 
 
-talisman = Talisman(app, 
-                    force_https = False,
-                    )
-cors = CORS(app, 
+CORS(app, 
   supports_credentials = True, 
   resources = {
-    r'/dl'      : {'origins': 'https://golden-malasada-69c9b4.netlify.app'},
     r'/auth'    : {'origins': '*'},
     r'/graphql' : {'origins': '*'},
     r'/storage' : {'origins': '*'},
   }
 ) if PRODUCTION else CORS(app, supports_credentials = True)
+Talisman(app)
+
 
 api   = Api(app)
 db    = SQLAlchemy(app, model_class = DbModelBaseClass)

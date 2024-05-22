@@ -1,5 +1,6 @@
 from io import BytesIO
 import locale
+import base64
 
 from flask import request
 from flask import send_file
@@ -55,16 +56,21 @@ TEMPLATE = {
 }
 
 
-@app.route('/dl', methods = ('POST',))
-def pdf_download():
-  data          = request.get_json()
+
+from config.graphql.init import query
+
+@query.field('pdfDownload')
+def resolve_pdfDownload(_obj, _info, data):
   template_name = data.get('template')
     
   # file = BytesIO(printHtmlToPDF(document_from_request_data_to_render()))
-  file = BytesIO(printHtmlToPDF(TEMPLATE[template_name](data)))
+  # file = BytesIO(printHtmlToPDF(TEMPLATE[template_name](data)))
+  file = printHtmlToPDF(TEMPLATE[template_name](data))
 
-  return send_file(file,
-    as_attachment = True,
-    download_name = 'download.pdf',
-    mimetype      = 'application/pdf',
-  )
+  # return send_file(file,
+  #   as_attachment = True,
+  #   download_name = 'download.pdf',
+  #   mimetype      = 'application/pdf',
+  # )
+
+  return base64.b64encode(file).decode('utf-8')

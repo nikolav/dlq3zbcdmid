@@ -32,3 +32,6 @@ from .posts import posts_list
 from .posts import posts_images
 
 from .packages import packages_is_promoted
+
+from .pdf import pdf_download
+

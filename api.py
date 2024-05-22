@@ -26,10 +26,6 @@ app.register_blueprint(bp_auth)
 app.register_blueprint(bp_home)
 #   /storage
 app.register_blueprint(bp_storage)
-
-#   /dl
-from blueprints import dl
-
 #   /test
 if not PRODUCTION:
   app.register_blueprint(bp_testing)

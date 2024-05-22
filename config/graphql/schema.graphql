@@ -200,6 +200,9 @@ type Query {
 
   # packages --products
   packagesIsPromoted(pid: ID!): Boolean!
+
+  # pdf
+  pdfDownload(data: JsonData!): String!
 }
 
 ############
