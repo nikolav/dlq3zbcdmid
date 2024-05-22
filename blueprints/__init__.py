@@ -1,29 +1,26 @@
 import os
-import locale
-from io import BytesIO
+# import locale
+# from io import BytesIO
 
 import sqlalchemy
 
-from flask      import send_file
+# from flask      import send_file
 from flask      import Blueprint
-from flask      import g
 from flask      import render_template
 from flask      import request
-from flask      import make_response
 from flask_cors                  import CORS
 from flask_mail                  import Message
-from babel.numbers import format_currency
+# from babel.numbers import format_currency
 
 from config                      import TAG_VARS
 from models.docs                 import Docs
-from models.orders               import Orders
+# from models.orders               import Orders
 from models.tags                 import Tags
-from models.users                import Users
 from models.users                import Users
 from flask_app                   import db
 from flask_app                   import mail
-from middleware.wrappers.timelog import timelog
-from src.services.pdf            import printHtmlToPDF
+# from middleware.wrappers.timelog import timelog
+# from src.services.pdf            import printHtmlToPDF
 from utils.jwtToken              import encode
 
 ADMIN_EMAIL   = os.getenv('ADMIN_EMAIL')
@@ -36,7 +33,6 @@ bp_home = Blueprint('home', __name__, url_prefix = '/')
 CORS(bp_home)
 
 @bp_home.route('/', methods = ('GET',))
-@timelog
 def status_ok():
   
   admin_email = ''
@@ -77,7 +73,6 @@ def status_ok():
     'sqlalchemy'    : sqlalchemy.__version__,
     'admins'        : uids_admin,
   }
-  
 
 @bp_home.route('/packages-request', methods = ('POST',))
 def packages_request_mail():
@@ -108,66 +103,58 @@ def packages_request_mail():
   return { 'status': 'ok' if not res else str(res) }
 
 
-
-
-def render_template_order_items(data):
-  locale.setlocale(locale.LC_TIME, 'sr_RS.UTF-8')
+# def render_template_order_items(data):
+#   locale.setlocale(locale.LC_TIME, 'sr_RS.UTF-8')
   
-  oid  = int(data.get('oid'))
-  uid  = int(data.get('uid'))
+#   oid  = int(data.get('oid'))
+#   uid  = int(data.get('uid'))
   
-  com         = db.session.get(Users,  uid)
-  com_profile = com.profile()
+#   com         = db.session.get(Users,  uid)
+#   com_profile = com.profile()
   
-  order       = db.session.get(Orders, oid)
-  user        = order.user
-  total       = order.total_original_for_company(com)
-  order_items = Orders.order_products_with_amount_and_original_price_by_user(order, com)
-  profile     = user.profile()
-  full_name   = ' '.join(map(
-    lambda d: d.capitalize(),
-    (profile.get('firstName', ''), profile.get('lastName', ''))
-  ))
+#   order       = db.session.get(Orders, oid)
+#   user        = order.user
+#   total       = order.total_original_for_company(com)
+#   order_items = Orders.order_products_with_amount_and_original_price_by_user(order, com)
+#   profile     = user.profile()
+#   full_name   = ' '.join(map(
+#     lambda d: d.capitalize(),
+#     (profile.get('firstName', ''), profile.get('lastName', ''))
+#   ))
 
-  return render_template('pdf/order-items.html', 
-                         com                 = com, 
-                         com_profile         = com_profile,
+#   return render_template('pdf/order-items.html', 
+#                          com                 = com, 
+#                          com_profile         = com_profile,
                          
-                         user      = user,
-                         profile   = profile,
-                         full_name = full_name,
+#                          user      = user,
+#                          profile   = profile,
+#                          full_name = full_name,
                          
-                         order          = order,
-                         date_formated  = order.created_at.strftime('%d. %B, %Y.'),
-                         total          = total,
-                         total_formated = format_currency(total, 'RSD', locale = 'sr_RS'),
+#                          order          = order,
+#                          date_formated  = order.created_at.strftime('%d. %B, %Y.'),
+#                          total          = total,
+#                          total_formated = format_currency(total, 'RSD', locale = 'sr_RS'),
                          
-                         order_items = order_items,
-                         count       = len(order_items),
-                         )
+#                          order_items = order_items,
+#                          count       = len(order_items),
+#                          )
 
 
-TEMPLATE = {
-  'order-items': render_template_order_items,
-}
+# TEMPLATE = {
+#   'order-items': render_template_order_items,
+# }
 
 
-@bp_home.route('/dl', methods = ('POST',))
-def pdf_download():
-  data          = request.get_json()
-  template_name = data.get('template')
+# @bp_home.route('/dl', methods = ('POST',))
+# def pdf_download():
+#   data          = request.get_json()
+#   template_name = data.get('template')
     
-  # file = BytesIO(printHtmlToPDF(document_from_request_data_to_render()))
-  file = BytesIO(printHtmlToPDF(TEMPLATE[template_name](data)))
+#   # file = BytesIO(printHtmlToPDF(document_from_request_data_to_render()))
+#   file = BytesIO(printHtmlToPDF(TEMPLATE[template_name](data)))
 
-  res = make_response(send_file(file,
-    as_attachment = True,
-    download_name = 'download.pdf',
-    mimetype      = 'application/pdf',
-  ))
-
-  res.headers['Access-Control-Allow-Origin']      = 'https://golden-malasada-69c9b4.netlify.app'
-  res.headers['Access-Control-Allow-Credentials'] = 'true'  
-  
-  return res
-
+#   return send_file(file,
+#     as_attachment = True,
+#     download_name = 'download.pdf',
+#     mimetype      = 'application/pdf',
+#   )

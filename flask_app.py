@@ -5,7 +5,7 @@ from flask            import Flask
 from flask_restful    import Api
 from flask_cors       import CORS
 from flask_sqlalchemy import SQLAlchemy
-# from flask_talisman   import Talisman
+from flask_talisman   import Talisman
 # https://github.com/miguelgrinberg/flask-socketio/issues/40#issuecomment-48268526
 from flask_socketio import SocketIO
 # https://pythonhosted.org/Flask-Mail/
@@ -27,7 +27,6 @@ IO_CORS_ALLOW_ORIGINS = (
   os.getenv('IOCORS_ALLOW_ORIGIN_nikolavrs'),
   os.getenv('IOCORS_ALLOW_ORIGIN_production'),
   os.getenv('IOCORS_ALLOW_ORIGIN_production_2'),
-  # os.getenv('IOCORS_ALLOW_ORIGIN_production_3'),
 )
 
 REBUILD_SCHEMA_ = bool(os.getenv('REBUILD_SCHEMA'))
@@ -53,11 +52,13 @@ app.config['MAIL_USE_SSL']           = bool(os.getenv('MAIL_USE_SSL'))
 app.config['MAIL_ASCII_ATTACHMENTS'] = bool(os.getenv('MAIL_ASCII_ATTACHMENTS'))
 
 
-# talisman = Talisman(app, force_https = False)
+talisman = Talisman(app, 
+                    force_https = False,
+                    )
 cors = CORS(app, 
   supports_credentials = True, 
   resources = {
-    # r'/dl'      : {'origins': '*'},
+    r'/dl'      : {'origins': 'https://golden-malasada-69c9b4.netlify.app'},
     r'/auth'    : {'origins': '*'},
     r'/graphql' : {'origins': '*'},
     r'/storage' : {'origins': '*'},
