@@ -1,23 +1,19 @@
-from io import BytesIO
-import locale
 import base64
 
-from flask import request
-from flask import send_file
 from flask import render_template
-# from flask_cors import cross_origin
-from flask_app import app
+
 from babel.numbers import format_currency
+from babel.dates   import format_date
 
-from src.services.pdf            import printHtmlToPDF
-from flask_app                   import db
-from models.users                import Users
-from models.orders               import Orders
+from flask_app         import db
+from models.users      import Users
+from models.orders     import Orders
+from src.services.pdf  import printHtmlToPDF
+
+from config.graphql.init import query
 
 
-def render_template_order_items(data):
-  locale.setlocale(locale.LC_TIME, 'sr_RS.UTF-8')
-  
+def render_template_order_items(data):  
   oid  = int(data.get('oid'))
   uid  = int(data.get('uid'))
   
@@ -43,34 +39,29 @@ def render_template_order_items(data):
                          full_name = full_name,
                          
                          order          = order,
-                         date_formated  = order.created_at.strftime('%d. %B, %Y.'),
+                         date_formated  = format_date(order.created_at, locale = 'sr_RS'),
                          total          = total,
                          total_formated = format_currency(total, 'RSD', locale = 'sr_RS'),
                          
                          order_items = order_items,
                          count       = len(order_items),
-                         )
+                        )
 
 TEMPLATE = {
   'order-items': render_template_order_items,
 }
 
 
-
-from config.graphql.init import query
-
 @query.field('pdfDownload')
 def resolve_pdfDownload(_obj, _info, data):
-  template_name = data.get('template')
-    
   # file = BytesIO(printHtmlToPDF(document_from_request_data_to_render()))
-  # file = BytesIO(printHtmlToPDF(TEMPLATE[template_name](data)))
-  file = printHtmlToPDF(TEMPLATE[template_name](data))
-
   # return send_file(file,
   #   as_attachment = True,
   #   download_name = 'download.pdf',
   #   mimetype      = 'application/pdf',
   # )
 
+  template_name = data.get('template')
+  file = printHtmlToPDF(TEMPLATE[template_name](data))
   return base64.b64encode(file).decode('utf-8')
+

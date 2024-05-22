@@ -88,3 +88,4 @@ def testing_home():
   # return SchemaSerializeProductsTimes(many = True).dump(lspromo)
   # return SchemaSerializeUsersTimes(many = True).dump(lspromo)
   return []
+  
