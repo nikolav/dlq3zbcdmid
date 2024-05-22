@@ -60,6 +60,7 @@ CORS(app,
     r'/storage' : {'origins': '*'},
   }
 ) if PRODUCTION else CORS(app, supports_credentials = True)
+
 Talisman(app)
 
 

@@ -27,6 +27,7 @@ from utils.pw  import hash as hashPassword
 from schemas.serialization import SchemaSerializeProductsTimes
 
 
+POLICY_ADMINS         = os.getenv('POLICY_ADMINS')
 POLICY_COMPANY        = os.getenv('POLICY_COMPANY')
 USER_EMAIL            = os.getenv('USER_EMAIL')
 POLICY_PACKAGE_SILVER = os.getenv('POLICY_PACKAGE_SILVER')
@@ -71,6 +72,9 @@ class Users(MixinTimestamps, MixinIncludesTags, db.Model):
     
     return False
   
+  # public
+  def is_admin(self):
+    return self.includes_tags(POLICY_ADMINS)
   
   # public
   def is_company(self):

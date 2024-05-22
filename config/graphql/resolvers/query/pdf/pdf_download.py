@@ -27,7 +27,10 @@ def render_template_order_items(data):
   profile     = user.profile()
   full_name   = ' '.join(map(
     lambda d: d.capitalize(),
-    (profile.get('firstName', ''), profile.get('lastName', ''))
+    (
+      profile.get('firstName', '') or profile.get('ownerFirstName', ''), 
+      profile.get('lastName', '')  or profile.get('ownerLastName', '')
+    )
   ))
 
   return render_template('pdf/order-items.html', 

@@ -14,8 +14,8 @@ from flask_app      import io
 
 from models.users   import Users
 from models.docs    import Docs
-from models.tags    import Tags
-from utils.pw       import hash  as hashPassword
+# from models.tags    import Tags
+# from utils.pw       import hash  as hashPassword
 from utils.pw       import check as checkPassword
 from utils.jwtToken import issueToken
 from utils.jwtToken import setInvalid as tokenSetInvalid
@@ -192,12 +192,13 @@ def auth_who():
   try:
     # send user data
     return { 
-      'id'          : g.user.id, 
-      'email'       : g.user.email, 
-      'company'     : g.is_company,
-      'approved'    : g.user.approved(),
-      'silver'      : g.user.packages_is('silver'),
-      'gold'        : g.user.packages_is('gold'),
+      'id'       : g.user.id, 
+      'email'    : g.user.email, 
+      'company'  : g.is_company,
+      'approved' : g.user.approved(),
+      'silver'   : g.user.packages_is('silver'),
+      'gold'     : g.user.packages_is('gold'),
+      'admin'    : g.user.is_admin(),
     }, 200
   except Exception as err:
     error = err
