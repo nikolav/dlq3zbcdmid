@@ -13,6 +13,7 @@ from flask_mail                  import Message
 # from babel.numbers import format_currency
 
 from config                      import TAG_VARS
+from config                      import MAIL_RECIPIENTS
 from models.docs                 import Docs
 # from models.orders               import Orders
 from models.tags                 import Tags
@@ -89,10 +90,7 @@ def packages_request_mail():
     Message(
       f'zahtev-za-paket:{package_type}@kantar.rs',
       sender = ('KANTAR.RS', 'app@kantar.rs'),
-      recipients = [
-        'admin@nikolav.rs', 
-        'slavko.savic@me.com',
-      ],
+      recipients = MAIL_RECIPIENTS,
       html = render_template(
         'mail/simple.html', 
         text = f'[{name}] \n\n[{package_type} paket] \n\n[Kontakt: {contact}] \n\n --- {message}'
@@ -105,8 +103,6 @@ def packages_request_mail():
 
 @bp_home.route('/sendmail-general', methods = ('POST',))
 def packages_onpayment_mail():
-  from config import MAIL_RECIPIENTS
-
   request_data = request.get_json()
   subject      = request_data.get('subject')
   template     = request_data.get('template', '').removesuffix('.html')

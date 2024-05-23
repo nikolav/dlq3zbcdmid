@@ -11,16 +11,15 @@ from models.orders       import Orders
 from models              import ln_orders_products
 
 from config.graphql.init import mutation
+# from config              import MAIL_RECIPIENTS
 
 from flask      import render_template
 from flask_mail import Message
 from flask_app  import mail
 
 
-# IOEVENT_PRODUCTS_CHANGE_prefix = os.getenv('IOEVENT_PRODUCTS_CHANGE_prefix')
-# IOEVENT_PRODUCTS_CHANGE        = os.getenv('IOEVENT_PRODUCTS_CHANGE')
-IOEVENT_ORDERS_CHANGE          = os.getenv('IOEVENT_ORDERS_CHANGE')
-MAIL_COMPANIES_ON_ORDER        = bool(os.getenv('MAIL_COMPANIES_ON_ORDER'))
+IOEVENT_ORDERS_CHANGE   = os.getenv('IOEVENT_ORDERS_CHANGE')
+MAIL_COMPANIES_ON_ORDER = bool(os.getenv('MAIL_COMPANIES_ON_ORDER'))
 
 @mutation.field('ordersPlace')
 def resolve_ordersPlace(_obj, _info, data, items):
@@ -45,7 +44,7 @@ def resolve_ordersPlace(_obj, _info, data, items):
     )]
     
     if not 0 < len(lsProductsOrdered):
-      raise Exception('--ordersPlace-skip-cRXgtZgd7Z')
+      raise Exception('--ordersPlace-skip')
 
     # insert order
     o = Orders(
@@ -53,7 +52,7 @@ def resolve_ordersPlace(_obj, _info, data, items):
       description = data.get('description', ''),
       user        = g.user,
       products    = lsProductsOrdered
-      )
+    )
     db.session.add(o)
     db.session.commit()
 
