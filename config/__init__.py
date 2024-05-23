@@ -26,3 +26,8 @@ init_docs_tags = (TAG_VARS, TAG_IS_FILE)
 KEY_TOKEN_CREATED_AT = '@'
 
 DEFAULT_POPULAR_PRODUCTS_LIMIT = 10
+
+MAIL_RECIPIENTS = [
+  'admin@nikolav.rs', 
+  # 'slavko.savic@me.com',
+]

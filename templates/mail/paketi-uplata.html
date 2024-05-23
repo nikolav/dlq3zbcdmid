@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" style="box-sizing: content-box; -moz-box-sizing: content-box; -webkit-box-sizing: content-box; -ms-box-sizing: content-box;">
+  <head>
+    <meta charset="UTF-8">
+    <title></title>
+    <meta name="viewport" content="width=589">
+    <style type="text/css">
+a:link {
+  color: #393939;
+  text-decoration: none;
+}
+a:active {
+  color: #393939;
+  text-decoration: none;
+}
+a:hover {
+  color: #393939;
+  text-decoration: none;
+}
+a:visited {
+  color: #393939;
+  text-decoration: none;
+}
+</style>
+  </head>
+  <body style="box-sizing: content-box; -moz-box-sizing: content-box; -webkit-box-sizing: content-box; -ms-box-sizing: content-box; margin: 0; padding: 0; word-wrap: break-word; height: 510px; background: #ffffff;">
+    <div id="divMain" style="box-sizing: content-box; -moz-box-sizing: content-box; -webkit-box-sizing: content-box; -ms-box-sizing: content-box; background: transparent; margin-left: auto; margin-right: auto; position: relative; width: 589px; height: 510px;">
+      <div style="box-sizing: content-box; -moz-box-sizing: content-box; -webkit-box-sizing: content-box; -ms-box-sizing: content-box; position: absolute; left: 20px; top: 53px; width: 550px; height: 400px; display: flex; justify-content: center; align-items: center; object-fit: contain; overflow: hidden;">
+        <!--Body-->
+	<a href="{{ data.get('photo', '') }}" style="box-sizing: content-box; -moz-box-sizing: content-box; -webkit-box-sizing: content-box; -ms-box-sizing: content-box;">
+	  <img style="box-sizing: content-box; -moz-box-sizing: content-box; -webkit-box-sizing: content-box; -ms-box-sizing: content-box; display: block; max-width: 92%; max-height: 92%; border-radius: .22rem; padding: 2px; background-color: white; border: 1px solid grey;" src="{{ data.get('photo', '') }}">
+	</a>
+	
+      </div>
+      <map id="map1" name="map1" style="box-sizing: content-box; -moz-box-sizing: content-box; -webkit-box-sizing: content-box; -ms-box-sizing: content-box;"><area shape="rect" coords="0,0,288,31" href="{{data.get('photo','')}}" target="_blank" alt style="box-sizing: content-box; -moz-box-sizing: content-box; -webkit-box-sizing: content-box; -ms-box-sizing: content-box;"></map>
+      <img alt="Dokaz o uplati paketa kantar.rs" usemap="#map1" style="box-sizing: content-box; -moz-box-sizing: content-box; -webkit-box-sizing: content-box; -ms-box-sizing: content-box; border: none; position: absolute; left: 131px; top: 12px; width: 287px; height: 30px;" src="data:image/png;base64,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" width="287" height="30">
+    </div>
+  </body>
+</html>

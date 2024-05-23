@@ -103,6 +103,41 @@ def packages_request_mail():
   return { 'status': 'ok' if not res else str(res) }
 
 
+@bp_home.route('/sendmail-general', methods = ('POST',))
+def packages_onpayment_mail():
+  from config import MAIL_RECIPIENTS
+
+  request_data = request.get_json()
+  subject      = request_data.get('subject')
+  template     = request_data.get('template', '').removesuffix('.html')
+  data         = request_data.get('data', {})
+  
+  res = '--error:sendmail-general'
+  
+  if not template or not subject:
+    raise '--error:sendmail-general --input'
+
+  res = mail.send(
+    Message(
+      
+      # subject
+      f'{subject}@kantar.rs',
+
+      # from
+      sender = ('KANTAR.RS', 'app@kantar.rs'),
+      
+      # default recepiens ls
+      recipients = MAIL_RECIPIENTS,
+
+      # pass all data to mail template
+      html = render_template(f'mail/{template}.html', data = data)
+      
+    )
+  )
+
+  return { 'status': 'ok' if not res else str(res) }
+
+
 # def render_template_order_items(data):
 #   locale.setlocale(locale.LC_TIME, 'sr_RS.UTF-8')
   
