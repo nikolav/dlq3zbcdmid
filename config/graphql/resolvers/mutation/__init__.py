@@ -12,6 +12,7 @@ from .products import products_upsert
 from .orders import orders_place
 from .orders import manage_data
 from .orders import order_products_status
+from .orders import order_products_delivery_date
 
 from .posts import posts_upsert
 from .posts import posts_rm

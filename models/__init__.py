@@ -2,6 +2,7 @@ import os
 
 from sqlalchemy import Float
 from sqlalchemy import Integer
+from sqlalchemy import DateTime
 
 from flask_app import db
 
@@ -42,6 +43,7 @@ ln_orders_products = db.Table(
   db.Column('product_id', db.ForeignKey(f'{productsTable}.id'), primary_key = True),
   db.Column('amount', Float),
   db.Column('status', Integer),
+  db.Column('delivery_at', DateTime),
 )
 
 ln_orders_tags = db.Table(

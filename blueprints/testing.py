@@ -85,35 +85,4 @@ PRODUCTS_SEARCH_RANDOM_MAX = int(os.getenv('PRODUCTS_SEARCH_RANDOM_MAX'))
 @bp_testing.route('/', methods = ('POST',))
 # @arguments_schema(SchemaTesting())
 def testing_home():
-  from models import ln_orders_products
-  from sqlalchemy import update
-
-  data = {}
-
-  oid = 1
-  uid = 1
-
-  res = db.session.execute(
-    db.select(Products.id, ln_orders_products.c.status)
-      .join(ln_orders_products)
-      .join(Products.orders)
-      .where(
-        ln_orders_products.c.order_id   == oid,
-        ln_orders_products.c.product_id.in_(
-          db.select(Products.id)
-            .join(Products.orders)          
-            .where(
-              Orders.id        == oid,
-              Products.user_id == uid
-            )
-            .subquery()
-        )
-      )
-  )
-  
-  for pid, s in res:
-    data[pid] = s
-  
-  
-  return data
-  
+  return []

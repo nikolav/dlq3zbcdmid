@@ -181,6 +181,8 @@ type Query {
   productsListPromotedAll: [Product!]!
   productsListPromo: [Product!]!
   getOrderProductsStatusByCompany(oid: ID!, uid: ID!): JsonData
+  getOrderProductsDeliveryDate(oid: ID!, uid: ID!): JsonData
+
 
   # orders
   ordersReceived: [Order!]!
@@ -217,6 +219,7 @@ type Mutation {
   productsUpsert(data: InputProduct!, id: ID): Product!
   productsRm(id: ID!): Product
   orderProductsStatusByCompany(oid: ID!, uid: ID!, status: Int!): String
+  orderProductsDeliveryDateByCompany(oid: ID!, uid: ID!, date: String!): String
 
   # orders
   ordersPlace(data: JsonData!, items: JsonData!): ID
