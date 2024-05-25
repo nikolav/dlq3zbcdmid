@@ -51,6 +51,8 @@ class SchemaSerializeOrdersTimes(SchemaSerializeTimes):
   description = fields.String()
   completed   = fields.Boolean()
   canceled    = fields.Boolean()
+  status      = fields.Integer()
+  delivery_at = fields.DateTime()
 
 class SchemaSerializeOrdersProducts(SchemaSerializeOrdersTimes):
   products = fields.List(fields.Nested(SchemaSerializeProductsTimes()))

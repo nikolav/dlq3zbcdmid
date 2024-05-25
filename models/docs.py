@@ -13,6 +13,7 @@ from . import usersTable
 from . import postsTable
 from . import productsTable
 from . import ln_docs_tags
+from . import ordersTable
 from . import db
 from .tags import Tags
 from src.mixins import MixinTimestamps
@@ -36,12 +37,14 @@ class Docs(MixinTimestamps, MixinIncludesTags, db.Model):
   user_id    = mapped_column(db.ForeignKey(f'{usersTable}.id'))
   post_id    = mapped_column(db.ForeignKey(f'{postsTable}.id'))
   product_id = mapped_column(db.ForeignKey(f'{productsTable}.id'))
+  order_id   = mapped_column(db.ForeignKey(f'{ordersTable}.id'))
 
   # virtual
   tags    : Mapped[List['Tags']] = relationship(secondary = ln_docs_tags, back_populates = 'docs')
   user    : Mapped['Users']      = relationship(back_populates = 'docs')
   post    : Mapped['Posts']      = relationship(back_populates = 'docs')
   product : Mapped['Products']   = relationship(back_populates = 'docs')
+  order   : Mapped['Orders']     = relationship(back_populates = 'docs')
 
   
   # magic

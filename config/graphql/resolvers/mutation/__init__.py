@@ -10,10 +10,11 @@ from .products import products_rm
 from .products import products_upsert
 
 from .orders import orders_place
+from .orders import manage_data
+from .orders import order_products_status
 
 from .posts import posts_upsert
 from .posts import posts_rm
 from .posts import posts_images_drop
 
 from .packages import packages_set_promoted
-

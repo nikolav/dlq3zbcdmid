@@ -1,6 +1,8 @@
 # import os
 # import json
 # import re
+from datetime import datetime
+
 from typing import List
 from typing import Optional
 
@@ -22,6 +24,15 @@ from models.products import Products
 
 from schemas.serialization import SchemaSerializeProductsTimes
 
+
+ORDER_STATUS = {
+  '1': 'narudžbenica primljena',
+  '2': 'priprema robe',
+  '3': 'spremno',
+  '4': 'pošta pošiljka #',
+}
+
+
 class Orders(MixinTimestamps, MixinIncludesTags, db.Model):
   __tablename__ = ordersTable
   
@@ -31,12 +42,15 @@ class Orders(MixinTimestamps, MixinIncludesTags, db.Model):
   description : Mapped[Optional[str]]
   completed   : Mapped[Optional[bool]]
   canceled    : Mapped[Optional[bool]]
+  status      : Mapped[Optional[int]]
+  delivery_at : Mapped[datetime]
   user_id = mapped_column(db.ForeignKey(f'{usersTable}.id'))
   
   # virtual
   tags     : Mapped[List['Tags']]     = relationship(secondary = ln_orders_tags, back_populates = 'orders')
   user     : Mapped['Users']          = relationship(back_populates = 'orders')
   products : Mapped[List['Products']] = relationship(secondary = ln_orders_products, back_populates = 'orders')
+  docs     : Mapped[List['Docs']]     = relationship(back_populates = 'order')
   
   
   # magic

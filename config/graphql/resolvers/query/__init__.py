@@ -24,6 +24,8 @@ from .orders import orders_received
 from .orders import orders_received_products
 from .orders import orders_list_by_user
 from .orders import orders_products
+from .orders import orders_one
+from .orders import order_products_status_by_company
 
 from .users import users_list
 from .users import users_by_id

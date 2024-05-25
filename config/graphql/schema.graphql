@@ -116,7 +116,9 @@ type Order {
   user_id: ID
   completed: Boolean
   canceled: Boolean
+  status: Int
   products: [ProductWithAmount!]
+  delivery_at: String
   created_at: String!
   updated_at: String!
 }
@@ -178,12 +180,14 @@ type Query {
   productsTotalAmountOrdered(pid: ID!): ResultTotalAmountOrdered!
   productsListPromotedAll: [Product!]!
   productsListPromo: [Product!]!
+  getOrderProductsStatusByCompany(oid: ID!, uid: ID!): JsonData
 
   # orders
   ordersReceived: [Order!]!
   ordersReceivedProducts(order_id: ID!): [ProductWithAmount!]!
   ordersListByUser(uid: ID!): [Order!]!
   ordersProducts(oid: ID!): [ProductWithAmount!]!
+  ordersOne(oid: ID!): Order
 
   # posts
   postsList(uid: ID): [Post!]!
@@ -212,9 +216,11 @@ type Mutation {
   # products
   productsUpsert(data: InputProduct!, id: ID): Product!
   productsRm(id: ID!): Product
+  orderProductsStatusByCompany(oid: ID!, uid: ID!, status: Int!): String
 
   # orders
   ordersPlace(data: JsonData!, items: JsonData!): ID
+  manageOrderData(oid: ID!, data: JsonData!): Order
 
   # posts
   postsUpsert(data: InputPost!, id: ID): Post!
