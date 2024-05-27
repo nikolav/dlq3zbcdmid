@@ -24,7 +24,7 @@ FIELDS = [
   'price',
   'stock',
   'stockType',
-  'onSale',
+  # 'onSale',
   'description',
 ]
 

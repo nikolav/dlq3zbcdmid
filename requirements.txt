@@ -24,3 +24,4 @@ requests==2.31.0
 selenium==4.21.0
 webdriver-manager==4.0.1
 Babel==2.15.0
+nutree==0.8.0

@@ -24,6 +24,8 @@ def tokenFromRequest():
 def decode(sToken):
   return jwt.decode(sToken, os.getenv('JWT_SECRET_ACCESS_TOKEN'), algorithms = ('HS256',))
 
+def decode_secret(sToken, secret):
+  return jwt.decode(sToken, secret, algorithms = ('HS256',))
 
 def expired(token):
   jsonTokenPayload = token if isinstance(token, dict) else decode(token)
@@ -36,7 +38,11 @@ def encode(jsonPayload):
     os.getenv('JWT_SECRET_ACCESS_TOKEN'),
     algorithm = 'HS256'
   )
-  
+
+def encode_secret(jsonPayload, secret):
+  return jwt.encode(__with_created_at(jsonPayload),
+    secret, algorithm = 'HS256'
+  )
 
 def issueToken(jsonPayload):
   # generate/store token @Tokens
