@@ -50,7 +50,7 @@ SORT_METHOD_manual = {
 def resolve_productsSearch(_obj, _info, query = None):
   # query: JSON | None
   # {
-  #   'category' : '@product:category:brasno',
+  #   'category' : '@product:category:brasno'[]
   #   'district' : 'Srem',
   #   'priceMax' : 1122,
   #   'sortBy'   : 3,
@@ -103,8 +103,11 @@ def resolve_productsSearch(_obj, _info, query = None):
   # # query --builder
   q = db.select(Products)
 
-  if category:
-    q = q.join(Products.tags).where(Tags.tag == category)
+  # if category:
+  #   q = q.join(Products.tags).where(Tags.tag == category)
+  
+  if category and (0 < len(category)):
+    q = q.join(Products.tags).where(Tags.tag.in_(category))
 
   # match .name, .description, category
   if TEXT:
