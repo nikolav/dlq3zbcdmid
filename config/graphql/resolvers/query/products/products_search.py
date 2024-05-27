@@ -83,6 +83,9 @@ def resolve_productsSearch(_obj, _info, query = None):
   # :string
   category     = query.get('category', None)
 
+  # flag text search
+  is_text_q    = True == query.get('isText', False)
+
   # # :string
   text         = query.get('text', None)
   TEXT         = text.strip().upper() if text else None
@@ -105,9 +108,9 @@ def resolve_productsSearch(_obj, _info, query = None):
 
   # if category:
   #   q = q.join(Products.tags).where(Tags.tag == category)
-  
-  if category and (0 < len(category)):
-    q = q.join(Products.tags).where(Tags.tag.in_(category))
+  if not is_text_q:
+    if category and (0 < len(category)):
+      q = q.join(Products.tags).where(Tags.tag.in_(category))
 
   # match .name, .description, category
   if TEXT:
@@ -118,7 +121,7 @@ def resolve_productsSearch(_obj, _info, query = None):
         Products.tags.any(
 
           # postgres
-          func.upper(Tags.tag).op('~')(f'.*{re.escape(TEXT)}.*')
+          func.upper(Tags.tag).op('~')(f'.*{re.escape(TEXT)}.*') if not is_text_q else Tags.tag.in_(category)
 
           # sqlite
           # func.upper(Tags.tag).op('REGEXP')(f'.*{re.escape(TEXT)}.*')
@@ -126,6 +129,7 @@ def resolve_productsSearch(_obj, _info, query = None):
         )
       )
     )
+      
   
   if PRICE and 0 < PRICE:
     q = q.where(
