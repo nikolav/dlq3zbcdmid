@@ -29,8 +29,7 @@ IO_CORS_ALLOW_ORIGINS = (
   # os.getenv('IOCORS_ALLOW_ORIGIN_production'),
 )
 
-REBUILD_SCHEMA_ = bool(os.getenv('REBUILD_SCHEMA'))
-REBUILD_SCHEMA  = (not PRODUCTION) and REBUILD_SCHEMA_
+REBUILD_SCHEMA = bool(os.getenv('REBUILD_SCHEMA'))
 
 app = Flask(__name__)
 

@@ -43,7 +43,7 @@ class Orders(MixinTimestamps, MixinIncludesTags, db.Model):
   completed   : Mapped[Optional[bool]]
   canceled    : Mapped[Optional[bool]]
   status      : Mapped[Optional[int]]
-  delivery_at : Mapped[datetime]
+  delivery_at : Mapped[Optional[datetime]]
   user_id = mapped_column(db.ForeignKey(f'{usersTable}.id'))
   
   # virtual

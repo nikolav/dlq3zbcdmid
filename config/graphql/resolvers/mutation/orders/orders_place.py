@@ -31,6 +31,9 @@ def resolve_ordersPlace(_obj, _info, data, items):
   o          = None
   orderd_ids = items.keys()
 
+  print('data', data)
+  print('items', items)
+  
   try:
     
     # products:ordered
@@ -38,11 +41,12 @@ def resolve_ordersPlace(_obj, _info, data, items):
       db.select(Products)
         .where(
           Products.id.in_(orderd_ids), 
+          
           # skip own products
           Products.user_id != g.user.id
         )
     )]
-    
+
     if not 0 < len(lsProductsOrdered):
       raise Exception('--ordersPlace-skip')
 
@@ -53,6 +57,7 @@ def resolve_ordersPlace(_obj, _info, data, items):
       user        = g.user,
       products    = lsProductsOrdered
     )
+
     db.session.add(o)
     db.session.commit()
 
@@ -76,7 +81,7 @@ def resolve_ordersPlace(_obj, _info, data, items):
 
   except Exception as err:
     print('--mutation-ordersPlace')
-    print(err)
+    raise err
 
   else:
     # notify companies
