@@ -62,6 +62,8 @@ policy_pkg_silver   = os.getenv('POLICY_PACKAGE_SILVER')
 policy_pkg_gold     = os.getenv('POLICY_PACKAGE_GOLD')
 policy_pkg_promoted = os.getenv('POLICY_PACKAGE_PROMOTED')
 
+TAG_ARCHIVED        = os.getenv('TAG_ARCHIVED')
+
 
 tagPolicyADMINS           = Tags.by_name(policy_admins_,  create = True)
 tagPolicyEMAIL            = Tags.by_name(policy_email_,   create = True)
@@ -75,6 +77,8 @@ tagPolicy_approved        = Tags.by_name(policy_approved_, create = True)
 tagPolicy_pkg_silver   = Tags.by_name(policy_pkg_silver,   create = True)
 tagPolicy_pkg_gold     = Tags.by_name(policy_pkg_gold,     create = True)
 tagPolicy_pkg_promoted = Tags.by_name(policy_pkg_promoted, create = True)
+
+tag_archived = Tags.by_name(TAG_ARCHIVED, create = True)
 
 
 # tag default users

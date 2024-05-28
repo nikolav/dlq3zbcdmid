@@ -1,24 +1,24 @@
 import os
 import secrets
-from pprint import pprint
+# from pprint import pprint
 
 from flask      import Blueprint
 from flask      import g
 from flask      import request
-from flask_cors import CORS
 from flask      import render_template
+from flask_cors import CORS
+from flask_mail import Message
 
 from sqlalchemy import func
-
 
 from flask_app      import db
 from flask_app      import io
 from flask_app      import mail
-from flask_mail     import Message
 
-from models.users   import Users
-from models.docs    import Docs
+from models.users    import Users
+from models.docs     import Docs
 # from models.tags    import Tags
+
 from utils.pw       import hash  as hashPassword
 from utils.pw       import check as checkPassword
 from utils.jwtToken import issueToken
@@ -32,7 +32,6 @@ from schemas.validation.auth import SchemaAuthRegister
 from schemas.validation.auth import SchemaAuthSocial
 from schemas.validation.auth import SchemaEmailResetRequest
 from schemas.validation.auth import SchemaEmailResetObnovaLozinke
-
 
 TAG_COMPANY_PROFILE_prefix = os.getenv('TAG_COMPANY_PROFILE_prefix')
 IOEVENT_AUTH_NEWUSER       = os.getenv('IOEVENT_AUTH_NEWUSER')
@@ -106,6 +105,13 @@ def auth_login():
     # skip invalid credentials ~email ~password
     if not u:
       raise Exception('access denied')
+
+    #
+    # skip archived
+    if u.is_archived():
+      raise Exception('access denied')
+    
+    
     if not checkPassword(password, u.password):
       raise Exception('access denied')
     
@@ -130,8 +136,8 @@ def auth_social():
   #   uid?
   #   photoURL?
   #   displayName?
-  token = ''
-  error = '@error/auth:social'
+  token      = ''
+  error      = '@error/auth:social'
   user_added = False
   
   try:
@@ -143,6 +149,13 @@ def auth_social():
       db.select(Users)
         .where(Users.email == auth_data['email'])
     )
+    
+    # 
+    # skip archived
+    if u and u.is_archived():
+      raise Exception('access denied')
+    
+    
     if not u:
       u = Users.create_user(
         email    = auth_data['email'],
@@ -209,6 +222,7 @@ def auth_who():
       'silver'   : g.user.packages_is('silver'),
       'gold'     : g.user.packages_is('gold'),
       'admin'    : g.user.is_admin(),
+      'archived' : g.user.is_archived(),
     }, 200
   except Exception as err:
     error = err

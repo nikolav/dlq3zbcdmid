@@ -244,4 +244,8 @@ type Mutation {
 
   # packages --products
   packagesSetPromoted(pid: ID!, status: Boolean): ID
+
+  # accounts
+  accountsArchive(uid: ID!): ID
+  accountsDrop(uid: ID!): ID
 }

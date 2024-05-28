@@ -19,3 +19,6 @@ from .posts import posts_rm
 from .posts import posts_images_drop
 
 from .packages import packages_set_promoted
+
+from .accounts import account_archive
+from .accounts import account_drop

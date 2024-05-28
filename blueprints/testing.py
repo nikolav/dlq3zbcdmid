@@ -86,3 +86,4 @@ PRODUCTS_SEARCH_RANDOM_MAX = int(os.getenv('PRODUCTS_SEARCH_RANDOM_MAX'))
 # @arguments_schema(SchemaTesting())
 def testing_home():
   return []
+
