@@ -69,6 +69,13 @@ class Users(MixinTimestamps, MixinIncludesTags, db.Model):
     
     return False
   
+  @staticmethod
+  def email_exists(email):
+    return 0 < db.session.scalar(
+      db.select(func.count(Users.id))
+        .where(Users.email == email)
+    )
+  
   # public
   def is_admin(self):
     return self.includes_tags(POLICY_ADMINS)

@@ -10,6 +10,8 @@ PATHS_SKIP_AUTH = (
   r'^/auth/register$',
   r'^/auth/login$',
   r'^/auth/social$',
+  r'^/auth/password-reset-email-link$',
+  r'^/auth/password-reset-obnova-lozinke$',
   
   # storage.allow-download
   r'^/storage/[0-9a-fA-F]+$',

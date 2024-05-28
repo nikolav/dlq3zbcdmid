@@ -27,3 +27,11 @@ class SchemaAuthSocial(Schema):
   uid         = fields.Str()
   displayName = fields.Str()
   photoURL    = fields.Str()
+
+class SchemaEmailResetRequest(Schema):
+  url   = fields.String()
+  email = fields.Email(required = True)
+
+class SchemaEmailResetObnovaLozinke(Schema):
+  key      = fields.String(required = True)
+  password = fields.String(required = True)

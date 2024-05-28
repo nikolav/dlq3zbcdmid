@@ -1,6 +1,10 @@
 from marshmallow import Schema
 from marshmallow import fields
 
+# https://marshmallow.readthedocs.io/en/stable/quickstart.html#field-validators-as-methods
+
+
+
 class SchemaSerializeTimes(Schema):
   created_at = fields.DateTime()
   updated_at = fields.DateTime()
