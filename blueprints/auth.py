@@ -217,7 +217,7 @@ def auth_who():
     return { 
       'id'            : g.user.id, 
       'email'         : g.user.email, 
-      'company'       : g.is_company,
+      'company'       : g.user.is_company(),
       'approved'      : g.user.approved(),
       'silver'        : g.user.packages_is('silver'),
       'gold'          : g.user.packages_is('gold'),
