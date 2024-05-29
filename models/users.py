@@ -56,6 +56,23 @@ class Users(MixinTimestamps, MixinIncludesTags, db.Model):
     return f'Users(id={self.id!r}, email={self.email!r}, password={self.password!r})'
   
   # public
+  def accounts_upgrade(self, flag = True):
+    isc = self.is_company()
+    tt  = Tags.by_name(POLICY_COMPANY)
+    
+    if flag:
+      if not isc:
+        tt.users.append(self)
+    
+    else:
+      if isc:
+        tt.users.remove(self)
+    
+    db.session.commit()
+    
+    return self.is_company()
+  
+  # public
   def email_verified(self):
     return self.includes_tags(TAG_EMAIL_VERIFIED)
   

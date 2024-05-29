@@ -252,4 +252,5 @@ type Mutation {
   accountsDrop(uid: ID!): ID
   accountsSendVerifyEmailLink(uid: ID!, url: String!): ID
   accountsVeifyEmail(data: JsonData!): String
+  accountsUpgradeUserCompany(uid: ID!): ID
 }
