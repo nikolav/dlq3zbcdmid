@@ -22,3 +22,5 @@ from .packages import packages_set_promoted
 
 from .accounts import account_archive
 from .accounts import account_drop
+from .accounts import accounts_send_verify_email_link
+from .accounts import verify_email

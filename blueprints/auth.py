@@ -215,14 +215,15 @@ def auth_who():
   try:
     # send user data
     return { 
-      'id'       : g.user.id, 
-      'email'    : g.user.email, 
-      'company'  : g.is_company,
-      'approved' : g.user.approved(),
-      'silver'   : g.user.packages_is('silver'),
-      'gold'     : g.user.packages_is('gold'),
-      'admin'    : g.user.is_admin(),
-      'archived' : g.user.is_archived(),
+      'id'            : g.user.id, 
+      'email'         : g.user.email, 
+      'company'       : g.is_company,
+      'approved'      : g.user.approved(),
+      'silver'        : g.user.packages_is('silver'),
+      'gold'          : g.user.packages_is('gold'),
+      'admin'         : g.user.is_admin(),
+      'archived'      : g.user.is_archived(),
+      'email_verified': g.user.email_verified(),
     }, 200
   except Exception as err:
     error = err
@@ -257,7 +258,6 @@ def password_reset_obnova_lozinke():
     return payload['email'] if 'email' in payload else None
   
   return None
-  
 
 @bp_auth.route('/password-reset-email-link', methods = ('POST',))
 def password_reset_email_link():
@@ -305,4 +305,3 @@ def password_reset_email_link():
       return d['email'] if not res else None
   
   return None
-

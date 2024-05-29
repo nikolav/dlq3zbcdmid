@@ -29,6 +29,7 @@ POLICY_PACKAGE_SILVER = os.getenv('POLICY_PACKAGE_SILVER')
 POLICY_PACKAGE_GOLD   = os.getenv('POLICY_PACKAGE_GOLD')
 TAG_ARCHIVED          = os.getenv('TAG_ARCHIVED')
 UPLOAD_PATH           = os.getenv('UPLOAD_PATH')
+TAG_EMAIL_VERIFIED    = os.getenv('TAG_EMAIL_VERIFIED')
 
 PKG = {
   'silver': POLICY_PACKAGE_SILVER,
@@ -53,7 +54,28 @@ class Users(MixinTimestamps, MixinIncludesTags, db.Model):
   # magic
   def __repr__(self):
     return f'Users(id={self.id!r}, email={self.email!r}, password={self.password!r})'
+  
+  # public
+  def email_verified(self):
+    return self.includes_tags(TAG_EMAIL_VERIFIED)
+  
+  # public
+  def set_email_verified(self, flag = True):
+    pe  = Tags.by_name(TAG_EMAIL_VERIFIED)
+    isv = self.email_verified()
     
+    if flag:
+      if not isv:
+        pe.users.append(self)
+
+    else:
+      if isv:
+        pe.users.remove(self)
+      
+    db.session.commit()
+
+    return self.email_verified()
+  
   # public
   def is_admin(self):
     return self.includes_tags(POLICY_ADMINS)
