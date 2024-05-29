@@ -189,7 +189,7 @@ class Products(MixinTimestamps, MixinIncludesTags, db.Model):
         .group_by(Products.id)
         .order_by(desc(sumc)))
 
-    lsp = SchemaSerializeProductsTimes(exclude = ('user','user_id',), many = True).dump(ls_p)
+    lsp = SchemaSerializeProductsTimes(exclude = ('user',), many = True).dump(ls_p)
     
     return lsp
 

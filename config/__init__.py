@@ -31,7 +31,7 @@ DEFAULT_POPULAR_PRODUCTS_LIMIT = 10
 
 MAIL_RECIPIENTS = [
   'admin@nikolav.rs', 
-  'slavko.savic@me.com',
+  # 'slavko.savic@me.com',
 ]
 
 fields_profile_complete = [
