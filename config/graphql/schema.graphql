@@ -171,26 +171,25 @@ type Query {
   companiesCountedByDistrict: JsonData!
 
   # products
+  getOrderProductsDeliveryDate(oid: ID!, uid: ID!): JsonData
+  getOrderProductsStatusByCompany(oid: ID!, uid: ID!): JsonData
   productsListAll: [Product!]!
-  productsListByUser(user_id: ID!): [Product!]!
   productsListByTags(tags: [String!]!): [Product!]!
-  productsListPopular(length: Int): [Product!]!
+  productsListByUser(user_id: ID!): [Product!]!
   productsListExact(products: [ID!]!): [Product!]!
+  productsListPopular(length: Int): [Product!]!
+  productsListPromo: [Product!]!
+  productsListPromotedAll: [Product!]!
   productsSearch(query: JsonData): [Product!]!
   productsTotalAmountOrdered(pid: ID!): ResultTotalAmountOrdered!
-  productsListPromotedAll: [Product!]!
-  productsListPromo: [Product!]!
-  getOrderProductsStatusByCompany(oid: ID!, uid: ID!): JsonData
-  getOrderProductsDeliveryDate(oid: ID!, uid: ID!): JsonData
-
 
   # orders
+  ordersListByUser(uid: ID!): [Order!]!
+  ordersOne(oid: ID!): Order
+  ordersProducts(oid: ID!): [ProductWithAmount!]!
   ordersReceived: [Order!]!
   ordersReceivedProducts(order_id: ID!): [ProductWithAmount!]!
-  ordersListByUser(uid: ID!): [Order!]!
-  ordersProducts(oid: ID!): [ProductWithAmount!]!
-  ordersOne(oid: ID!): Order
-
+  
   # posts
   postsList(uid: ID): [Post!]!
   postsImages(id: ID): [JsonData!]!
