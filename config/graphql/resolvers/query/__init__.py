@@ -38,3 +38,5 @@ from .packages import packages_is_promoted
 
 from .pdf import pdf_download
 
+from .accounts import accounts_incomplete_profile_fields
+

@@ -33,3 +33,17 @@ MAIL_RECIPIENTS = [
   'admin@nikolav.rs', 
   # 'slavko.savic@me.com',
 ]
+
+fields_profile_complete = [
+  'about',
+  'address',
+  'city',
+  'delivery',
+  'district',
+  'name',
+  'ownerFirstName',
+  'ownerLastName',
+  'phone',
+  'pib',
+  'pin',
+]

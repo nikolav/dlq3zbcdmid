@@ -208,6 +208,9 @@ type Query {
 
   # pdf
   pdfDownload(data: JsonData!): String!
+
+  # accounts
+  accountsIncompleteProfileFields: [String!]!
 }
 
 ############

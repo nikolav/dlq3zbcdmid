@@ -85,5 +85,7 @@ PRODUCTS_SEARCH_RANDOM_MAX = int(os.getenv('PRODUCTS_SEARCH_RANDOM_MAX'))
 @bp_testing.route('/', methods = ('POST',))
 # @arguments_schema(SchemaTesting())
 def testing_home():
-  return []
+  u = db.session.get(Users, 1)
+  p = u.profile()
+  return p
 
