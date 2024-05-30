@@ -33,6 +33,7 @@ from .users import users_by_id
 
 from .posts import posts_list
 from .posts import posts_images
+from .posts import posts_list_only
 
 from .packages import packages_is_promoted
 

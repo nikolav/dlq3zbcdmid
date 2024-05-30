@@ -193,6 +193,7 @@ type Query {
   # posts
   postsList(uid: ID): [Post!]!
   postsImages(id: ID): [JsonData!]!
+  postsListOnly(sids: [ID!]!): [Post!]!
 
   # storage
   storageList: [StorageFileInfo!]!
