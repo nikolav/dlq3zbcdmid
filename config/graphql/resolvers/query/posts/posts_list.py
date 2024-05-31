@@ -14,6 +14,7 @@ from schemas.serialization import SchemaSerializePosts
 
 @query.field('postsList')
 def resolve_postsList(_obj, _info, uid = None):
+  from pprint import pprint
   
   try:
     id = uid if None != uid else g.user.id
@@ -28,10 +29,14 @@ def resolve_postsList(_obj, _info, uid = None):
           joinedload(Posts.tags), 
           joinedload(Posts.docs) 
         )
-        .where(Users.id == id)
+        .where(Posts.user_id == id)
     ).unique()
     
-    return SchemaSerializePosts(many = True).dump(posts)
+    res = SchemaSerializePosts(many = True).dump(posts)
+
+    pprint(res)
+
+    return res
 
   except Exception as err:
     raise err
