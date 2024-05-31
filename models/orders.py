@@ -1,4 +1,4 @@
-# import os
+import os
 # import json
 # import re
 from datetime import datetime
@@ -21,6 +21,7 @@ from src.mixins import MixinTimestamps
 from src.mixins import MixinIncludesTags
 
 from models.products import Products
+from models.tags     import Tags
 
 from schemas.serialization import SchemaSerializeProductsTimes
 
@@ -31,6 +32,8 @@ ORDER_STATUS = {
   '3': 'spremno',
   '4': 'pošta pošiljka #',
 }
+
+TAG_FEEDBACK_ON_ORDER_COMPLETED = os.getenv('TAG_FEEDBACK_ON_ORDER_COMPLETED')
 
 
 class Orders(MixinTimestamps, MixinIncludesTags, db.Model):
@@ -87,6 +90,17 @@ class Orders(MixinTimestamps, MixinIncludesTags, db.Model):
     for p, amount in self.products_with_amount_for_company(user):
       tot += amount * p.price_for_order(self)
     return tot
+  
+  ##########################
+  # feedback order-completed
+  def feedback_on_completed_sent(self):
+    return self.includes_tags(TAG_FEEDBACK_ON_ORDER_COMPLETED)
+  
+  def feedback_on_completed_sent_set(self):
+    if not self.feedback_on_completed_sent():
+      tf = Tags.by_name(TAG_FEEDBACK_ON_ORDER_COMPLETED)
+      tf.orders.append(self)
+      db.session.commit()    
   
   @staticmethod
   def order_products_with_amount_and_original_price_by_user(order, user):
