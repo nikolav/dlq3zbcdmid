@@ -33,4 +33,3 @@ def resolve_ordersReceived(_obj, _info):
     pass
 
   return []
-

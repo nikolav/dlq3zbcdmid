@@ -227,6 +227,7 @@ type Mutation {
   # orders
   ordersPlace(data: JsonData!, items: JsonData!): ID
   manageOrderData(oid: ID!, data: JsonData!): Order
+  ordersSetCompleted(oid: ID!, completed: Boolean): ID
 
   # posts
   postsUpsert(data: InputPost!, id: ID): Post!
