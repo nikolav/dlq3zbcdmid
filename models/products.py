@@ -213,7 +213,6 @@ class Products(MixinTimestamps, MixinIncludesTags, db.Model):
   
   
   # public
-
   def packages_type(self):
     # 'basic' | 'silver' | 'gold'
     return 'basic' if (not self.user.packages_is_premium() or not self.packages_is_promoted()) else 'silver' if self.user.packages_is('silver') else 'gold'

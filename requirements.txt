@@ -25,3 +25,4 @@ selenium==4.21.0
 webdriver-manager==4.0.1
 Babel==2.15.0
 nutree==0.8.0
+python-dateutil==2.9.0.post0

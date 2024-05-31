@@ -1,6 +1,8 @@
 import os
 import re
 
+from datetime import datetime
+
 from sqlalchemy import func
 from sqlalchemy import or_
 
@@ -57,6 +59,9 @@ def resolve_productsSearch(_obj, _info, query = None):
   #   'text'     : '12'
   #   'limit'    : 10
   #   'random'   : true
+  # 
+  #   'date_after'  : Date:isostring
+  #   'date_before' : Date:isostring
   # }
   
 
@@ -98,6 +103,10 @@ def resolve_productsSearch(_obj, _info, query = None):
   district_    = query.get('district', None)
   district     = district_.strip() if district_ else None
 
+  # :date-string
+  date_after   = query.get('date_after', None)
+  date_before  = query.get('date_before', None)
+
   # # 0 < :int
   sort_method_ = query.get('sortBy', None)
   sort_method  = int(sort_method_) if sort_method_ else None
@@ -135,7 +144,7 @@ def resolve_productsSearch(_obj, _info, query = None):
     q = q.where(
       Products.price <= int(PRICE)
     )
-
+  
   # # sort strategy
   if RANDOM:
     q = q.order_by(func.random())
@@ -153,9 +162,19 @@ def resolve_productsSearch(_obj, _info, query = None):
 
   # # manual filter/sort
 
+  # filter on user:profle:district
   if district:
-    # filter on user:profle:district
     pls = [p for p in pls if p.is_from_district(district)]
+  
+  # filter on [date_after < created_at]
+  if None != date_after:
+    d_a = datetime.fromisoformat(date_after)
+    pls = [p for p in pls if d_a <= p.created_at]
+
+  # filter on [created_at < date_before]
+  if None != date_before:
+    d_b = datetime.fromisoformat(date_before)
+    pls = [p for p in pls if p.created_at <= d_b]
 
   # sort social
   if sort_method in SORT_METHOD_manual:
