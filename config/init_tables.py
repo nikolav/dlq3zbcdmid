@@ -1,7 +1,5 @@
 import os
 
-# from sqlalchemy import func
-
 from flask_app    import db
 from flask_app    import APP_NAME
 from models.users import Users
@@ -12,26 +10,10 @@ from config       import TAG_VARS
 from utils.pw     import hash as hashPassword
 
 
-for t in init_docs_tags:
-  Tags.by_name(t, create = True)
-
-tag_vars = Tags.by_name(TAG_VARS)
-
-vars_data = [doc.data for doc in tag_vars.docs]
-
-if all(not 'app:name' in node for node in vars_data):
-  tag_vars.docs.append(Docs(data = { 'app:name': APP_NAME }))
-
-if all(not 'admin:email' in node for node in vars_data):
-  tag_vars.docs.append(Docs(data = { 'admin:email': os.getenv('ADMIN_EMAIL') }))
-  
-db.session.commit()
-
-
-# add default users --admin --user
+# --admin
 email_    = os.getenv('ADMIN_EMAIL')
 password_ = os.getenv('ADMIN_PASSWORD')
-
+# --user
 emailUser_    = os.getenv('USER_EMAIL')
 passwordUser_ = os.getenv('USER_PASSWORD')
 
@@ -49,45 +31,55 @@ if not user_default:
 db.session.commit()
 
 
-# store default tags
-policy_admins_           = os.getenv('POLICY_ADMINS')
-policy_email_            = os.getenv('POLICY_EMAIL')
-policy_fs_               = os.getenv('POLICY_FILESTORAGE')
-policy_all_              = os.getenv('POLICY_ALL')
-policy_company_          = os.getenv('POLICY_COMPANY')
-# policy_company_approved_ = os.getenv('POLICY_COMPANY_APPROVED')
-policy_approved_         = os.getenv('POLICY_APPROVED')
+for t in init_docs_tags:
+  Tags.by_name(t, create = True)
 
+tag_vars = Tags.by_name(TAG_VARS)
+
+vars_data = [doc.data for doc in tag_vars.docs]
+
+if all(not 'app:name' in node for node in vars_data):
+  tag_vars.docs.append(Docs(data = {'app:name': APP_NAME }))
+
+if all(not 'admin:email' in node for node in vars_data):
+  tag_vars.docs.append(Docs(data = {'admin:email': email_ }))
+  
+db.session.commit()
+
+
+# default tags
+policy_admins_   = os.getenv('POLICY_ADMINS')
+policy_company_  = os.getenv('POLICY_COMPANY')
+policy_fs_       = os.getenv('POLICY_FILESTORAGE')
+policy_email_    = os.getenv('POLICY_EMAIL')
+policy_approved_ = os.getenv('POLICY_APPROVED')
+policy_all_      = os.getenv('POLICY_ALL')
+
+# packages
 policy_pkg_silver   = os.getenv('POLICY_PACKAGE_SILVER')
 policy_pkg_gold     = os.getenv('POLICY_PACKAGE_GOLD')
 policy_pkg_promoted = os.getenv('POLICY_PACKAGE_PROMOTED')
 
+# misc
 TAG_ARCHIVED        = os.getenv('TAG_ARCHIVED')
 TAG_EMAIL_VERIFIED  = os.getenv('TAG_EMAIL_VERIFIED')
-
 TAG_FEEDBACK_ON_ORDER_COMPLETED = os.getenv('TAG_FEEDBACK_ON_ORDER_COMPLETED')
 
-
-tagPolicyADMINS           = Tags.by_name(policy_admins_,  create = True)
-tagPolicyEMAIL            = Tags.by_name(policy_email_,   create = True)
-tagPolicyFS               = Tags.by_name(policy_fs_,      create = True)
-tagPolicyALL              = Tags.by_name(policy_all_,     create = True)
-tagPolicyCOMPANY          = Tags.by_name(policy_company_, create = True)
-# tagPolicyCOMPANY_approved = Tags.by_name(policy_company_approved_, create = True)
-tagPolicy_approved        = Tags.by_name(policy_approved_, create = True)
-
-# tags @packages 
-tagPolicy_pkg_silver   = Tags.by_name(policy_pkg_silver,   create = True)
-tagPolicy_pkg_gold     = Tags.by_name(policy_pkg_gold,     create = True)
-tagPolicy_pkg_promoted = Tags.by_name(policy_pkg_promoted, create = True)
-
-tag_archived       = Tags.by_name(TAG_ARCHIVED, create = True)
-tag_email_verified = Tags.by_name(TAG_EMAIL_VERIFIED, create = True)
-
+# init
+tagPolicyADMINS          = Tags.by_name(policy_admins_,                  create = True)
+tagPolicyCOMPANY         = Tags.by_name(policy_company_,                 create = True)
+tagPolicyEMAIL           = Tags.by_name(policy_email_,                   create = True)
+tagPolicyFS              = Tags.by_name(policy_fs_,                      create = True)
+tagPolicy_approved       = Tags.by_name(policy_approved_,                create = True)
+tagPolicyALL             = Tags.by_name(policy_all_,                     create = True)
+tagPolicy_pkg_silver     = Tags.by_name(policy_pkg_silver,               create = True)
+tagPolicy_pkg_gold       = Tags.by_name(policy_pkg_gold,                 create = True)
+tagPolicy_pkg_promoted   = Tags.by_name(policy_pkg_promoted,             create = True)
+tag_archived             = Tags.by_name(TAG_ARCHIVED,                    create = True)
+tag_email_verified       = Tags.by_name(TAG_EMAIL_VERIFIED,              create = True)
 tag_order_email_feedback = Tags.by_name(TAG_FEEDBACK_ON_ORDER_COMPLETED, create = True)
 
-
-# tag default users
+# bind users
 if not user_admin.includes_tags(policy_admins_):
   tagPolicyADMINS.users.append(user_admin)
 if not user_admin.includes_tags(policy_email_):
@@ -109,4 +101,3 @@ if not user_admin.includes_tags(policy_approved_):
 #   tagPolicyFS.users.append(user_default)
 
 db.session.commit()
-
