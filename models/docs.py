@@ -19,6 +19,7 @@ from .tags import Tags
 from src.mixins import MixinTimestamps
 from src.mixins import MixinIncludesTags
 from schemas.serialization import SchemaSerializeDocJsonTimes
+from config import TAG_VARS
 
 
 PREFIX_BY_DOC_ID           = os.getenv('PREFIX_BY_DOC_ID')
@@ -77,16 +78,6 @@ class Docs(MixinTimestamps, MixinIncludesTags, db.Model):
       pass
     
     return doc
-
-
-  @staticmethod
-  def var_by_name(var_name):
-    return db.session.scalar(
-      db.select(Docs).join(Docs.tags).where(
-        Tags.tag == '@vars', 
-        Docs.data.contains(var_name)
-      )
-    )
   
   @staticmethod
   def docs_profile_domain_from_docid(doc_id):
@@ -136,3 +127,21 @@ class Docs(MixinTimestamps, MixinIncludesTags, db.Model):
     
   def dump(self, **kwargs):
     return _schemaDocsDump.dump(self, **kwargs)
+
+  # vars
+  @staticmethod
+  def var_by_name(var_name):
+    return db.session.scalar(
+      db.select(Docs).join(Docs.tags).where(
+        Tags.tag == '@vars', 
+        Docs.data.contains(var_name)
+      )
+    )
+  
+  @staticmethod
+  def vars_list():
+    res = []
+    for doc in Docs.tagged(TAG_VARS):
+      for name, value in doc.data.items():
+        res.append({ 'id': doc.id, 'name': name, 'value': value })
+    return res
